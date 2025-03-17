@@ -3,7 +3,7 @@
 <!-- [Head] start -->
 
 <head>
-  <title>{% block title %}Govtech | MICDE </title>
+  <title>Govtech | MICDE </title>
   <!-- [Meta] -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -40,7 +40,7 @@
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">
-      <a href="../dashboard/index.html" class="b-brand text-primary">
+      <a href="../static/templates/dashboard.html" class="b-brand text-primary">
         <!-- ========   Change your logo from here   ============ -->
         <img src="../static/images/COT.png" class="img-fluid logo-lg" alt="logo">
       </a>
@@ -48,7 +48,7 @@
     <div class="navbar-content">
       <ul class="pc-navbar">
         <li class="pc-item">
-          <a href="../dashboard/index.html" class="pc-link">
+          <a href="../static/templates/dashboard.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
@@ -373,7 +373,7 @@
                 <h5 class="m-b-10">Home</h5>
               </div>
               <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="../static/templates/dashboard.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
                 <li class="breadcrumb-item" aria-current="page">Home</li>
               </ul>
@@ -384,7 +384,9 @@
       <!-- [ breadcrumb ] end -->
       <!-- [ Main Content ] start -->
       <div class="row">
-        <!-- all my contents load here  -->
+        {% block content %}
+    <!-- This section will be replaced by child templates -->
+        {% endblock %}
       </div>
     </div>
   </div>
