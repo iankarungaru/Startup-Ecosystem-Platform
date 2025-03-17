@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake/build/pdfmake.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake/build/vfs_fonts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header img {
+            height: 50px;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #007bff;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/images/logo.png" alt="Logo">
+        <div class="user-profile">
+            <img src="/static/images/user.png" alt="User Profile">
+            <span>{{ request.user.username }}</span>
+            <a href="/logout/" class="btn btn-outline-light btn-sm ms-3">Logout</a>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <h4 class="text-center text-white">Dashboard</h4>
+        <a href="/dashboard/">📊 Overview</a>
+        <a href="/register/step/1/">📝 Start New Registration</a>
+    </div>
+
+    <div class="main-content">
+        <h2 class="text-center text-primary">Dashboard Overview</h2>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <h5 class="text-center">Business Model Distribution</h5>
+                    <canvas id="businessModelChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <h5 class="text-center">Startup Stages</h5>
+                    <canvas id="startupStageChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-striped" id="registrationsTable">
+                <thead>
+                    <tr>
+                        <th>Startup Name</th>
+                        <th>Founder</th>
+                        <th>Sector</th>
+                        <th>Business Model</th>
+                        <th>Funding Status</th>
+                        <th>Employees</th>
+                        <th>Compliance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registration in registrations %}
+                    <tr>
+                        <td>{{ registration.startup_name }}</td>
+                        <td>{{ registration.founder_name }}</td>
+                        <td>{{ registration.sector }}</td>
+                        <td>{{ registration.business_model }}</td>
+                        <td>{{ registration.funding_status }}</td>
+                        <td>{{ registration.employees }}</td>
+                        <td>{{ registration.gdpr_compliance|yesno:"Compliant,Non-Compliant" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let table = new DataTable("#registrationsTable", {
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'csvHtml5', text: 'Export CSV', className: 'btn btn-success' },
+                    { extend: 'excelHtml5', text: 'Export Excel', className: 'btn btn-primary' },
+                    { extend: 'pdfHtml5', text: 'Export PDF', className: 'btn btn-danger' }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- templates/step3.html --> 
+ 
+{% extends 'register/step_base.html' %}
+
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">Step 3: Founder & Team Information</h4>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Founder(s) Full Name(s)</label>
+                {{ form.founder_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Founder(s) National ID/Passport Number</label>
+                {{ form.founder_id }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Founder(s) Contact Information</label>
+                {{ form.founder_contact }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Number of Employees</label>
+                {{ form.employees }}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'multi_step' step=step|add:'-1' %}" class="btn btn-secondary">← Previous</a>
+            <button type="submit" class="btn btn-primary">Next →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
