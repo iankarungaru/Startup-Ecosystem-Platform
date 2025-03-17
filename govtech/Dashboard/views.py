@@ -7,5 +7,5 @@ def index(request):
     return render(request,"index.html")
 
 
-def hello(request):
-    return render(request,"hello.html")
+def me(request):
+    return render(request,"me.html")
