@@ -11,10 +11,10 @@ from .views import dashboard
 
 urlpatterns = [
     # path("", views.home, name="home"),
-    path('', multi_step_registration, name='multi_step'),
+    path('register/', multi_step_registration, name='multi_step'),
     path('step/<int:step>/', multi_step_registration, name='multi_step'),
     path('completed/', registration_complete, name='registration_complete'),
-    path('dashboard/', dashboard, name='dashboard'),
+    #path('dashboard/', dashboard, name='dashboard'),
 ]
 
 

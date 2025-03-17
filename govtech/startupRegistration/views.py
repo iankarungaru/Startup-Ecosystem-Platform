@@ -88,6 +88,10 @@ def registration_complete(request):
 
 
 
+def hello(request):
+    return render(request,"hello.html")
+
+
 
 # views.py for dashboard
 
