@@ -1,0 +1,38 @@
+<!-- templates/step7.html --> 
+
+{% extends 'register/step_base.html' %}
+
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">Step 7: Compliance & Legal Information</h4>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Business Registration Certificate (Upload)</label>
+            {{ form.business_certificate }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tax Identification Number (TIN)</label>
+            {{ form.tax_identification_number }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Licenses & Certifications (if applicable)</label>
+            {{ form.licenses }}
+        </div>
+
+        <div class="form-check mb-3">
+            {{ form.gdpr_compliance }}
+            <label class="form-check-label">GDPR/Data Protection Compliance</label>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'multi_step' step=step|add:'-1' %}" class="btn btn-secondary">← Previous</a>
+            <button type="submit" class="btn btn-primary">Next →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- templates/step8.html --> 
+
+{% extends 'register/step_base.html' %}
+
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">Step 8: Government Support & Expectations</h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Areas Where Government Support is Needed</label>
+            {{ form.government_support_needed }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Challenges Faced by the Startup</label>
+            {{ form.challenges_faced }}
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'multi_step' step=step|add:'-1' %}" class="btn btn-secondary">← Previous</a>
+            <button type="submit" class="btn btn-primary">Next →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
