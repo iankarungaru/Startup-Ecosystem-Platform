@@ -1,0 +1,82 @@
+/* static/css/style.css */
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #BE0000;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+}
+
+.btn-secondary {
+    background-color: #BE0000;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+input[type="file"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-check-label {
+    margin-left: 5px;
+}
+
+
+textarea {
+    height: 100px;
+}
+
+.btn-success {
+    background-color: #BE0000;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+
+.logo {
+    width: 60px;
+    height: auto;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #BE0000;
+    border-color: #740404; /*set the color you want here*/
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #740404;
+    border-color: #BE0000; /*set the color you want here*/
+}
