@@ -472,7 +472,18 @@ function layout_change(layout) {
     }
   } else {
     dark_flag = false;
-
+    if (document.querySelector('.pc-sidebar .m-header .logo-lg')) {
+      document.querySelector('.pc-sidebar .m-header .logo-lg').setAttribute('src', '../assets/images/logo-dark.svg');
+    }
+    if (document.querySelector('.navbar-brand .logo-lg')) {
+      document.querySelector('.navbar-brand .logo-lg').setAttribute('src', '../assets/images/logo-dark.svg');
+    }
+    if (document.querySelector('.auth-main.v1 .auth-sidefooter')) {
+      document.querySelector('.auth-main.v1 .auth-sidefooter img').setAttribute('src', '../assets/images/logo-dark.svg');
+    }
+    if (document.querySelector('.footer-top .footer-logo')) {
+      document.querySelector('.footer-top .footer-logo').setAttribute('src', '../assets/images/logo-dark.svg');
+    }
     var control = document.querySelector('.theme-layout > a.active');
     if (control) {
       document.querySelector('.theme-layout > a.active').classList.remove('active');
