@@ -130,9 +130,13 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Static files URL prefix
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# Tell Django to look for static files both inside the app and in the global static folder
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # Global static folder outside the app
+]
+
+# Only used in production (when running `collectstatic`)
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # This should NOT be the same as STATICFILES_DIRS
