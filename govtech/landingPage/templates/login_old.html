@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+           
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Overlay effect */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0.5; /* Dark translucent overlay */
+            z-index: 1;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.8); /* Transparent white background */
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 380px;
+            text-align: center;
+        }
+        .login-container img {
+            width: 100px;
+            margin-bottom: 10px; /* Adjusts space between logo and title */
+        }
+
+        .login-container h1 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: green;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .login-form input,
+        .login-form button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px; /* Oval-shaped button */
+        }
+
+        .login-form button:hover {
+            background-color: #218838;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 10px;
+            color: red;
+            font-size: 14px;
+        }
+
+        .signup-link a {
+            color: green;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay"></div> <!-- Overlay element -->
+
+<div class="login-container">
+    <img src="{% static 'img/court of arms.png' %}" alt="Logo">
+
+    <h1>Login</h1>
+    <form class="login-form" action="/login" method="post">
+        <input type="email" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div class="signup-link">
+        Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+
+    </div>
+</div>
+
+</body>
+</html>
