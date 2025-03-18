@@ -5,7 +5,3 @@ def dashboard(request):
 
 def index(request):
     return render(request,"index.html")
-
-
-def me(request):
-    return render(request,"me.html")

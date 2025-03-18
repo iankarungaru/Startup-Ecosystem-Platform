@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("startupRegistration/", include("startupRegistration.urls")),
     path("dashboard/", include("Dashboard.urls")),
+    path("landingPage/", include("landingPage.urls")),
+    path("", include("landingPage.urls")),
 ]
 
