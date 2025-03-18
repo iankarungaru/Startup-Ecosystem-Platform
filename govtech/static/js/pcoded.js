@@ -472,7 +472,7 @@ function layout_change(layout) {
     }
   } else {
     dark_flag = false;
-
+    
     var control = document.querySelector('.theme-layout > a.active');
     if (control) {
       document.querySelector('.theme-layout > a.active').classList.remove('active');

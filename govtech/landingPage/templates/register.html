@@ -1,0 +1,415 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Startup Kenya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Ensure the background is behind the form */
+        }
+    
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px; /* Adjusted padding to make the form more compact */
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px; /* Reduced container width for compactness */
+            text-align: center;
+            z-index: 1; /* Ensure the form stays above the background */
+        }
+    
+        .signup-container h1 {
+            margin-bottom: 10px; /* Reduced margin for compactness */
+            font-size: 22px; /* Slightly smaller font size */
+            color: green;
+        }
+    
+        .signup-container img {
+            width: 80px; /* Reduced logo size */
+            margin-bottom: 8px; /* Adjusted spacing */
+        }
+    
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Reduced gap between elements */
+        }
+    
+        .signup-form input,
+        .signup-form select,
+        .signup-form button {
+            padding: 6px; /* Reduced padding inside inputs and button */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px; /* Reduced font size for compactness */
+        }
+    
+        .signup-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 30px; /* Smaller oval button */
+        }
+    
+        .signup-form button:hover {
+            background-color: #218838;
+        }
+    
+        .login-link {
+            text-align: center;
+            margin-top: 8px; /* Reduced margin */
+            color: red;
+            font-size: 13px; /* Slightly smaller font size */
+        }
+    
+        .login-link a {
+            color: green;
+            text-decoration: none;
+        }
+    
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+    
+    
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <div class="signup-container">
+        <img src="{% static 'img/court of arms.png' %}" alt="Logo">
+
+        <h1>Sign Up</h1>
+        <form class="signup-form" method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Phone (Optional)">
+            <select id="nationality" name="nationality" required>
+                <option value="" disabled selected>Nationality</option>
+                <!-- Full list of all countries -->
+                <option value="Afghanistan">Afghanistan</option>
+                <option value="Albania">Albania</option>
+                <option value="Algeria">Algeria</option>
+                <option value="Andorra">Andorra</option>
+                <option value="Angola">Angola</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Australia">Australia</option>
+                <option value="Austria">Austria</option>
+                <option value="Bahamas">Bahamas</option>
+                <option value="Bahrain">Bahrain</option>
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="Barbados">Barbados</option>
+                <option value="Belgium">Belgium</option>
+                <option value="Belize">Belize</option>
+                <option value="Benin">Benin</option>
+                <option value="Bhutan">Bhutan</option>
+                <option value="Bolivia">Bolivia</option>
+                <option value="Botswana">Botswana</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Brunei">Brunei</option>
+                <option value="Bulgaria">Bulgaria</option>
+                <option value="Burkina Faso">Burkina Faso</option>
+                <option value="Burundi">Burundi</option>
+                <option value="Cambodia">Cambodia</option>
+                <option value="Cameroon">Cameroon</option>
+                <option value="Canada">Canada</option>
+                <option value="Chad">Chad</option>
+                <option value="Chile">Chile</option>
+                <option value="China">China</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Comoros">Comoros</option>
+                <option value="Congo">Congo</option>
+                <option value="Costa Rica">Costa Rica</option>
+                <option value="Croatia">Croatia</option>
+                <option value="Cuba">Cuba</option>
+                <option value="Cyprus">Cyprus</option>
+                <option value="Denmark">Denmark</option>
+                <option value="Djibouti">Djibouti</option>
+                <option value="Dominican Republic">Dominican Republic</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="Egypt">Egypt</option>
+                <option value="El Salvador">El Salvador</option>
+                <option value="Estonia">Estonia</option>
+                <option value="Ethiopia">Ethiopia</option>
+                <option value="Fiji">Fiji</option>
+                <option value="Finland">Finland</option>
+                <option value="France">France</option>
+                <option value="Gabon">Gabon</option>
+                <option value="Gambia">Gambia</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Germany">Germany</option>
+                <option value="Ghana">Ghana</option>
+                <option value="Greece">Greece</option>
+                <option value="Grenada">Grenada</option>
+                <option value="Guatemala">Guatemala</option>
+                <option value="Guinea">Guinea</option>
+                <option value="Guyana">Guyana</option>
+                <option value="Haiti">Haiti</option>
+                <option value="Honduras">Honduras</option>
+                <option value="Hungary">Hungary</option>
+                <option value="Iceland">Iceland</option>
+                <option value="India">India</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Iran">Iran</option>
+                <option value="Iraq">Iraq</option>
+                <option value="Ireland">Ireland</option>
+                <option value="Israel">Israel</option>
+                <option value="Italy">Italy</option>
+                <option value="Jamaica">Jamaica</option>
+                <option value="Japan">Japan</option>
+                <option value="Jordan">Jordan</option>
+                <option value="Kazakhstan">Kazakhstan</option>
+                <option value="Kenya">Kenya</option>
+                <option value="Kuwait">Kuwait</option>
+                <option value="Laos">Laos</option>
+                <option value="Latvia">Latvia</option>
+                <option value="Lebanon">Lebanon</option>
+                <option value="Lesotho">Lesotho</option>
+                <option value="Liberia">Liberia</option>
+                <option value="Libya">Libya</option>
+                <option value="Lithuania">Lithuania</option>
+                <option value="Luxembourg">Luxembourg</option>
+                <option value="Madagascar">Madagascar</option>
+                <option value="Malawi">Malawi</option>
+                <option value="Malaysia">Malaysia</option>
+                <option value="Maldives">Maldives</option>
+                <option value="Mali">Mali</option>
+                <option value="Malta">Malta</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Moldova">Moldova</option>
+                <option value="Monaco">Monaco</option>
+                <option value="Mongolia">Mongolia</option>
+                <option value="Morocco">Morocco</option>
+                <option value="Mozambique">Mozambique</option>
+                <option value="Myanmar">Myanmar</option>
+                <option value="Namibia">Namibia</option>
+                <option value="Nepal">Nepal</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="New Zealand">New Zealand</option>
+                <option value="Nicaragua">Nicaragua</option>
+                <option value="Niger">Niger</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="North Korea">North Korea</option>
+                <option value="Norway">Norway</option>
+                <option value="Oman">Oman</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Panama">Panama</option>
+                <option value="Paraguay">Paraguay</option>
+                <option value="Peru">Peru</option>
+                <option value="Philippines">Philippines</option>
+                <option value="Poland">Poland</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Qatar">Qatar</option>
+                <option value="Romania">Romania</option>
+                <option value="Russia">Russia</option>
+                <option value="Rwanda">Rwanda</option>
+                <option value="Saint Lucia">Saint Lucia</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Senegal">Senegal</option>
+                <option value="Serbia">Serbia</option>
+                <option value="Seychelles">Seychelles</option>
+                <option value="Sierra Leone">Sierra Leone</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Slovakia">Slovakia</option>
+                <option value="Somalia">Somalia</option>
+                <option value="South Africa">South Africa</option>
+                <option value="South Korea">South Korea</option>
+                <option value="Spain">Spain</option>
+                <option value="Sri Lanka">Sri Lanka</option>
+                <option value="Sudan">Sudan</option>
+                <option value="Suriname">Suriname</option>
+                <option value="Sweden">Sweden</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Syria">Syria</option>
+                <option value="Tanzania">Tanzania</option>
+                <option value="Thailand">Thailand</option>
+                <option value="Togo">Togo</option>
+                <option value="Tunisia">Tunisia</option>
+                <option value="Turkey">Turkey</option>
+                <option value="Uganda">Uganda</option>
+                <option value="Ukraine">Ukraine</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="United States">United States</option>
+                <option value="Uruguay">Uruguay</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="Yemen">Yemen</option>
+                <option value="Zambia">Zambia</option>
+                <option value="Zimbabwe">Zimbabwe</option>
+            </select>
+            
+			
+            <select id="county"  name="county" required onchange="populateSubCounties()">
+                <option value="" disabled selected>Select County</option>
+                <option value="Baringo">Baringo</option>
+                <option value="Bomet">Bomet</option>
+                <option value="Bungoma">Bungoma</option>
+                <option value="Busia">Busia</option>
+                <option value="Elgeyo-Marakwet">Elgeyo-Marakwet</option>
+                <option value="Embu">Embu</option>
+                <option value="Garissa">Garissa</option>
+                <option value="Homa Bay">Homa Bay</option>
+                <option value="Isiolo">Isiolo</option>
+                <option value="Kajiado">Kajiado</option>
+                <option value="Kakamega">Kakamega</option>
+                <option value="Kericho">Kericho</option>
+                <option value="Kiambu">Kiambu</option>
+                <option value="Kilifi">Kilifi</option>
+                <option value="Kirinyaga">Kirinyaga</option>
+                <option value="Kisii">Kisii</option>
+                <option value="Kisumu">Kisumu</option>
+                <option value="Kitui">Kitui</option>
+                <option value="Kwale">Kwale</option>
+                <option value="Laikipia">Laikipia</option>
+                <option value="Lamu">Lamu</option>
+                <option value="Machakos">Machakos</option>
+                <option value="Makueni">Makueni</option>
+                <option value="Mandera">Mandera</option>
+                <option value="Meru">Meru</option>
+                <option value="Migori">Migori</option>
+                <option value="Marsabit">Marsabit</option>
+                <option value="Mombasa">Mombasa</option>
+                <option value="Murang'a">Murang'a</option>
+                <option value="Nairobi">Nairobi</option>
+                <option value="Nakuru">Nakuru</option>
+                <option value="Nandi">Nandi</option>
+                <option value="Narok">Narok</option>
+                <option value="Nyamira">Nyamira</option>
+                <option value="Nyandarua">Nyandarua</option>
+                <option value="Nyeri">Nyeri</option>
+                <option value="Samburu">Samburu</option>
+                <option value="Siaya">Siaya</option>
+                <option value="Taita-Taveta">Taita-Taveta</option>
+                <option value="Tana River">Tana River</option>
+                <option value="Tharaka-Nithi">Tharaka-Nithi</option>
+                <option value="Trans Nzoia">Trans Nzoia</option>
+                <option value="Turkana">Turkana</option>
+                <option value="Uasin Gishu">Uasin Gishu</option>
+                <option value="Vihiga">Vihiga</option>
+                <option value="Wajir">Wajir</option>
+                <option value="West Pokot">West Pokot</option>
+            </select>
+
+            
+            <select id="subcounty" name="subcounty" required>
+                <option value="" disabled selected>Select Subcounty</option>
+            </select>
+			<select id="gender" name="gender" required>
+				<option value="" disabled selected>Select Gender</option>
+				<option value="male">Male</option>
+				<option value="female">Female</option>
+			</select>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" required>
+
+			<label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+
+        </div>
+    </div>
+
+    <script>
+        const subCounties = {
+            "Baringo": ["Baringo North", "Baringo South", "Mogotio", "Eldama Ravine", "Tiaty"],
+            "Bomet": ["Bomet Central", "Bomet East", "Chepalungu", "Sotik", "Konoin"],
+            "Bungoma": ["Bungoma Central", "Bungoma East", "Bungoma South", "Bungoma North", "Mt. Elgon"],
+            "Busia": ["Butula", "Funyula", "Nambale", "Samia", "Teso North", "Teso South"],
+            "Elgeyo-Marakwet": ["Keiyo North", "Keiyo South", "Marakwet East", "Marakwet West"],
+            "Embu": ["Embu East", "Embu North", "Embu West", "Mbeere North", "Mbeere South"],
+            "Garissa": ["Balambala", "Dadaab", "Fafi", "Garissa Township", "Hulugho", "Ijara", "Lagdera"],
+            "Homa Bay": ["Homa Bay Town", "Karachuonyo", "Mbita", "Ndhiwa", "Rachuonyo East", "Rachuonyo North", "Rachuonyo South"],
+            "Isiolo": ["Garbatulla", "Isiolo", "Merti"],
+            "Kajiado": ["Kajiado Central", "Kajiado East", "Kajiado North", "Kajiado South", "Kajiado West"],
+            "Kakamega": ["Butere", "Khwisero", "Lugari", "Lurambi", "Mumias East", "Mumias West", "Navakholo", "Shinyalu"],
+            "Kericho": ["Ainamoi", "Belgut", "Bureti", "Kipkelion East", "Kipkelion West", "Soin/Sigowet"],
+            "Kiambu": ["Gatundu North", "Gatundu South", "Githunguri", "Juja", "Kabete", "Kiambaa", "Kiambu Town", "Kikuyu", "Lari", "Limuru", "Ruiru", "Thika Town"],
+            "Kilifi": ["Ganze", "Kaloleni", "Kilifi North", "Kilifi South", "Magarini", "Malindi", "Rabai"],
+            "Kirinyaga": ["Kirinyaga Central", "Kirinyaga East", "Kirinyaga West", "Mwea East", "Mwea West"],
+            "Kisii": ["Bobasi", "Bomachoge Borabu", "Bomachoge Chache", "Kitutu Chache North", "Kitutu Chache South", "Nyaribari Chache", "Nyaribari Masaba", "South Mugirango"],
+            "Kisumu": ["Kisumu Central", "Kisumu East", "Kisumu West", "Muhoroni", "Nyakach", "Nyando", "Seme"],
+            "Kitui": ["Ikutha", "Katulani", "Kisasi", "Kitui Central", "Kitui East", "Kitui Rural", "Kitui South", "Kitui West", "Mutitu", "Mwingi Central", "Mwingi North", "Mwingi West"],
+            "Kwale": ["Kinango", "Lunga Lunga", "Matuga", "Msambweni"],
+            "Laikipia": ["Laikipia Central", "Laikipia East", "Laikipia North", "Laikipia West"],
+            "Lamu": ["Lamu East", "Lamu West"],
+            "Machakos": ["Kathiani", "Kangundo", "Machakos Town", "Masinga", "Matungulu", "Mavoko", "Mwala", "Yatta"],
+            "Makueni": ["Kaiti", "Kilome", "Makueni", "Mbooni", "Mukaa", "Nzaui", "Wote"],
+            "Mandera": ["Banissa", "Lafey", "Mandera Central", "Mandera East", "Mandera North", "Mandera South"],
+            "Meru": ["Buuri", "Igembe Central", "Igembe North", "Igembe South", "Meru Central", "Meru North", "Meru South", "Tigania East", "Tigania West"],
+            "Migori": ["Awendo", "Kuria East", "Kuria West", "Nyatike", "Rongo", "Suna East", "Suna West", "Uriri"],
+            "Marsabit": ["Laisamis", "Moyale", "North Horr", "Saku"],
+            "Mombasa": ["Changamwe", "Jomvu", "Kisauni", "Likoni", "Mvita", "Nyali"],
+            "Murang'a": ["Gatanga", "Kahuro", "Kandara", "Kangema", "Kigumo", "Kiharu", "Maragua", "Mathioya"],
+            "Nairobi": ["Dagoretti North", "Dagoretti South", "Embakasi Central", "Embakasi East", "Embakasi North", "Embakasi South", "Embakasi West", "Kamukunji", "Kasarani", "Kibra", "Lang'ata", "Makadara", "Mathare", "Roysambu", "Ruaraka", "Starehe", "Westlands"],
+            "Nakuru": ["Bahati", "Gilgil", "Kuresoi North", "Kuresoi South", "Molo", "Naivasha", "Nakuru Town East", "Nakuru Town West", "Njoro", "Rongai", "Subukia"],
+            "Nandi": ["Aldai", "Chesumei", "Emgwen", "Mosop", "Nandi Hills", "Tindiret"],
+            "Narok": ["Narok East", "Narok North", "Narok South", "Narok West", "Trans Mara East", "Trans Mara West"],
+            "Nyamira": ["Borabu", "Manga", "Masaba North", "Nyamira North", "Nyamira South"],
+            "Nyandarua": ["Kinangop", "Kipipiri", "Ndaragwa", "Ol Kalou", "Ol Joro Orok"],
+            "Nyeri": ["Kieni East", "Kieni West", "Mathira East", "Mathira West", "Mukurweini", "Nyeri Town", "Othaya", "Tetu"],
+            "Samburu": ["Samburu Central", "Samburu East", "Samburu North"],
+            "Siaya": ["Alego Usonga", "Bondo", "Gem", "Rarieda", "Ugenya", "Ugunja"],
+            "Taita-Taveta": ["Mwatate", "Taveta", "Voi", "Wundanyi"],
+            "Tana River": ["Bura", "Galole", "Garsen"],
+            "Tharaka-Nithi": ["Chuka", "Igambang'ombe", "Maara", "Tharaka North", "Tharaka South"],
+            "Trans Nzoia": ["Cherangany", "Endebess", "Kwanza", "Saboti", "Kiminini"],
+            "Turkana": ["Loima", "Turkana Central", "Turkana East", "Turkana North", "Turkana South", "Turkana West"],
+            "Uasin Gishu": ["Ainabkoi", "Kapseret", "Kesses", "Moiben", "Soy", "Turbo"],
+            "Vihiga": ["Emuhaya", "Hamisi", "Luanda", "Sabatia", "Vihiga"],
+            "Wajir": ["Bute", "Eldas", "Habasawein", "Tarbaj", "Wajir East", "Wajir North", "Wajir South", "Wajir West"],
+            "West Pokot": ["Kacheliba", "Kapenguria", "Pokot South", "Sigor"]
+        };
+
+        function populateSubCounties() {
+            const countySelect = document.getElementById("county");
+            const subCountySelect = document.getElementById("subcounty");
+            const selectedCounty = countySelect.value;
+            
+            // Clear previous subcounty options
+            subCountySelect.innerHTML = '<option value="" disabled selected>Select Subcounty</option>';
+
+            if (selectedCounty && subCounties[selectedCounty]) {
+                const countySubCounties = subCounties[selectedCounty];
+                countySubCounties.forEach(subCounty => {
+                    const option = document.createElement("option");
+                    option.value = subCounty;
+                    option.textContent = subCounty;
+                    subCountySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+
+
+</body>
+</html>
