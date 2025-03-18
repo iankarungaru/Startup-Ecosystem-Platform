@@ -22131,7 +22131,7 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
 }
 .auth-main .auth-wrapper.v3 .auth-form {
   flex-direction: column;
-  background: url("../images/authentication/img-auth-bg.svg");
+  /* background: url("../images/authentication/img-auth-bg.svg"); */
   min-height: 100vh;
   padding: 24px;
   background-repeat: no-repeat;
@@ -22174,7 +22174,7 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
 }
 .auth-main .auth-wrapper .auth-footer,
 .auth-main .auth-wrapper .auth-header {
-  width: 100%;
+  width: 35%;
   display: flex;
   align-items: center;
   justify-content: space-between;
