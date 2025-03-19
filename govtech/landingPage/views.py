@@ -50,3 +50,6 @@ def register_view(request):
 # View for login page
 def login_view(request):
     return render(request, 'login.html')
+
+def authlogin(request): 
+    return print("Hekoooo")
