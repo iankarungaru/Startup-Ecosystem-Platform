@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,7 @@
             position: relative;
             overflow: hidden;
         }
-    
+
         .background-overlay {
             position: absolute;
             top: 0;
@@ -26,77 +27,93 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            z-index: -1; /* Ensure the background is behind the form */
+            z-index: -1;
+            /* Ensure the background is behind the form */
         }
-    
+
         .signup-container {
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 15px; /* Adjusted padding to make the form more compact */
-            border-radius: 20px; /* Rounded corners */
+            padding: 15px;
+            /* Adjusted padding to make the form more compact */
+            border-radius: 20px;
+            /* Rounded corners */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 350px; /* Reduced container width for compactness */
+            width: 50%;
+            /* Reduced container width for compactness */
             text-align: center;
-            z-index: 1; /* Ensure the form stays above the background */
+            z-index: 1;
+            /* Ensure the form stays above the background */
         }
-    
+
         .signup-container h1 {
-            margin-bottom: 10px; /* Reduced margin for compactness */
-            font-size: 22px; /* Slightly smaller font size */
+            margin-bottom: 10px;
+            /* Reduced margin for compactness */
+            font-size: 22px;
+            /* Slightly smaller font size */
             color: green;
         }
-    
+
         .signup-container img {
-            width: 80px; /* Reduced logo size */
-            margin-bottom: 8px; /* Adjusted spacing */
+            width: 80px;
+            /* Reduced logo size */
+            margin-bottom: 8px;
+            /* Adjusted spacing */
         }
-    
+
         .signup-form {
             display: flex;
             flex-direction: column;
-            gap: 6px; /* Reduced gap between elements */
+            gap: 6px;
+            /* Reduced gap between elements */
         }
-    
+
         .signup-form input,
         .signup-form select,
         .signup-form button {
-            padding: 6px; /* Reduced padding inside inputs and button */
+            padding: 14px;
+            /* Reduced padding inside inputs and button */
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 14px; /* Reduced font size for compactness */
+            font-size: 14px;
+            /* Reduced font size for compactness */
         }
-    
+
         .signup-form button {
             background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 30px; /* Smaller oval button */
+            border-radius: 30px;
+            /* Smaller oval button */
         }
-    
+
         .signup-form button:hover {
             background-color: #218838;
         }
-    
+
         .login-link {
             text-align: center;
-            margin-top: 8px; /* Reduced margin */
+            margin-top: 8px;
+            /* Reduced margin */
             color: red;
-            font-size: 13px; /* Slightly smaller font size */
+            font-size: 13px;
+            /* Slightly smaller font size */
         }
-    
+
         .login-link a {
             color: green;
             text-decoration: none;
         }
-    
+
         .login-link a:hover {
             text-decoration: underline;
         }
     </style>
-    
-    
-    
+
+
+
 </head>
+
 <body>
     <div class="background-overlay"></div>
 
@@ -263,9 +280,9 @@
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
             </select>
-            
-			
-            <select id="county"  name="county" required onchange="populateSubCounties()">
+
+
+            <select id="county" name="county" required onchange="populateSubCounties()">
                 <option value="" disabled selected>Select County</option>
                 <option value="Baringo">Baringo</option>
                 <option value="Bomet">Bomet</option>
@@ -316,19 +333,19 @@
                 <option value="West Pokot">West Pokot</option>
             </select>
 
-            
+
             <select id="subcounty" name="subcounty" required>
                 <option value="" disabled selected>Select Subcounty</option>
             </select>
-			<select id="gender" name="gender" required>
-				<option value="" disabled selected>Select Gender</option>
-				<option value="male">Male</option>
-				<option value="female">Female</option>
-			</select>
-			<label for="password">Password:</label>
-			<input type="password" id="password" name="password" required>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-			<label for="confirm_password">Confirm Password:</label>
+            <label for="confirm_password">Confirm Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
 
             <button type="submit">Sign Up</button>
@@ -394,7 +411,7 @@
             const countySelect = document.getElementById("county");
             const subCountySelect = document.getElementById("subcounty");
             const selectedCounty = countySelect.value;
-            
+
             // Clear previous subcounty options
             subCountySelect.innerHTML = '<option value="" disabled selected>Select Subcounty</option>';
 
@@ -412,4 +429,5 @@
 
 
 </body>
+
 </html>

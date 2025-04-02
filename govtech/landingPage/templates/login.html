@@ -11,18 +11,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- [Favicon] icon -->
   <link rel="icon" href="{% static 'images/cos.ico' %}" type="image/x-icon"> <!-- [Google Font] Family -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
-<!-- [Tabler Icons] https://tablericons.com -->
-<link rel="stylesheet" href="{% static 'fonts/tabler-icons.min.css' %}">
-<!-- [Feather Icons] https://feathericons.com -->
-<link rel="stylesheet" href="{% static 'fonts/feather.css' %}" >
-<!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-<link rel="stylesheet" href="{% static 'fonts/fontawesome.css' %}" >
-<!-- [Material Icons] https://fonts.google.com/icons -->
-<link rel="stylesheet" href="{% static 'fonts/material.css' %}" >
-<!-- [Template CSS Files] -->
-<link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link" >
-<link rel="stylesheet" href="{% static 'css/style-preset.css' %}" >
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+    id="main-font-link">
+  <!-- [Tabler Icons] https://tablericons.com -->
+  <link rel="stylesheet" href="{% static 'fonts/tabler-icons.min.css' %}">
+  <!-- [Feather Icons] https://feathericons.com -->
+  <link rel="stylesheet" href="{% static 'fonts/feather.css' %}">
+  <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+  <link rel="stylesheet" href="{% static 'fonts/fontawesome.css' %}">
+  <!-- [Material Icons] https://fonts.google.com/icons -->
+  <link rel="stylesheet" href="{% static 'fonts/material.css' %}">
+  <!-- [Template CSS Files] -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link">
+  <link rel="stylesheet" href="{% static 'css/style-preset.css' %}">
 
 </head>
 <!-- [Head] end -->
@@ -45,26 +47,38 @@
         </div>
         <form class="login-form" action="{% url 'authlogin' %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-            <div class="card my-5" style="width: 500px; max-width: 100%; margin: auto;">
+          <div class="card my-5" style="width: 500px; max-width: 100%; margin: auto;">
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-end mb-4">
-                <h3 class="mb-0"><b>Login</b></h3>
-              </div>
-              <div class="form-group mb-3">
-                <label class="form-label">Username</label>
-                <input type="username" class="form-control" placeholder="username" required>
-              </div>
-              <div class="form-group mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" placeholder="Password" required>
-              </div>
-              <div class="d-flex mt-1 justify-content-between">
-                <a href="{% url 'register' %}" class="link-primary">Don't have an account ?</a>
-                <h5 class="text-secondary f-w-400">Forgot Password?</h5>
-              </div>
-              <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-primary">Login</button>
-              </div>
+              <form class="login-form" action="{% url 'authlogin' %}" method="post">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                  <h3 class="mb-0"><b>Login</b></h3>
+                </div>
+                <div class="form-group mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" placeholder="Password" required>
+                </div>
+                <div class="d-flex mt-1 justify-content-between">
+                  <a href="{% url 'register' %}" class="link-primary">Don't have an account?</a>
+                  <h5 class="text-secondary f-w-400">Forgot Password?</h5>
+                </div>
+                <div class="d-grid mt-4">
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+              </form>
+              {% if messages %}
+              {% for message in messages %}
+              {% if message.tags == 'error' %}
+              <p style="color: red;">{{ message }}</p>
+              {% else %}
+              <p style="color: green;">{{ message }}</p> <!-- Success or other messages -->
+              {% endif %}
+              {% endfor %}
+              {% endif %}
             </div>
           </div>
         </form>
@@ -80,29 +94,29 @@
   <script src="{% static 'js/pcoded.js' %}"></script>
   <script src="{% static 'js/plugins/feather.min.js' %}"></script>
 
-  
-  
-  
-  
+
+
+
+
   <script>layout_change('light');</script>
-  
-  
-  
-  
+
+
+
+
   <script>change_box_container('false');</script>
-  
-  
-  
+
+
+
   <script>layout_rtl_change('false');</script>
-  
-  
+
+
   <script>preset_change("preset-1");</script>
-  
-  
+
+
   <script>font_change("Public-Sans");</script>
-  
-    
- 
+
+
+
 </body>
 <!-- [Body] end -->
 
