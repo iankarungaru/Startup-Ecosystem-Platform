@@ -9,3 +9,7 @@ Dependencies and instructions to run📝
 -  pip install mysqlclient
 -  pip install validate-email-address
 -  pip install pillow
+-  pip install pymysql
+-  download mysql https://dev.mysql.com/downloads/installer/
+-  database name is startup
+-  setup your db credentials in settings.py
