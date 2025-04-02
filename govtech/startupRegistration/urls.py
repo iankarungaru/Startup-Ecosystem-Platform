@@ -9,9 +9,12 @@ from .import views
 from django.urls import path
 from .views import dashboard
 
+app_name = 'startupRegistration'  # ✅ Set the app name to 'dashboard'
+
+
 urlpatterns = [
     # path("", views.home, name="home"),
-    path('register/', multi_step_registration, name='multi_step'),
+    path('register/', multi_step_registration, name='register'),
     path('step/<int:step>/', multi_step_registration, name='multi_step'),
     path('completed/', registration_complete, name='registration_complete'),
     #path('dashboard/', dashboard, name='dashboard'),
