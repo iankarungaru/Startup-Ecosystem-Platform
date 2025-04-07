@@ -76,8 +76,14 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nationality</label>
-                                <input type="text" class="form-control" name="x" placeholder="X" required>
+                                <select class="form-control" name="nationality" required>
+                                    <option value="">-- Select Nationality --</option>
+                                    {% for country in countries %}
+                                        <option value="{{ country.id }}">{{ country.nationality }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
+                            
                             <div class="col-md-6">
                                 <label class="form-label">County</label>
                                 <input type="text" class="form-control" name="y" placeholder="Y" required>

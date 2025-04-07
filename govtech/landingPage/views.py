@@ -5,6 +5,7 @@ from django.contrib import messages
 from validate_email_address import validate_email
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import authenticate, login
+from .models import *
 # from landingPage.models import CustomUser  # Import your custom model  # Import authenticate and login
 
 # Create your views here.
@@ -18,6 +19,7 @@ from django.conf import settings
 # from landingPage.models import CustomUser
 
 def register_view(request):
+    countries = Country.objects.all().order_by('nationality')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -71,8 +73,11 @@ def register_view(request):
         except Exception as e:
             messages.error(request, f'An error occurred: {e}')
             return render(request, 'register.html')
+        
+        
+        
 
-    return render(request, 'register.html')
+    return render(request, 'register.html',{'countries': countries})
 
 
 # View for login page
@@ -100,3 +105,6 @@ def authlogin(request):
     
     # For GET requests, show the login form
     return render(request, 'login.html')
+
+
+    
