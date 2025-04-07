@@ -3,11 +3,31 @@ from django.db import models
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
     nationality = models.CharField(max_length=100)
+    
     class Meta:
         db_table = 'country'
 
     def __str__(self):
         return f"{self.name} ({self.nationality})"
+
+class County(models.Model):
+    name = models.CharField(max_length=100, unique=True)  # Ensuring county names are unique
+    class Meta:
+        db_table = 'county'
+    def __str__(self):
+        return self.name
+
+class Subcounty(models.Model):
+    name = models.CharField(max_length=100)  
+    county = models.ForeignKey(County, on_delete=models.CASCADE, related_name='subcounties')  # Foreign key to County
+
+    class Meta:
+        db_table = 'subcounty'  # The name of the table in the database
+
+    def __str__(self):
+        return self.name
+
+
 
 
 
