@@ -1,3 +1,17 @@
+from django.db import models
+
+class Country(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    nationality = models.CharField(max_length=100)
+    class Meta:
+        db_table = 'country'
+
+    def __str__(self):
+        return f"{self.name} ({self.nationality})"
+
+
+
+
 # # landingPage/models.py
 # from django.db import models
 # from django.contrib.auth.models import AbstractUser, UserManager
