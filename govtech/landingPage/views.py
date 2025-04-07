@@ -22,6 +22,7 @@ from django.conf import settings
 def register_view(request):
     countries = Country.objects.all().order_by('nationality')
     counties = County.objects.all().order_by('name')
+    genders  = gender.objects.all().order_by('name')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -30,7 +31,7 @@ def register_view(request):
         nationality = request.POST.get('nationality')
         county = request.POST.get('county')
         subcounty = request.POST.get('subcounty')
-        gender = request.POST.get('gender')
+        genderName = request.POST.get('gender')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -78,8 +79,7 @@ def register_view(request):
         
         
         
-
-    return render(request, 'register.html', {'countries': countries, 'counties': counties})
+    return render(request, 'register.html', {'countries': countries, 'counties': counties, 'genders':genders})
 
 def get_subcounties(request):
     county_id = request.GET.get('county_id')

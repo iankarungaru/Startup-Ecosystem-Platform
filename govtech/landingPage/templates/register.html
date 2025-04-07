@@ -103,7 +103,12 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Gender</label>
-                                <input type="text" class="form-control" name="y" placeholder="Y" required>
+                                <select class="form-control" name="gender" required>
+                                    <option value="">-- Select Gender --</option>
+                                    {% for mygender in genders %}
+                                        <option value="{{ mygender.id }}">{{ mygender.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
