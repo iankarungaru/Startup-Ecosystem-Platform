@@ -5,6 +5,7 @@ from django.contrib import messages
 from validate_email_address import validate_email
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
 from .models import *
 # from landingPage.models import CustomUser  # Import your custom model  # Import authenticate and login
 
@@ -20,6 +21,7 @@ from django.conf import settings
 
 def register_view(request):
     countries = Country.objects.all().order_by('nationality')
+    counties = County.objects.all().order_by('name')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -77,8 +79,12 @@ def register_view(request):
         
         
 
-    return render(request, 'register.html',{'countries': countries})
+    return render(request, 'register.html', {'countries': countries, 'counties': counties})
 
+def get_subcounties(request):
+    county_id = request.GET.get('county_id')
+    subcounties = Subcounty.objects.filter(county_id=county_id).values('id', 'name')
+    return JsonResponse(list(subcounties), safe=False)
 
 # View for login page
 def login_view(request):

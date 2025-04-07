@@ -86,13 +86,20 @@
                             
                             <div class="col-md-6">
                                 <label class="form-label">County</label>
-                                <input type="text" class="form-control" name="y" placeholder="Y" required>
+                                <select id="county" name="county" class="form-control" required>
+                                    <option value="">-- Select County --</option>
+                                    {% for c in counties %}
+                                        <option value="{{ c.id }}">{{ c.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">Sub county</label>
-                                <input type="text" class="form-control" name="x" placeholder="X" required>
+                                <label class="form-label">Subcounty</label>
+                                <select id="subcounty" name="subcounty" class="form-control" required>
+                                    <option value="">-- Select Subcounty --</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Gender</label>
@@ -121,6 +128,34 @@
     </div>
     <!-- [ Main Content ] end -->
     <!-- Required Js -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#county').on('change', function () {
+        var countyId = $(this).val();
+
+        if (countyId) {
+            $.ajax({
+                url: '/get-subcounties/',
+                data: {
+                    'county_id': countyId
+                },
+                success: function (data) {
+                    $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+                    $.each(data, function (i, item) {
+                        $('#subcounty').append($('<option>', {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                }
+            });
+        } else {
+            $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+        }
+    });
+</script>
+
+    </script>
     <script src="{% static 'js/plugins/popper.min.js' %}"></script>
     <script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
     <script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
@@ -148,6 +183,7 @@
 
 
     <script>font_change("Public-Sans");</script>
+    
 
 
 
