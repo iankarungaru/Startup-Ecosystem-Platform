@@ -7,78 +7,19 @@ from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from .models import *
+import re
+from django.contrib.auth.hashers import make_password
+from django.db import IntegrityError
 # from landingPage.models import CustomUser  # Import your custom model  # Import authenticate and login
 
 # Create your views here.
 def landing(request):
     return render(request, 'landing.html')
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
-# from landingPage.models import CustomUser
-
 def register_view(request):
     countries = Country.objects.all().order_by('nationality')
     counties = County.objects.all().order_by('name')
     genders  = gender.objects.all().order_by('name')
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        nationality = request.POST.get('nationality')
-        county = request.POST.get('county')
-        subcounty = request.POST.get('subcounty')
-        genderName = request.POST.get('gender')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Check if passwords match
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, 'register.html')
-
-        # Check if email is already registered
-        if CustomUser.objects.filter(email=email).exists():
-            messages.error(request, 'Email is already registered.')
-            return render(request, 'register.html')
-
-        # Create the user
-        try:
-            user = CustomUser.objects.create_user(
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
-                phone=phone,
-                nationality=nationality,
-                county=county,
-                subcounty=subcounty,
-                gender=gender
-            )
-            user.save()
-
-            # Send verification email
-            verification_link = 'http://your-domain.com/verify/'
-            send_mail(
-                'Email Verification',
-                f'Hi {first_name}, Welcome to Startup Kenya! Click the link to verify your email: {verification_link}',
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
-
-            messages.success(request, 'Registration successful! A verification email has been sent.')
-            return redirect('dashboard:dashboard')
-
-        except Exception as e:
-            messages.error(request, f'An error occurred: {e}')
-            return render(request, 'register.html')
-        
-        
-        
     return render(request, 'register.html', {'countries': countries, 'counties': counties, 'genders':genders})
 
 def get_subcounties(request):
@@ -93,7 +34,7 @@ def login_view(request):
 def authlogin(request):
     if request.method == 'POST':
         # Get form data
-        email = request.POST.get('email')  # Adjust field names as per your form
+        email = request.POST.get('email')  
         password = request.POST.get('password')
         print(f"Email: {email}, Password: {password}")  # Debug
         
@@ -112,5 +53,59 @@ def authlogin(request):
     # For GET requests, show the login form
     return render(request, 'login.html')
 
+def is_strong_password(password):
+    # At least 8 characters, one uppercase letter, one number, and one symbol
+    return (
+        len(password) >= 8 and
+        re.search(r'[A-Z]', password) and
+        re.search(r'[a-z]', password) and
+        re.search(r'\d', password) and
+        re.search(r'[^A-Za-z0-9]', password)
+    )
 
-    
+def signup(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name') 
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')  
+        phone = request.POST.get('phone')
+        nationality = request.POST.get('nationality')  
+        county = request.POST.get('county')
+        subCounty = request.POST.get('subcounty')  
+        genderName = request.POST.get('gender')
+        password = request.POST.get('password')  
+        confirm_password = request.POST.get('confirm_password')
+        
+        # Password match check
+        if password != confirm_password:
+            return JsonResponse({'status': 'error', 'message': 'Passwords do not match.'})
+        
+        # Password strength check
+        if not is_strong_password(password):
+            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+        
+        # Encrypt the password
+        encrypted_password = make_password(password)
+        
+        # Save to DB
+        try:
+            user = SignupUser.objects.create(
+                email=email,
+                password=encrypted_password,
+                fName=first_name,
+                lName=last_name,
+                phone=phone,
+                nationality=nationality,
+                county=county,
+                subcounty=subCounty,
+                gender=genderName
+            )
+            user.save()
+            return JsonResponse({'status': 'success', 'message': 'Registration successful. Please log in.'})
+
+        except IntegrityError:
+            return JsonResponse({'status': 'error', 'message': 'An account with this email already exists.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'An error occurred while saving your data: {e}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

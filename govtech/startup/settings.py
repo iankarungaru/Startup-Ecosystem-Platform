@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'startupRegistration',
     'Dashboard',
+    'debug_toolbar',
     'landingPage'    
 ]
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'startup.urls'
@@ -109,6 +111,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
+
+# DEBUG_TOOLBAR_CONFIG = {
+#     'INTERCEPT_REDIRECTS': False,
+# }
+
 
 
 # Internationalization
