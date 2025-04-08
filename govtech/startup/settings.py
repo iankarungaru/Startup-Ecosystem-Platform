@@ -83,8 +83,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Use MySQL engine
         'NAME': 'startup',  # Change to your MySQL database name
-        'USER': 'sotieno',  # Change to your MySQL username
-        'PASSWORD': 'Root@2025*',  # Change to your MySQL password
+        'USER': 'root',  # Change to your MySQL username
+        'PASSWORD': '',  # Change to your MySQL password
         'HOST': '127.0.0.1',  # Use localhost or 127.0.0.1
         'PORT': '3306',  # Default MySQL port
         'OPTIONS': {

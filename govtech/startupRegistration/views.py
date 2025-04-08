@@ -10,21 +10,13 @@ from django.http import HttpResponse
 from django.urls import reverse
 from datetime import datetime
 from .forms import (
-    Step1Form, Step2Form, Step3Form, Step4Form, Step5Form, 
-    Step6Form, Step7Form, Step8Form, Step9Form
+    Step1Form, Step2Form
 )
 
 def get_form(step):
     forms = {
         1: Step1Form,
         2: Step2Form,
-        3: Step3Form,
-        4: Step4Form,
-        5: Step5Form,
-        6: Step6Form,
-        7: Step7Form,
-        8: Step8Form,
-        9: Step9Form,
     }
     return forms.get(step)
 
@@ -66,7 +58,7 @@ def multi_step_registration(request, step=1):
             request.session[f'step_{step}'] = form_data
 
             next_step = step + 1
-            if next_step > 9:
+            if next_step > 2:
                 return redirect(reverse("registration_complete"))
             return redirect(reverse("multi_step", kwargs={"step": next_step}))
 
@@ -82,15 +74,35 @@ def multi_step_registration(request, step=1):
 
     return render(request, f"register/step{step}.html", {"form": form, "step": step})
 
+
+
 def registration_complete(request):
+    # Combine session data from step 1 and 2
+    data = {}
+    for i in range(1, 3):
+        step_data = request.session.get(f'step_{i}', {})
+        data.update(step_data)
+
+    # Convert date back to Python date object
+    if "date_of_establishment" in data and isinstance(data["date_of_establishment"], str):
+        try:
+            data["date_of_establishment"] = date.fromisoformat(data["date_of_establishment"])
+        except ValueError:
+            data["date_of_establishment"] = None
+
+    # Save to the Registration model
+    Registration.objects.create(**data)
+
+    # Clear session data
+    for i in range(1, 3):
+        request.session.pop(f'step_{i}', None)
+
     return render(request, "register/completed.html")
 
 
 
-
-def hello(request):
-    return render(request,"hello.html")
-
+def individual_reg(request):
+    return render(request,"individual.html")
 
 
 # views.py for dashboard
@@ -146,146 +158,3 @@ def dashboard(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-# V2 working
-
-from django.shortcuts import render, HttpResponse
-
-# Create your views here
-
-# views.py
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.urls import reverse
-from .forms import (
-    Step1Form, Step2Form, Step3Form, Step4Form, Step5Form, 
-    Step6Form, Step7Form, Step8Form, Step9Form
-)
-
-def home(request):
-    return render(request, "aboutus.html")
-
-
-def get_form(step):
-    forms = {
-        1: Step1Form,
-        2: Step2Form,
-        3: Step3Form,
-        4: Step4Form,
-        5: Step5Form,
-        6: Step6Form,
-        7: Step7Form,
-        8: Step8Form,
-        9: Step9Form,
-    }
-    return forms.get(step)
-
-def multi_step_registration(request, step=1):
-    step = int(step)
-    form_class = get_form(step)
-    
-    if not form_class:
-        return HttpResponse("Invalid step.")
-    
-    if request.method == "POST":
-        form = form_class(request.POST, request.FILES)
-        if form.is_valid():
-            request.session[f'step_{step}'] = form.cleaned_data
-            next_step = step + 1
-            if next_step > 9:
-                return redirect(reverse("registration_complete"))
-            return redirect(reverse("multi_step", kwargs={"step": next_step}))
-    else:
-        form = form_class()
-    
-    return render(request, f"step{step}.html", {"form": form, "step": step})
-
-def registration_complete(request):
-    return render(request, "completed.html")
-
-
-
-
-
-# V1
-import json
-from datetime import datetime
-
-def multi_step_registration(request, step=1):
-    step = int(step)
-    form_class = get_form(step)
-
-    if not form_class:
-        return HttpResponse("Invalid step.")
-
-    if request.method == "POST":
-        form = form_class(request.POST, request.FILES)
-        if form.is_valid():
-            form_data = form.cleaned_data
-
-            # Convert date to a string for JSON serialization
-            if "date_of_establishment" in form_data and isinstance(form_data["date_of_establishment"], datetime.date):
-                form_data["date_of_establishment"] = form_data["date_of_establishment"].isoformat()
-
-            # Save form data to session
-            request.session[f'step_{step}'] = form_data
-
-            next_step = step + 1
-            if next_step > 9:
-                return redirect(reverse("registration_complete"))
-            return redirect(reverse("multi_step", kwargs={"step": next_step}))
-
-    else:
-        # Convert date back to a Python date object when displaying the form
-        initial_data = request.session.get(f'step_{step}', {})
-        if "date_of_establishment" in initial_data:
-            try:
-                initial_data["date_of_establishment"] = datetime.fromisoformat(initial_data["date_of_establishment"]).date()
-            except ValueError:
-                pass  # Keep it as a string if it fails
-
-        form = form_class(initial=initial_data)
-
-    return render(request, f"register/step{step}.html", {"form": form, "step": step})
-
-
-
-
-
-
-
-def home(request):
-    return render(request, "aboutus.html")
-    
-    
-
-
-def register(request):
-     return render(request, 'register.html')
-'''
