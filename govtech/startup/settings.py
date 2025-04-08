@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'startupRegistration',
     'Dashboard',
     'debug_toolbar',
-    'landingPage'    
+    'landingPage',   
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

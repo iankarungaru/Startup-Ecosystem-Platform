@@ -5,14 +5,13 @@ from django.contrib import messages
 from validate_email_address import validate_email
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from .models import *
 import re
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
-# from landingPage.models import CustomUser  # Import your custom model  # Import authenticate and login
 
-# Create your views here.
 def landing(request):
     return render(request, 'landing.html')
 
@@ -29,28 +28,6 @@ def get_subcounties(request):
 
 # View for login page
 def login_view(request):
-    return render(request, 'login.html')
-
-def authlogin(request):
-    if request.method == 'POST':
-        # Get form data
-        email = request.POST.get('email')  
-        password = request.POST.get('password')
-        print(f"Email: {email}, Password: {password}")  # Debug
-        
-        # Authenticate user (assuming you're using Django's auth system)
-        user = authenticate(request, username=email, password=password)
-        print(f"User: {user}")  # Debug
-        
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'Login successful!')
-            return redirect('dashboard:dashboard')  # Replace 'home' with your desired redirect URL
-        else:
-            messages.error(request, 'Invalid email or password.')
-            return render(request, 'login.html')
-    
-    # For GET requests, show the login form
     return render(request, 'login.html')
 
 def is_strong_password(password):
@@ -109,3 +86,32 @@ def signup(request):
             return JsonResponse({'status': 'error', 'message': f'An error occurred while saving your data: {e}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def authlogin(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            # Get user by email
+            user = SignupUser.objects.get(email=email)
+
+            # Check if the account is active (0 is active)
+            if user.isactive == 1:
+                return JsonResponse({'status': 'error', 'message': 'Your account is deactivated or not activated. Please contact system admin.'})
+            
+            # Validate password using check_password
+            if not check_password(password, user.password):
+                return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})  # Generic error message
+
+            # Manually set session values
+            request.session['user_id'] = user.id
+            request.session['user_email'] = user.email
+
+            return JsonResponse({'status': 'success', 'message': 'Login successful.'})
+
+        except SignupUser.DoesNotExist:
+            # Avoid exposing whether it's the email or password that is wrong
+            return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
