@@ -62,7 +62,7 @@
             <div class="auth-header">
             <a href="#"><img src="{% static 'images/COTlog.png' %}" alt="img"></a>
             </div>
-            <form class="login-form" action="{% url 'authlogin' %}" method="post" enctype="multipart/form-data">
+            <form class="login-form" id="registerForm" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="card my-5" style="width: 1000px; max-width: 100%; margin: auto;">
                     <div class="card-body">
@@ -83,7 +83,8 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Enter you email address" required>
+                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email address" required>
+                                <small id="emailFeedback" class="form-text"></small>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Phone Number</label>
@@ -132,7 +133,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="password" class="form-control" name="x" placeholder="Enter password" required>
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter password" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                             <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
@@ -146,7 +147,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">Confirm Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="confirm_password" class="form-control" name="y" placeholder="Confirm password" required>
+                                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm password" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="toggleConfirmPassword" style="cursor: pointer;">
                                             <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>
@@ -170,111 +171,170 @@
     <!-- [ Main Content ] end -->
     <!-- Required Js -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('#county').on('change', function () {
-        var countyId = $(this).val();
-
-        if (countyId) {
-            $.ajax({
-                url: '/get-subcounties/',
-                data: {
-                    'county_id': countyId
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();  // Prevent default form submission
+        
+            const form = e.target;
+            const formData = new FormData(form);  // Collect form data
+        
+            fetch("{% url 'signup' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // Send CSRF token
                 },
-                success: function (data) {
-                    $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
-                    $.each(data, function (i, item) {
-                        $('#subcounty').append($('<option>', {
-                            value: item.id,
-                            text: item.name
-                        }));
+                body: formData  // Send the form data
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: data.message
+                    }).then(() => {
+                        window.location.href = "{% url 'login' %}";  // Redirect to login on success
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message
                     });
                 }
             });
-        } else {
-            $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
-        }
-    });
-</script>
-<script>
-    // Toggle password visibility
-    $('#togglePassword').on('click', function () {
-        const input = $('#password');
-        const icon = $('#togglePasswordIcon');
-        const type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-        icon.toggleClass('fa-eye fa-eye-slash');
-    });
+        });
+        </script>
+        
+    <script>
+        $('#county').on('change', function () {
+            var countyId = $(this).val();
 
-    $('#toggleConfirmPassword').on('click', function () {
-        const input = $('#confirm_password');
-        const icon = $('#toggleConfirmPasswordIcon');
-        const type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-        icon.toggleClass('fa-eye fa-eye-slash');
-    });
-
-    // Password strength checker
-    $('#password').on('input', function () {
-        const password = $(this).val();
-        const strength = getPasswordStrength(password);
-        const strengthDiv = $('#passwordStrength');
-
-        let color, message;
-        switch (strength) {
-            case 0:
-                color = 'danger'; message = 'Too weak'; break;
-            case 1:
-                color = 'warning'; message = 'Weak'; break;
-            case 2:
-                color = 'info'; message = 'Moderate'; break;
-            case 3:
-                color = 'primary'; message = 'Strong'; break;
-            case 4:
-                color = 'success'; message = 'Very strong'; break;
-        }
-
-        strengthDiv.html(`<div class="progress">
-            <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
-        </div><small class="text-${color}">${message}</small>`);
-    });
-
-    function getPasswordStrength(password) {
-        let score = 0;
-        if (password.length >= 8) score++;
-        if (/[A-Z]/.test(password)) score++;
-        if (/[0-9]/.test(password)) score++;
-        if (/[^A-Za-z0-9]/.test(password)) score++;
-        return score;
-    }
-
-    // Password match validation
-    $('#password, #confirm_password').on('input', function () {
-        const password = $('#password').val();
-        const confirmPassword = $('#confirm_password').val();
-        const messageEl = $('#matchMessage');
-
-        if (confirmPassword.length === 0) {
-            messageEl.text('');
-            return;
-        }
-
-        if (password === confirmPassword) {
-            messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
-        } else {
-            messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
-        }
-    });
-</script>
-
-
-
+            if (countyId) {
+                $.ajax({
+                    url: '/get-subcounties/',
+                    data: {
+                        'county_id': countyId
+                    },
+                    success: function (data) {
+                        $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+                        $.each(data, function (i, item) {
+                            $('#subcounty').append($('<option>', {
+                                value: item.id,
+                                text: item.name
+                            }));
+                        });
+                    }
+                });
+            } else {
+                $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+            }
+        });
     </script>
-    <script src="{% static 'js/plugins/popper.min.js' %}"></script>
-    <script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
-    <script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/fonts/custom-font.js' %}"></script>
-    <script src="{% static 'js/pcoded.js' %}"></script>
-    <script src="{% static 'js/plugins/feather.min.js' %}"></script>
+    <script>
+        // Toggle password visibility
+        $('#togglePassword').on('click', function () {
+            const input = $('#password');
+            const icon = $('#togglePasswordIcon');
+            const type = input.attr('type') === 'password' ? 'text' : 'password';
+            input.attr('type', type);
+            icon.toggleClass('fa-eye fa-eye-slash');
+        });
+
+        $('#toggleConfirmPassword').on('click', function () {
+            const input = $('#confirm_password');
+            const icon = $('#toggleConfirmPasswordIcon');
+            const type = input.attr('type') === 'password' ? 'text' : 'password';
+            input.attr('type', type);
+            icon.toggleClass('fa-eye fa-eye-slash');
+        });
+
+        // Password strength checker
+        $('#password').on('input', function () {
+            const password = $(this).val();
+            const strength = getPasswordStrength(password);
+            const strengthDiv = $('#passwordStrength');
+
+            let color, message;
+            switch (strength) {
+                case 0:
+                    color = 'danger'; message = 'Too weak'; break;
+                case 1:
+                    color = 'warning'; message = 'Weak'; break;
+                case 2:
+                    color = 'info'; message = 'Moderate'; break;
+                case 3:
+                    color = 'primary'; message = 'Strong'; break;
+                case 4:
+                    color = 'success'; message = 'Very strong'; break;
+            }
+
+            strengthDiv.html(`<div class="progress">
+                <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
+            </div><small class="text-${color}">${message}</small>`);
+        });
+
+        function getPasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+            return score;
+        }
+
+        // Password match validation
+        $('#password, #confirm_password').on('input', function () {
+            const password = $('#password').val();
+            const confirmPassword = $('#confirm_password').val();
+            const messageEl = $('#matchMessage');
+
+            if (confirmPassword.length === 0) {
+                messageEl.text('');
+                return;
+            }
+
+            if (password === confirmPassword) {
+                messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
+            } else {
+                messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
+            }
+        });
+    </script>
+    <script>
+        const emailInput = document.getElementById('emailInput');
+        const emailFeedback = document.getElementById('emailFeedback');
+
+        emailInput.addEventListener('input', function () {
+            const email = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+            if (!email) {
+                emailFeedback.textContent = '';
+                emailFeedback.className = 'form-text';
+            } else if (emailRegex.test(email)) {
+                emailFeedback.textContent = 'Looks good!';
+                emailFeedback.className = 'form-text text-success';
+            } else {
+                emailFeedback.textContent = 'Please enter a valid email like name@example.com';
+                emailFeedback.className = 'form-text text-danger';
+            }
+        });
+    </script>
+
+
+
+        </script>
+        <script src="{% static 'js/plugins/popper.min.js' %}"></script>
+        <script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
+        <script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/fonts/custom-font.js' %}"></script>
+        <script src="{% static 'js/pcoded.js' %}"></script>
+        <script src="{% static 'js/plugins/feather.min.js' %}"></script>
+        
+
 
 
 

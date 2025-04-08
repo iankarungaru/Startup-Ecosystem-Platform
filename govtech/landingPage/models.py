@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -34,6 +35,28 @@ class gender(models.Model):
 
     def __str__(self):
         return self.name
+    
+class SignupUser(models.Model):
+    fName = models.CharField(max_length=255)
+    lName = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
+    phone = models.CharField(max_length=255)
+    nationality = models.IntegerField()
+    county = models.IntegerField()
+    subcounty = models.IntegerField()
+    gender = models.IntegerField(null=True, blank=True)  # Nullable in DB
+    password = models.TextField()
+    isLogin = models.IntegerField(default=0)
+    logtime = models.DateTimeField(auto_now_add=True)
+    isactive = models.IntegerField(default=0)
+    dateCreated = models.DateTimeField(auto_now_add=True) 
+    dateUpdated = models.DateTimeField(auto_now=True) 
+
+    class Meta:
+        db_table = 'externalusers'  # Change this to your actual DB table name
+
+    def __str__(self):
+        return self.email
 
 
 

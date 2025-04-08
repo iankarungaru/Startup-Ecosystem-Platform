@@ -7,6 +7,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),  
     path('authlogin/', views.authlogin, name = 'authlogin'),
     path('get-subcounties/', views.get_subcounties, name='get_subcounties'),
+    path('signup/', views.signup, name='signup'),
     path('', include('Dashboard.urls')),  # ✅ Include dashboard URLs here
 
 ]
