@@ -25,3 +25,18 @@ class Registration(models.Model):
 
     def __str__(self):
         return self.startup_name
+from django.db import models
+
+class IndividualDeveloper(models.Model):
+    first_name = models.CharField(max_length=255)
+    second_name = models.CharField(max_length=255)
+    id_number = models.CharField(max_length=20)
+    website = models.URLField(blank=True, null=True)
+    mail = models.EmailField()
+    contact = models.CharField(max_length=20)
+    industry = models.CharField(max_length=100)
+    address = models.TextField()
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.first_name} {self.second_name}"

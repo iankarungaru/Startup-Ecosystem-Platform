@@ -17,3 +17,23 @@ class Step2Form(forms.Form):
     startup_description = forms.CharField(widget=forms.Textarea, required=True)
     sector = forms.CharField(max_length=100, required=True)
     website = forms.URLField(required=False)
+
+from django import forms
+from .models import IndividualDeveloper
+
+class IndividualForm(forms.ModelForm):
+    class Meta:
+        model = IndividualDeveloper
+        fields = '__all__'  # or list them explicitly if needed
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'second_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'id_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'website': forms.URLInput(attrs={'class': 'form-control'}),
+            'mail': forms.EmailInput(attrs={'class': 'form-control'}),
+            'contact': forms.TextInput(attrs={'class': 'form-control'}),
+            'industry': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

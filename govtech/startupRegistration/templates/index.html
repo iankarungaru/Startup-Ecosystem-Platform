@@ -51,7 +51,7 @@
       <div class="navbar-content">
         <ul class="pc-navbar">
           <li class="pc-item">
-            <a href="{% url 'dashboard:dashboard' %}" class="pc-link">
+            <a href="{% url 'dashboard' %}" class="pc-link">
               <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
               <span class="pc-mtext">Dashboard</span>
             </a>
@@ -62,9 +62,15 @@
             <i class="ti ti-dashboard"></i>
           </li>
           <li class="pc-item">
-            <a href="{% url 'startupRegistration:register' %}" class="pc-link">
+            <a href="{% url 'individual_reg' %}" class="pc-link">
               <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
-              <span class="pc-mtext">Register Startup</span>
+              <span class="pc-mtext">Register Individual Developer</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="{% url 'multi_step' %}" class="pc-link">
+              <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+              <span class="pc-mtext">Register Software Company</span>
             </a>
           </li>
           <li class="pc-item">

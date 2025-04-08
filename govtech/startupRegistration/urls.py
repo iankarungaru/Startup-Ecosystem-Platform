@@ -14,7 +14,7 @@ from .views import dashboard
 
 urlpatterns = [
     # path("", views.home, name="home"),
-    path('register/', multi_step_registration, name='multi_step'),
+    path('SoftwareFirm/', multi_step_registration, name='multi_step'),
     path('step/<int:step>/', multi_step_registration, name='multi_step'),
     path('completed/', registration_complete, name='registration_complete'),
     path('individual/', individual_reg, name='individual_reg'),
