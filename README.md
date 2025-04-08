@@ -13,4 +13,6 @@ Dependencies and instructions to run📝
 -  download mysql https://dev.mysql.com/downloads/installer/
 -  database name is startup
 -  setup your db credentials in settings.py
--  pip install django-debug-toolbar    
+-  pip install django-debug-toolbar
+-  pip install djangorestframework
+-  pip install djangorestframework-simplejwt    
