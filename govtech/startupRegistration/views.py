@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from datetime import datetime
 from .forms import (
-    Step1Form, Step2Form
+    Step1Form, Step2Form, IndividualForm
 )
 
 def get_form(step):
@@ -101,8 +101,20 @@ def registration_complete(request):
 
 
 
+from django.shortcuts import render, redirect
+from .forms import IndividualForm
+
 def individual_reg(request):
-    return render(request,"individual.html")
+    if request.method == 'POST':
+        form = IndividualForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "register/completed.html")  # Adjust URL as needed
+    else:
+        form = IndividualForm()
+
+    return render(request, "register/individual.html", {'form': form})
+
 
 
 # views.py for dashboard
