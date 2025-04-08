@@ -25,10 +25,27 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link">
     <link rel="stylesheet" href="{% static 'css/style-preset.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
+<style>
+    .input-group .input-group-text {
+    background-color: #fff;
+    border-left: none;
+    border-radius: 0 .25rem .25rem 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    height: 100%;
+}
+
+.input-group input.form-control {
+    border-right: none;
+}
+
+</style>
 
 <body>
     <!-- [ Pre-loader ] start -->
@@ -103,18 +120,42 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Gender</label>
-                                <input type="text" class="form-control" name="y" placeholder="Y" required>
+                                <select class="form-control" name="gender" required>
+                                    <option value="">-- Select Gender --</option>
+                                    {% for mygender in genders %}
+                                        <option value="{{ mygender.id }}">{{ mygender.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Password</label>
-                                <input type="text" class="form-control" name="x" placeholder="X" required>
+                                <div class="input-group">
+                                    <input type="password" id="password" class="form-control" name="x" placeholder="Enter password" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters, include a capital letter, number, and symbol.</small>
+                                <div id="passwordStrength" class="mt-1"></div>
                             </div>
+                            
                             <div class="col-md-6">
                                 <label class="form-label">Confirm Password</label>
-                                <input type="text" class="form-control" name="y" placeholder="Y" required>
+                                <div class="input-group">
+                                    <input type="password" id="confirm_password" class="form-control" name="y" placeholder="Confirm password" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="toggleConfirmPassword" style="cursor: pointer;">
+                                            <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <small id="matchMessage" class="form-text"></small>
                             </div>
+                            
                         </div>
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Sign Up</button>
@@ -154,6 +195,78 @@
         }
     });
 </script>
+<script>
+    // Toggle password visibility
+    $('#togglePassword').on('click', function () {
+        const input = $('#password');
+        const icon = $('#togglePasswordIcon');
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        icon.toggleClass('fa-eye fa-eye-slash');
+    });
+
+    $('#toggleConfirmPassword').on('click', function () {
+        const input = $('#confirm_password');
+        const icon = $('#toggleConfirmPasswordIcon');
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        icon.toggleClass('fa-eye fa-eye-slash');
+    });
+
+    // Password strength checker
+    $('#password').on('input', function () {
+        const password = $(this).val();
+        const strength = getPasswordStrength(password);
+        const strengthDiv = $('#passwordStrength');
+
+        let color, message;
+        switch (strength) {
+            case 0:
+                color = 'danger'; message = 'Too weak'; break;
+            case 1:
+                color = 'warning'; message = 'Weak'; break;
+            case 2:
+                color = 'info'; message = 'Moderate'; break;
+            case 3:
+                color = 'primary'; message = 'Strong'; break;
+            case 4:
+                color = 'success'; message = 'Very strong'; break;
+        }
+
+        strengthDiv.html(`<div class="progress">
+            <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
+        </div><small class="text-${color}">${message}</small>`);
+    });
+
+    function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        return score;
+    }
+
+    // Password match validation
+    $('#password, #confirm_password').on('input', function () {
+        const password = $('#password').val();
+        const confirmPassword = $('#confirm_password').val();
+        const messageEl = $('#matchMessage');
+
+        if (confirmPassword.length === 0) {
+            messageEl.text('');
+            return;
+        }
+
+        if (password === confirmPassword) {
+            messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
+        } else {
+            messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
+        }
+    });
+</script>
+
+
 
     </script>
     <script src="{% static 'js/plugins/popper.min.js' %}"></script>
