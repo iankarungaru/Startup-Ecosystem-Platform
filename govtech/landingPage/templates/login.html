@@ -25,10 +25,29 @@
   <!-- [Template CSS Files] -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link">
   <link rel="stylesheet" href="{% static 'css/style-preset.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
 
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
+<style>
+  .input-group .input-group-text {
+  background-color: #fff;
+  border-left: none;
+  border-radius: 0 .25rem .25rem 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  height: 100%;
+}
+
+.input-group input.form-control {
+  border-right: none;
+}
+
+</style>
 
 <body>
   <!-- [ Pre-loader ] start -->
@@ -45,7 +64,7 @@
         <div class="auth-header">
           <a href="#"><img src="{% static 'images/COTlog.png' %}" alt="img"></a>
         </div>
-        <form class="login-form" action="{% url 'authlogin' %}" method="post" enctype="multipart/form-data">
+        <form class="login-form" id="loginForm" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="card my-5" style="width: 500px; max-width: 100%; margin: auto;">
             <div class="card-body">
@@ -58,8 +77,15 @@
                 </div>
                 <div class="form-group mb-3">
                   <label class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password" placeholder="Password" required>
-                </div>
+                  <div class="input-group">
+                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter password" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                        </span>
+                    </div>
+                </div>                
+                </div>                               
                 <div class="d-flex mt-1 justify-content-between">
                   <a href="{% url 'register' %}" class="link-primary">Don't have an account?</a>
                   <h5 class="text-secondary f-w-400">Forgot Password?</h5>
@@ -74,6 +100,67 @@
     </div>
   </div>
   <!-- [ Main Content ] end -->
+
+
+  <script>
+    // Function to toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.getElementById('togglePasswordIcon');
+  
+      // Toggle the input type between 'password' and 'text'
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye'); // Remove the eye icon
+        toggleIcon.classList.add('fa-eye-slash'); // Add the eye-slash icon
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash'); // Remove the eye-slash icon
+        toggleIcon.classList.add('fa-eye'); // Add the eye icon
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent default form submission
+    
+        const form = e.target;
+        const formData = new FormData(form);  // Collect form data
+
+        // Get CSRF token from the hidden input field (if it's in the form)
+        const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+        fetch("{% url 'authlogin' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken  // Send CSRF token in the header
+            },
+            body: formData  // Send the form data
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message
+                }).then(() => {
+                  window.location.href = "/dashboard/";  // Redirect to Dashboard on success
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message
+                });
+            }
+        })
+        .catch(error => console.log(error));
+    });
+</script>
+
+
   <!-- Required Js -->
   <script src="{% static 'js/plugins/popper.min.js' %}"></script>
   <script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
