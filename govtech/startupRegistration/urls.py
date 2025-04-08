@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from django.urls import path
-from .views import multi_step_registration, registration_complete
+from .views import multi_step_registration, registration_complete, individual_reg
 from django.urls import path
 from .import views
 
@@ -9,14 +9,15 @@ from .import views
 from django.urls import path
 from .views import dashboard
 
-app_name = 'startupRegistration'  # ✅ Set the app name to 'dashboard'
+#app_name = 'startupRegistration'  # ✅ Set the app name to 'dashboard'
 
 
 urlpatterns = [
     # path("", views.home, name="home"),
-    path('register/', multi_step_registration, name='register'),
+    path('register/', multi_step_registration, name='multi_step'),
     path('step/<int:step>/', multi_step_registration, name='multi_step'),
     path('completed/', registration_complete, name='registration_complete'),
+    path('individual/', individual_reg, name='individual_reg'),
     #path('dashboard/', dashboard, name='dashboard'),
 ]
 
