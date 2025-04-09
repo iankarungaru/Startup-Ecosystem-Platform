@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django.urls import include, path
 from django.urls import path
-from .views import multi_step_registration, registration_complete, individual_reg, dashboard_data # DashboardData
+from .views import multi_step_registration, registration_complete, individual_reg, dashboard_data, index # DashboardData
 from django.urls import path
 
-
-from django.urls import path
 
 #app_name = 'startupRegistration'  # ✅ Set the app name to 'dashboard'
 
@@ -17,6 +15,7 @@ urlpatterns = [
     path('completed/', registration_complete, name='registration_complete'),
     path('individual/', individual_reg, name='individual_reg'),
     path('',  dashboard_data, name='dashboard'),
+    path("index/", index, name="index"),
 ]
 
 
