@@ -94,24 +94,29 @@ def authlogin(request):
 
         try:
             # Get user by email
-            user = SignupUser.objects.get(email=email)
+            user_obj = SignupUser.objects.get(email=email)
 
-            # Check if the account is active (0 is active)
-            if user.isactive == 1:
+            if user_obj.isactive == 1:
                 return JsonResponse({'status': 'error', 'message': 'Your account is deactivated or not activated. Please contact system admin.'})
-            
-            # Validate password using check_password
-            if not check_password(password, user.password):
-                return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})  # Generic error message
 
-            # Manually set session values
-            request.session['user_id'] = user.id
-            request.session['user_email'] = user.email
+            # Check password
+            if not check_password(password, user_obj.password):
+                return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
+
+            # Now get or create a Django User for authentication (temporary fix)
+            # At this point, we’ve verified that the email and password match. Now, we need to create a Django User model (or get the existing one).
+            # We use get_or_create to get the user based on the email (username in Django’s default User model). Since you are using a custom SignupUser model for authentication, we don’t use Django’s password system directly. Instead, we call set_unusable_password() to ensure no password is set on the User object.
+            # Finally, we save the User model to the database. We are doing this to enforce the login required middleware
+            user, created = User.objects.get_or_create(username=user_obj.email)
+            user.set_unusable_password()  # since we’re not using Django’s password system
+            user.save()
+
+            # Log the user in properly
+            login(request, user)
 
             return JsonResponse({'status': 'success', 'message': 'Login successful.'})
 
         except SignupUser.DoesNotExist:
-            # Avoid exposing whether it's the email or password that is wrong
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
