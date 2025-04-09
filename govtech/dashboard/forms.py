@@ -19,11 +19,11 @@ class Step2Form(forms.Form):
     website = forms.URLField(required=False)
 
 from django import forms
-from .models import IndividualDeveloper
+from .models import IndividualDev
 
 class IndividualForm(forms.ModelForm):
     class Meta:
-        model = IndividualDeveloper
+        model = IndividualDev
         fields = '__all__'  # or list them explicitly if needed
 
         widgets = {

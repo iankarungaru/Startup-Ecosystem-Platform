@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 import json
 from datetime import datetime
+from .models import Registration
 # Create your views here
 
 # views.py
@@ -115,41 +116,42 @@ def individual_reg(request):
 
     return render(request, "register/individual.html", {'form': form})
 
-
+def dashboard_data(request):
+     return render(request, "index.html")
 
 # views.py for dashboard
 
-from django.shortcuts import render
+'''from django.shortcuts import render
 from django.db.models import Count, Avg
-from .models import Registration
+from .models import DashboardData
 
-def dashboard(request):
+def dashboard_data(request):
     # Get total registrations
-    total_registrations = Registration.objects.count()
+    total_registrations = DashboardData.objects.count()
 
     # Get average number of employees
-    avg_employees = Registration.objects.aggregate(Avg('employees'))['employees__avg'] or 0
+    avg_employees = DashboardData.objects.aggregate(Avg('employees'))['employees__avg'] or 0
     avg_employees = round(avg_employees, 2)
 
     # Get the most common industry
-    common_industry = Registration.objects.values('sector').annotate(count=Count('sector')).order_by('-count').first()
+    common_industry = DashboardData.objects.values('sector').annotate(count=Count('sector')).order_by('-count').first()
     common_industry = common_industry['sector'] if common_industry else 'N/A'
 
     # Get all registrations for the table
-    registrations = Registration.objects.all()
+    registrations = DashboardData.objects.all()
 
     # Business Model Distribution
-    business_model_data = Registration.objects.values('business_model').annotate(count=Count('business_model'))
+    business_model_data = DashboardData.objects.values('business_model').annotate(count=Count('business_model'))
     business_model_labels = [item['business_model'] for item in business_model_data]
     business_model_counts = [item['count'] for item in business_model_data]
 
     # Startup Stage Distribution
-    startup_stage_data = Registration.objects.values('stage').annotate(count=Count('stage'))
+    startup_stage_data = DashboardData.objects.values('stage').annotate(count=Count('stage'))
     startup_stage_labels = [item['stage'] for item in startup_stage_data]
     startup_stage_counts = [item['count'] for item in startup_stage_data]
 
     # Funding Status Distribution
-    funding_status_data = Registration.objects.values('funding_status').annotate(count=Count('funding_status'))
+    funding_status_data = DashboardData.objects.values('funding_status').annotate(count=Count('funding_status'))
     funding_labels = [item['funding_status'] for item in funding_status_data]
     funding_counts = [item['count'] for item in funding_status_data]
 
@@ -170,3 +172,4 @@ def dashboard(request):
 
 
 
+'''
