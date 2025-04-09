@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from django.urls import path
-from .views import multi_step_registration, registration_complete, individual_reg, dashboard_data, index # DashboardData
+from .views import multi_step_registration, registration_complete, individual_reg, dashboard_data, index, authlogout # DashboardData
 from django.urls import path
 
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('individual/', individual_reg, name='individual_reg'),
     path('',  dashboard_data, name='dashboard'),
     path("index/", index, name="index"),
+    path("authlogout/", authlogout, name="authlogout"),
 ]
 
 
