@@ -2,17 +2,14 @@ from django.shortcuts import render, HttpResponse
 import json
 from datetime import datetime
 from .models import Registration
-# Create your views here
-
-# views.py
-
-from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from datetime import datetime
 from .forms import (
     Step1Form, Step2Form, IndividualForm
 )
+from django.contrib.auth import logout
+from django.http import JsonResponse
 
 def dashboard_data(request):
     return render(request, "dashboard.html")
@@ -123,58 +120,14 @@ def individual_reg(request):
     return render(request, "register/individual.html", {'form': form})
 
 
+def authlogout(request):
+    try:
+        # Clear the session
+        logout(request)  # This will log the user out and clear their session.
 
-# views.py for dashboard
+        # You can return a success message via JSON if needed (optional)
+        return redirect('/login/')  # Redirect to login page or other desired page
 
-'''from django.shortcuts import render
-from django.db.models import Count, Avg
-from .models import DashboardData
-
-def dashboard_data(request):
-    # Get total registrations
-    total_registrations = DashboardData.objects.count()
-
-    # Get average number of employees
-    avg_employees = DashboardData.objects.aggregate(Avg('employees'))['employees__avg'] or 0
-    avg_employees = round(avg_employees, 2)
-
-    # Get the most common industry
-    common_industry = DashboardData.objects.values('sector').annotate(count=Count('sector')).order_by('-count').first()
-    common_industry = common_industry['sector'] if common_industry else 'N/A'
-
-    # Get all registrations for the table
-    registrations = DashboardData.objects.all()
-
-    # Business Model Distribution
-    business_model_data = DashboardData.objects.values('business_model').annotate(count=Count('business_model'))
-    business_model_labels = [item['business_model'] for item in business_model_data]
-    business_model_counts = [item['count'] for item in business_model_data]
-
-    # Startup Stage Distribution
-    startup_stage_data = DashboardData.objects.values('stage').annotate(count=Count('stage'))
-    startup_stage_labels = [item['stage'] for item in startup_stage_data]
-    startup_stage_counts = [item['count'] for item in startup_stage_data]
-
-    # Funding Status Distribution
-    funding_status_data = DashboardData.objects.values('funding_status').annotate(count=Count('funding_status'))
-    funding_labels = [item['funding_status'] for item in funding_status_data]
-    funding_counts = [item['count'] for item in funding_status_data]
-
-    context = {
-        'total_registrations': total_registrations,
-        'avg_employees': avg_employees,
-        'common_industry': common_industry,
-        'registrations': registrations,
-        'business_model_labels': business_model_labels,
-        'business_model_counts': business_model_counts,
-        'startup_stage_labels': startup_stage_labels,
-        'startup_stage_counts': startup_stage_counts,
-        'funding_labels': funding_labels,
-        'funding_counts': funding_counts,
-    }
-    return render(request, 'dashboard.html', context)
-
-
-
-
-'''
+    except Exception as e:
+        # Handle any errors that occur during logout
+        return JsonResponse({'status': 'error', 'message': f'Error during logout: {str(e)}'})
