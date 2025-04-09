@@ -14,6 +14,12 @@ from .forms import (
     Step1Form, Step2Form, IndividualForm
 )
 
+def dashboard_data(request):
+    return render(request, "dashboard.html")
+
+def index(request):
+    return render(request,"index.html")
+
 def get_form(step):
     forms = {
         1: Step1Form,
@@ -116,8 +122,7 @@ def individual_reg(request):
 
     return render(request, "register/individual.html", {'form': form})
 
-def dashboard_data(request):
-     return render(request, "index.html")
+
 
 # views.py for dashboard
 
