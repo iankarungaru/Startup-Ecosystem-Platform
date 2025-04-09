@@ -1,30 +1,26 @@
+# govtech/startup/middleware/login_required_middleware.py
+
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.conf import settings
+import re
 
-EXEMPT_PATHS = [
-    '/',  # Landing page
-    '/authlogin/',
-    '/register/',
-    '/logout/',
-]
-
-PROTECTED_PREFIXES = [
-    '/dashboard/',
-    '/account/',
+EXEMPT_URLS = [
+    r'^$',
+    r'^register/?$',                   
+    r'^login/?$',
+    r'^authlogin/.*$',
+    r'^get-subcounties/.*$',    
+    r'^signup/.*$',
 ]
 
 class LoginRequiredMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.exempt_urls = [re.compile(expr) for expr in EXEMPT_URLS]
 
     def __call__(self, request):
-        # Skip if path is exempt
-        if request.path in EXEMPT_PATHS:
-            return self.get_response(request)
-
-        # Check if it's under a protected path and user is not logged in
-        if any(request.path.startswith(prefix) for prefix in PROTECTED_PREFIXES):
-            if not request.user.is_authenticated:
-                return redirect(reverse('login'))  # You can customize this URL
-
+        path = request.path_info.lstrip('/')
+        if not request.user.is_authenticated:
+            if not any(pattern.match(path) for pattern in self.exempt_urls):
+                return redirect('/login/')
         return self.get_response(request)

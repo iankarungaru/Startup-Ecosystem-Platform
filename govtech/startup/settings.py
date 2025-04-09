@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'startup.middleware.login_required_middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -82,8 +83,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Use MySQL engine
         'NAME': 'startup',  # Change to your MySQL database name
-        'USER': 'root',  # Change to your MySQL username
-        'PASSWORD': '',  # Change to your MySQL password
+        'USER': 'sotieno',  # Change to your MySQL username
+        'PASSWORD': 'Root@2025*',  # Change to your MySQL password
         'HOST': '127.0.0.1',  # Use localhost or 127.0.0.1
         'PORT': '3306',  # Default MySQL port
         'OPTIONS': {
