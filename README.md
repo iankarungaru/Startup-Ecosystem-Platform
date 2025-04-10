@@ -11,7 +11,7 @@ Dependencies and instructions to run📝
 -  pip install pillow
 -  pip install pymysql
 -  download mysql https://dev.mysql.com/downloads/installer/
--  addtionally you can use xammp to get mysql and apache(if you need to work with phpmyadmin)
+-  addtionally you can use xammp to get mysql and apache(if you need to work with phpmyadmin)/Workbench
 -  database name is startup
 -  setup your db credentials in settings.py
 -  pip install django-debug-toolbar
