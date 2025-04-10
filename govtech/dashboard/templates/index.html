@@ -265,7 +265,7 @@
             <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
               aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
               <img src="/static/images/user/avatar-2.jpg" alt="user-image" class="user-avtar">
-              <span>Startup User</span>
+             <span>{{ request.session.fName }} {{ request.session.lName }}</span>
             </a>
             <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
               <div class="dropdown-header">
@@ -274,8 +274,7 @@
                     <img src="/static/images/user/avatar-2.jpg" alt="user-image" class="user-avtar wid-35">
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1">Startup User</h6>
-                    <span>UI/UX Designer</span>
+                    <h6 class="mb-1">{{ request.session.fName }} {{ request.session.lName }}</h6>
                   </div>
                   <a href="{% url 'authlogout' %}" class="pc-head-link bg-transparent"><i class="ti ti-power text-danger"></i></a>
                 </div>
@@ -371,11 +370,18 @@
       </div>
       <!-- [ breadcrumb ] end -->
       <!-- [ Main Content ] start -->
-      <div class="row">
-        {% block content %}
-        <!-- This section will be replaced by child templates -->
-        {% endblock %}
+     <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow-sm rounded">
+          <div class="card-body">
+            {% block content %}
+            <!-- Content from child templates will appear here -->
+            {% endblock %}
+          </div>
+        </div>
       </div>
+    </div>
+
     </div>
   </div>
   <!-- [ Main Content ] end -->
@@ -398,6 +404,11 @@
       </div>
     </div>
   </footer>
+
+
+
+<!-- Add this where you want to display the session data in HTML -->
+<div id="user-info"></div>
 
   <!-- [Page Specific JS] start -->
   <script src="/static/js/plugins/apexcharts.min.js"></script>
