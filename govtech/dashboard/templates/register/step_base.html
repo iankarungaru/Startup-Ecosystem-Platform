@@ -1,5 +1,7 @@
 <!-- templates/step_base.html --> 
 
+{% extends 'index.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +26,10 @@
                      aria-valuenow="{{ step }}" aria-valuemin="1" aria-valuemax="2"></div>
             </div>
 
-            {% block content %}{% endblock %}
+            
         </div>
     </div>
 
 </body>
 </html>
+{% endblock %}

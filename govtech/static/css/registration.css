@@ -12,9 +12,10 @@
 }
 
 .btn-primary {
-    background-color: #BE0000;
+    background-color: #007ACC;
     border-radius: 5px;
     padding: 10px 20px;
+    margin-bottom: 20px;
 }
 
 .card {
@@ -24,7 +25,7 @@
 }
 
 .btn-secondary {
-    background-color: #BE0000;
+    background-color: #007ACC;
     border-radius: 5px;
     padding: 10px 20px;
 }
@@ -59,7 +60,7 @@ textarea {
 }
 
 .btn-success {
-    background-color: #BE0000;
+    background-color: #007ACC;
     border-radius: 5px;
     padding: 10px 20px;
 }
@@ -71,12 +72,12 @@ textarea {
 
 .btn-primary {
     color: #fff;
-    background-color: #BE0000;
-    border-color: #740404; /*set the color you want here*/
+    background-color: #007ACC;
+    border-color: #3F71BC; /*set the color you want here*/
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #740404;
-    border-color: #BE0000; /*set the color you want here*/
+    background-color: #3F71BC;
+    border-color: #007ACC; /*set the color you want here*/
 }
