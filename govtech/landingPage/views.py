@@ -114,6 +114,15 @@ def authlogin(request):
             # Log the user in properly
             login(request, user)
 
+            # Set the user details in the session (id, email, fName, lName)
+            request.session['id'] = user_obj.id
+            request.session['email'] = user_obj.email
+            request.session['fName'] = user_obj.fName
+            request.session['lName'] = user_obj.lName
+
+            # Debugging: Print session data
+            print(f"Session set: {request.session.items()}")  # Print the session data to check if it's being set
+
             return JsonResponse({'status': 'success', 'message': 'Login successful.'})
 
         except SignupUser.DoesNotExist:

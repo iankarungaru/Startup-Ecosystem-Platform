@@ -14,8 +14,10 @@ from django.http import JsonResponse
 def dashboard_data(request):
     return render(request, "dashboard.html")
 
+
 def index(request):
     return render(request,"index.html")
+
 
 def get_form(step):
     forms = {
@@ -123,6 +125,9 @@ def individual_reg(request):
 def authlogout(request):
     try:
         # Clear the session
+        request.session.flush()
+
+        # Logout the user
         logout(request)  # This will log the user out and clear their session.
 
         # You can return a success message via JSON if needed (optional)
