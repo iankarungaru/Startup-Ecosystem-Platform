@@ -116,7 +116,7 @@
   <nav class="pc-sidebar">
     <div class="navbar-wrapper">
       <div class="m-header">
-        <a href="/static/templates/dashboard.html" class="b-brand text-primary">
+        <a href="{% url 'dashboard' %}" class="b-brand text-primary">
           <!-- ========   Change your logo from here   ============ -->
           <img src="/static/images/COT.png" class="img-fluid logo-lg" alt="logo">
         </a>
@@ -531,6 +531,41 @@
       setTimeout(() => loader.style.display = 'none', 300);
     });
   </script>
+
+
+{# Autologout functionality#}
+<script>
+  // Set auto-logout duration (15 mins)
+  const logoutAfter = 15 * 60 * 1000;
+
+  // Save current time on any activity
+  function resetTimer() {
+    localStorage.setItem('lastActivity', Date.now());
+  }
+
+  // Set initial timestamp on load
+  resetTimer();
+
+  // Monitor user activity to keep session alive
+  ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => {
+    window.addEventListener(evt, resetTimer);
+  });
+
+  // Check every 1 minute if inactivity > 15 mins
+  setInterval(() => {
+    const last = localStorage.getItem('lastActivity');
+    if (last && (Date.now() - last > logoutAfter)) {
+      localStorage.removeItem('lastActivity'); // optional cleanup
+      window.location.href = '/authlogout/';
+    }
+  }, 60000); // check every 60 sec
+</script>
+
+<!-- On logout.html or similar (if you have it) -->
+<script>
+  localStorage.removeItem('lastActivity');
+</script>
+
 
 
 </html>
