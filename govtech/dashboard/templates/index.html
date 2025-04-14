@@ -556,7 +556,7 @@
     const last = localStorage.getItem('lastActivity');
     if (last && (Date.now() - last > logoutAfter)) {
       localStorage.removeItem('lastActivity'); // optional cleanup
-      window.location.href = '/authlogout/';
+      window.location.href = '{% url 'authlogout' %}';
     }
   }, 60000); // check every 60 sec
 </script>
