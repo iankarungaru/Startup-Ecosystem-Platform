@@ -536,7 +536,7 @@
 {# Autologout functionality#}
 <script>
   // Set auto-logout duration (15 mins)
-  const logoutAfter = 15 * 60 * 1000;
+  const logoutAfter = 0.1 * 60 * 1000;
 
   // Save current time on any activity
   function resetTimer() {
@@ -556,7 +556,7 @@
     const last = localStorage.getItem('lastActivity');
     if (last && (Date.now() - last > logoutAfter)) {
       localStorage.removeItem('lastActivity'); // optional cleanup
-      window.location.href = '/authlogout/';
+      window.location.href = '{% url 'authlogout' %}';
     }
   }, 60000); // check every 60 sec
 </script>
