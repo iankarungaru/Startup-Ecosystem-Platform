@@ -10,6 +10,9 @@ from .forms import (
 )
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from landingPage.models import SignupUser
+from startup.helper import *
+
 
 def dashboard_data(request):
     return render(request, "dashboard.html")
@@ -60,7 +63,7 @@ def multi_step_registration(request, step=1):
                     for chunk in file.chunks():
                         destination.write(chunk)
                 form_data["business_certificate"] = file_path  # Store file path instead of file object
-            
+
             request.session[f'step_{step}'] = form_data
 
             next_step = step + 1
@@ -136,3 +139,21 @@ def authlogout(request):
     except Exception as e:
         # Handle any errors that occur during logout
         return JsonResponse({'status': 'error', 'message': f'Error during logout: {str(e)}'})
+
+
+def Myprofile(request):
+
+    myId = request.session.get('id')
+    myInfo = SignupUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'county': getCountyName(myInfo.county),
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'gender': getGenderName(myInfo.gender),
+    }
+
+    return render(request, 'myprofile.html', data)
