@@ -17,5 +17,5 @@ Dependencies and instructions to run📝
 -  pip install django-debug-toolbar
 -  pip install djangorestframework
 -  pip install djangorestframework-simplejwt
--  pip install django-axes
+
     
