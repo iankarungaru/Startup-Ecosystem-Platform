@@ -16,4 +16,6 @@ Dependencies and instructions to run📝
 -  setup your db credentials in settings.py
 -  pip install django-debug-toolbar
 -  pip install djangorestframework
--  pip install djangorestframework-simplejwt    
+-  pip install djangorestframework-simplejwt
+-  pip install django-axes
+    
