@@ -1,8 +1,4 @@
 from django.shortcuts import render,redirect
-from django.core.mail import send_mail
-from django.conf import settings
-from django.contrib import messages
-from validate_email_address import validate_email
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password
@@ -11,6 +7,8 @@ from .models import *
 import re
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
+from django.utils import timezone
+from datetime import timedelta
 
 def landing(request):
     return render(request, 'landing.html')
@@ -91,6 +89,22 @@ def authlogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        ip = get_client_ip(request)
+
+        # Get or create login attempt tracker
+        attempt, created = LoginAttempt.objects.get_or_create(email=email, ip_address=ip)
+
+        # Reset count if more than 10 minutes have passed
+        if timezone.now() - attempt.last_attempt > timedelta(minutes=10):
+            attempt.attempts = 0
+            attempt.save()
+
+        # Block login if locked out
+        if attempt.attempts >= 5 and timezone.now() - attempt.last_attempt < timedelta(minutes=10):
+            return JsonResponse(
+                {'status': 'locked', 'message': 'Too many failed login attempts. Please try again in 10 minutes.'})
+
+
 
         try:
             # Get user by email
@@ -101,6 +115,9 @@ def authlogin(request):
 
             # Check password
             if not check_password(password, user_obj.password):
+                attempt.attempts += 1
+                attempt.last_attempt = timezone.now()
+                attempt.save()
                 return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
             # Now get or create a Django User for authentication (temporary fix)
@@ -120,12 +137,25 @@ def authlogin(request):
             request.session['fName'] = user_obj.fName
             request.session['lName'] = user_obj.lName
 
-            # Debugging: Print session data
-            print(f"Session set: {request.session.items()}")  # Print the session data to check if it's being set
+            # Reset login attempts after successful login
+            attempt.attempts = 0
+            attempt.save()
 
             return JsonResponse({'status': 'success', 'message': 'Login successful.'})
 
         except SignupUser.DoesNotExist:
+            attempt.attempts += 1
+            attempt.last_attempt = timezone.now()
+            attempt.save()
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
