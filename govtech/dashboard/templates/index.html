@@ -370,7 +370,7 @@
                     <i class="ti ti-edit-circle"></i>
                     <span>Edit Profile</span>
                   </a>
-                  <a href="#!" class="dropdown-item">
+                  <a href="{% url 'Myprofile' %}" class="dropdown-item">
                     <i class="ti ti-user"></i>
                     <span>View Profile</span>
                   </a>
@@ -429,12 +429,11 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Home</h5>
+                <h5 class="m-b-10">Devlink</h5>
               </div>
               <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/static/templates/dashboard.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                <li class="breadcrumb-item" aria-current="page">Home</li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Devlink</a></li>
+                <li class="breadcrumb-item" id="breadcrumbCurrent" aria-current="page"></li>
               </ul>
             </div>
           </div>
@@ -564,6 +563,21 @@
 <script>
   localStorage.removeItem('lastActivity');
 </script>
+
+<script>
+  // Get the last part of the current URL path
+  let currentPage = window.location.pathname.split('/').filter(Boolean).pop();
+
+  // Capitalize first letter for nice display (optional)
+  currentPage = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
+
+  // Set default if no page (e.g., you're on the homepage "/")
+  if (!currentPage) currentPage = "Home";
+
+  // Set the breadcrumb text
+  document.getElementById('breadcrumbCurrent').textContent = currentPage;
+</script>
+
 
 
 
