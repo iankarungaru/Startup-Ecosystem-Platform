@@ -12,8 +12,8 @@
     <!-- [Favicon] icon -->
     <link rel="icon" href="{% static 'images/cos.ico' %}" type="image/x-icon"> <!-- [Google Font] Family -->
     <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-    id="main-font-link">
+          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+          id="main-font-link">
     <!-- [Tabler Icons] https://tablericons.com -->
     <link rel="stylesheet" href="{% static 'fonts/tabler-icons.min.css' %}">
     <!-- [Feather Icons] https://feathericons.com -->
@@ -32,35 +32,35 @@
 <!-- [Body] Start -->
 <style>
     .input-group .input-group-text {
-    background-color: #fff;
-    border-left: none;
-    border-radius: 0 .25rem .25rem 0;
-    display: flex;
-    align-items: center;
-    padding: 0 0.75rem;
-    height: 100%;
-}
+        background-color: #fff;
+        border-left: none;
+        border-radius: 0 .25rem .25rem 0;
+        display: flex;
+        align-items: center;
+        padding: 0 0.75rem;
+        height: 100%;
+    }
 
-.input-group input.form-control {
-    border-right: none;
-}
+    .input-group input.form-control {
+        border-right: none;
+    }
 
 </style>
 
 <body>
-    <!-- [ Pre-loader ] start -->
-    <div class="loader-bg">
-        <div class="loader-track">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
         <div class="loader-fill"></div>
-        </div>
     </div>
-    <!-- [ Pre-loader ] End -->
+</div>
+<!-- [ Pre-loader ] End -->
 
-    <div class="auth-main">
-        <div class="auth-wrapper v3">
+<div class="auth-main">
+    <div class="auth-wrapper v3">
         <div class="auth-form">
             <div class="auth-header">
-            <a href="#"><img src="{% static 'images/COTlog.png' %}" alt="img"></a>
+                <a href="#"><img src="{% static 'images/COTlog.png' %}" alt="img"></a>
             </div>
             <form class="login-form" id="registerForm" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -73,22 +73,26 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name" placeholder="Enter your First Name" required>
+                                <input type="text" class="form-control" name="first_name"
+                                       placeholder="Enter your First Name" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Surname</label>
-                                <input type="text" class="form-control" name="last_name" placeholder="Enter your Surname" required>
+                                <input type="text" class="form-control" name="last_name"
+                                       placeholder="Enter your Surname" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email address" required>
+                                <input type="email" class="form-control" name="email" id="emailInput"
+                                       placeholder="Enter your email address" required>
                                 <small id="emailFeedback" class="form-text"></small>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" name="phone" placeholder="Enter your phone number (+254712345678 or 0712345678)" required>
+                                <input type="tel" class="form-control" name="phone"
+                                       placeholder="Enter your phone number (+254712345678 or 0712345678)" required>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -101,7 +105,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <label class="form-label">County</label>
                                 <select id="county" name="county" class="form-control" required>
@@ -133,60 +137,64 @@
                             <div class="col-md-6">
                                 <label class="form-label">Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter password" required>
+                                    <input type="password" id="password" class="form-control" name="password"
+                                           placeholder="Enter password" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                             <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters, include a capital letter, number, and symbol.</small>
+                                <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters,
+                                    include a capital letter, number, and symbol.</small>
                                 <div id="passwordStrength" class="mt-1"></div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <label class="form-label">Confirm Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm password" required>
+                                    <input type="password" id="confirm_password" class="form-control"
+                                           name="confirm_password" placeholder="Confirm password" required>
                                     <div class="input-group-append">
-                                        <span class="input-group-text" id="toggleConfirmPassword" style="cursor: pointer;">
+                                        <span class="input-group-text" id="toggleConfirmPassword"
+                                              style="cursor: pointer;">
                                             <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>
                                         </span>
                                     </div>
                                 </div>
                                 <small id="matchMessage" class="form-text"></small>
                             </div>
-                            
+
                         </div>
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Sign Up</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </form>
         </div>
-        </div>
     </div>
-    <!-- [ Main Content ] end -->
-    <!-- Required Js -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();  // Prevent default form submission
-        
-            const form = e.target;
-            const formData = new FormData(form);  // Collect form data
-        
-            fetch("{% url 'signup' %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // Send CSRF token
-                },
-                body: formData  // Send the form data
-            })
+</div>
+<!-- [ Main Content ] end -->
+<!-- Required Js -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent default form submission
+
+        const form = e.target;
+        const formData = new FormData(form);  // Collect form data
+
+        fetch("{% url 'signup' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // Send CSRF token
+            },
+            body: formData  // Send the form data
+        })
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -205,159 +213,158 @@
                     });
                 }
             });
-        });
-        </script>
-        
-    <script>
-        $('#county').on('change', function () {
-            var countyId = $(this).val();
+    });
+</script>
 
-            if (countyId) {
-                $.ajax({
-                    url: '/get-subcounties/',
-                    data: {
-                        'county_id': countyId
-                    },
-                    success: function (data) {
-                        $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
-                        $.each(data, function (i, item) {
-                            $('#subcounty').append($('<option>', {
-                                value: item.id,
-                                text: item.name
-                            }));
-                        });
-                    }
-                });
-            } else {
-                $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
-            }
-        });
-    </script>
-    <script>
-        // Toggle password visibility
-        $('#togglePassword').on('click', function () {
-            const input = $('#password');
-            const icon = $('#togglePasswordIcon');
-            const type = input.attr('type') === 'password' ? 'text' : 'password';
-            input.attr('type', type);
-            icon.toggleClass('fa-eye fa-eye-slash');
-        });
+<script>
+    $('#county').on('change', function () {
+        var countyId = $(this).val();
 
-        $('#toggleConfirmPassword').on('click', function () {
-            const input = $('#confirm_password');
-            const icon = $('#toggleConfirmPasswordIcon');
-            const type = input.attr('type') === 'password' ? 'text' : 'password';
-            input.attr('type', type);
-            icon.toggleClass('fa-eye fa-eye-slash');
-        });
+        if (countyId) {
+            $.ajax({
+                url: '/get-subcounties/',
+                data: {
+                    'county_id': countyId
+                },
+                success: function (data) {
+                    $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+                    $.each(data, function (i, item) {
+                        $('#subcounty').append($('<option>', {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                }
+            });
+        } else {
+            $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
+        }
+    });
+</script>
+<script>
+    // Toggle password visibility
+    $('#togglePassword').on('click', function () {
+        const input = $('#password');
+        const icon = $('#togglePasswordIcon');
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        icon.toggleClass('fa-eye fa-eye-slash');
+    });
 
-        // Password strength checker
-        $('#password').on('input', function () {
-            const password = $(this).val();
-            const strength = getPasswordStrength(password);
-            const strengthDiv = $('#passwordStrength');
+    $('#toggleConfirmPassword').on('click', function () {
+        const input = $('#confirm_password');
+        const icon = $('#toggleConfirmPasswordIcon');
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        icon.toggleClass('fa-eye fa-eye-slash');
+    });
 
-            let color, message;
-            switch (strength) {
-                case 0:
-                    color = 'danger'; message = 'Too weak'; break;
-                case 1:
-                    color = 'warning'; message = 'Weak'; break;
-                case 2:
-                    color = 'info'; message = 'Moderate'; break;
-                case 3:
-                    color = 'primary'; message = 'Strong'; break;
-                case 4:
-                    color = 'success'; message = 'Very strong'; break;
-            }
+    // Password strength checker
+    $('#password').on('input', function () {
+        const password = $(this).val();
+        const strength = getPasswordStrength(password);
+        const strengthDiv = $('#passwordStrength');
 
-            strengthDiv.html(`<div class="progress">
-                <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
-            </div><small class="text-${color}">${message}</small>`);
-        });
-
-        function getPasswordStrength(password) {
-            let score = 0;
-            if (password.length >= 8) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
-            return score;
+        let color, message;
+        switch (strength) {
+            case 0:
+                color = 'danger';
+                message = 'Too weak';
+                break;
+            case 1:
+                color = 'warning';
+                message = 'Weak';
+                break;
+            case 2:
+                color = 'info';
+                message = 'Moderate';
+                break;
+            case 3:
+                color = 'primary';
+                message = 'Strong';
+                break;
+            case 4:
+                color = 'success';
+                message = 'Very strong';
+                break;
         }
 
-        // Password match validation
-        $('#password, #confirm_password').on('input', function () {
-            const password = $('#password').val();
-            const confirmPassword = $('#confirm_password').val();
-            const messageEl = $('#matchMessage');
+        strengthDiv.html(`<div class="progress">
+                <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
+            </div><small class="text-${color}">${message}</small>`);
+    });
 
-            if (confirmPassword.length === 0) {
-                messageEl.text('');
-                return;
-            }
+    function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        return score;
+    }
 
-            if (password === confirmPassword) {
-                messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
-            } else {
-                messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
-            }
-        });
-    </script>
-    <script>
-        const emailInput = document.getElementById('emailInput');
-        const emailFeedback = document.getElementById('emailFeedback');
+    // Password match validation
+    $('#password, #confirm_password').on('input', function () {
+        const password = $('#password').val();
+        const confirmPassword = $('#confirm_password').val();
+        const messageEl = $('#matchMessage');
 
-        emailInput.addEventListener('input', function () {
-            const email = this.value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        if (confirmPassword.length === 0) {
+            messageEl.text('');
+            return;
+        }
 
-            if (!email) {
-                emailFeedback.textContent = '';
-                emailFeedback.className = 'form-text';
-            } else if (emailRegex.test(email)) {
-                emailFeedback.textContent = 'Looks good!';
-                emailFeedback.className = 'form-text text-success';
-            } else {
-                emailFeedback.textContent = 'Please enter a valid email like name@example.com';
-                emailFeedback.className = 'form-text text-danger';
-            }
-        });
-    </script>
+        if (password === confirmPassword) {
+            messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
+        } else {
+            messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
+        }
+    });
+</script>
+<script>
+    const emailInput = document.getElementById('emailInput');
+    const emailFeedback = document.getElementById('emailFeedback');
 
+    emailInput.addEventListener('input', function () {
+        const email = this.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-
-        </script>
-        <script src="{% static 'js/plugins/popper.min.js' %}"></script>
-        <script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
-        <script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
-        <script src="{% static 'js/fonts/custom-font.js' %}"></script>
-        <script src="{% static 'js/pcoded.js' %}"></script>
-        <script src="{% static 'js/plugins/feather.min.js' %}"></script>
-        
-
-
-
-
-
-
-    <script>layout_change('light');</script>
+        if (!email) {
+            emailFeedback.textContent = '';
+            emailFeedback.className = 'form-text';
+        } else if (emailRegex.test(email)) {
+            emailFeedback.textContent = 'Looks good!';
+            emailFeedback.className = 'form-text text-success';
+        } else {
+            emailFeedback.textContent = 'Please enter a valid email like name@example.com';
+            emailFeedback.className = 'form-text text-danger';
+        }
+    });
+</script>
 
 
+</script>
+<script src="{% static 'js/plugins/popper.min.js' %}"></script>
+<script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
+<script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/fonts/custom-font.js' %}"></script>
+<script src="{% static 'js/pcoded.js' %}"></script>
+<script src="{% static 'js/plugins/feather.min.js' %}"></script>
 
 
-    <script>change_box_container('false');</script>
+<script>layout_change('light');</script>
 
 
-
-    <script>layout_rtl_change('false');</script>
-
-
-    <script>preset_change("preset-1");</script>
+<script>change_box_container('false');</script>
 
 
-    <script>font_change("Public-Sans");</script>
-    
+<script>layout_rtl_change('false');</script>
 
+
+<script>preset_change("preset-1");</script>
+
+
+<script>font_change("Public-Sans");</script>
 
 
 </body>

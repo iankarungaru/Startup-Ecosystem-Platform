@@ -10,7 +10,7 @@ def getCountyName(countyId):
     return countyName
 
 def getGenderName(genderId):
-    genderInfo = County.objects.get(id=genderId)
+    genderInfo = gender.objects.get(id=genderId)
     genderName = genderInfo.name
     return genderName
 
