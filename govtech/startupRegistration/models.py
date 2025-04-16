@@ -25,3 +25,40 @@ class Registration(models.Model):
 
     def __str__(self):
         return self.startup_name
+
+    #Chriss adjustments
+from django.db import models
+
+class Registration(models.Model):
+    # Existing Registration model code here...
+    startup_name = models.CharField(max_length=255)
+    stage = models.CharField(max_length=50, choices=[('Idea', 'Idea'), ('MVP', 'MVP'), ('Early-stage', 'Early-stage'), ('Growth', 'Growth'), ('Scaling', 'Scaling')])
+    official_email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    date_of_establishment = models.DateField()
+    physical_address = models.TextField()
+    
+    tax_identification_number = models.CharField(max_length=100)
+    employees = models.IntegerField()
+    startup_description = models.TextField()
+    sector = models.CharField(max_length=100)
+    business_model = models.CharField(max_length=50, choices=[('B2B', 'B2B'), ('B2C', 'B2C'), ('SaaS', 'SaaS'), ('Marketplace', 'Marketplace')])
+    website = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.startup_name
+
+# Clean new Individual model
+class Individual(models.Model):
+    full_name = models.CharField(max_length=255)
+    id_number = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    nature_of_business = models.CharField(max_length=255)
+    objectives = models.TextField()
+    sector = models.CharField(max_length=100)
+    description = models.TextField()
+    employees = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.full_name
