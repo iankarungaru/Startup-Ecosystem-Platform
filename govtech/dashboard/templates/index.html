@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css"
           integrity="sha512-v+KDQpW7MdqD1UCuCTfZqJtuh5TfzRPr4ESVjkSrwEjZsG2vNsDA3ZpzGBOsF8dZRY3ebBAvEd6AEPkYvZxFSg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
 
     <!-- Add custom styles -->
     <style>
@@ -283,7 +284,7 @@
                                 <a class="list-group-item list-group-item-action">
                                     <div class="d-flex">
                                         <div class="flex-shrink-0">
-                                            <img src="/static/images/user/avatar-2.jpg" alt="user-image"
+                                            <img src="/static/{{profilePicture}}" alt="user-image"
                                                  class="user-avtar">
                                         </div>
                                         <div class="flex-grow-1 ms-1">
@@ -322,7 +323,7 @@
                                 <a class="list-group-item list-group-item-action">
                                     <div class="d-flex">
                                         <div class="flex-shrink-0">
-                                            <img src="/static/images/user/avatar-4.jpg" alt="user-image"
+                                            <img src="/static/{{profilePicture}}" alt="user-image"
                                                  class="user-avtar">
                                         </div>
                                         <div class="flex-grow-1 ms-1">
@@ -345,14 +346,14 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                        role="button"
                        aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                        <img src="/static/images/user/avatar-2.jpg" alt="user-image" class="user-avtar">
+                        <img src="/static/{{profilePicture}}" alt="user-image" class="user-avtar">
                         <span>{{ request.session.fName }} {{ request.session.lName }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
                             <div class="d-flex mb-1">
                                 <div class="flex-shrink-0">
-                                    <img src="/static/images/user/avatar-2.jpg" alt="user-image"
+                                    <img src="/static/{{profilePicture}}" alt="user-image"
                                          class="user-avtar wid-35">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
@@ -485,6 +486,7 @@
 <script src="/static/js/pages/dashboard-default.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <!-- [Page Specific JS] end -->
 <!-- Required Js -->
 <script src="/static/js/plugins/popper.min.js"></script>

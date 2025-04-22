@@ -1,11 +1,37 @@
 {% extends 'index.html' %}
 {% block content %}
+    <style>
+    #profile-preview {
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    #profile-preview:hover {
+        opacity: 0.8;
+    }
+
+    #profile-picture {
+        display: none;
+    }
+</style>
     <form class="login-form" id="editprofile" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="d-flex justify-content-between align-items-end mb-4">
             <h3 class="mb-0"><b>Edit profile</b></h3>
         </div>
         <br>
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <label class="form-label d-block"><b>Click to edit profile picture</b></label>
+                <div class="position-relative d-inline-block">
+                    <img id="profile-preview" src="/static/images/avatar.jpg" class="rounded-circle border mb-2" width="150" height="150" style="object-fit: cover;">
+                    <input type="file" id="profile-picture" name="profile_picture" accept="image/*" class="form-control-file mt-2">
+                </div>
+                <input type="hidden" name="cropped_image" id="cropped-image">
+            </div>
+        </div>
+
+
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">First Name</label>
@@ -135,6 +161,63 @@
                 });
             }
         });
+    });
+</script>
+    <script>
+    let cropper;
+    const fileInput = document.getElementById('profile-picture');
+    const preview = document.getElementById('profile-preview');
+    const hiddenInput = document.getElementById('cropped-image');
+
+    // When you click the preview image, open the file dialog
+    preview.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div id="cropModal" class="modal" style="display:block; background-color: rgba(0,0,0,0.6); position: fixed; top:0; left:0; right:0; bottom:0; z-index: 1050; display: flex; justify-content: center; align-items: center;">
+                    <div class="bg-white p-3 rounded" style="max-width: 400px; width: 100%;">
+                        <h5 class="mb-3">Crop Your Image</h5>
+                        <img id="crop-image" src="${e.target.result}" class="img-fluid" style="max-height: 300px;">
+                        <div class="text-end mt-3">
+                            <button class="btn btn-sm btn-secondary me-2" id="cancelCrop">Cancel</button>
+                            <button class="btn btn-sm btn-primary" id="saveCrop">Save</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const image = modal.querySelector('#crop-image');
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 1
+            });
+
+            modal.querySelector('#cancelCrop').addEventListener('click', () => {
+                cropper.destroy();
+                modal.remove();
+                fileInput.value = '';  // Reset
+            });
+
+            modal.querySelector('#saveCrop').addEventListener('click', () => {
+                const croppedCanvas = cropper.getCroppedCanvas({
+                    width: 300,
+                    height: 300
+                });
+                const croppedDataURL = croppedCanvas.toDataURL('image/jpeg');
+                preview.src = croppedDataURL;  // update preview
+                hiddenInput.value = croppedDataURL;  // pass to backend
+                cropper.destroy();
+                modal.remove();
+            });
+        };
+        reader.readAsDataURL(file);
     });
 </script>
 
