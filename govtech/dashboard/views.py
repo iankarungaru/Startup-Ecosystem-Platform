@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.urls import reverse
 from landingPage.models import SignupUser, County, Subcounty, Country, gender
 from startup.helper import *
+import os, uuid, base64
+from django.conf import settings
 
 from .forms import (
     Step1Form, Step2Form
@@ -16,7 +18,10 @@ def dashboard_data(request):
 
 
 def index(request):
-    return render(request, "index.html")
+    myId = request.session.get('id')
+    myInfo = SignupUser.objects.get(id=myId)
+    data = {'profilePicture': myInfo.profile_picture}
+    return render(request, "index.html", data)
 
 
 def get_form(step):
@@ -151,6 +156,7 @@ def Myprofile(request):
         'county': getCountyName(myInfo.county),
         'subcounty': getSubcountyName(myInfo.subcounty),
         'gender': getGenderName(myInfo.gender),
+        'profilePicture':myInfo.profile_picture,
     }
 
     return render(request, 'myprofile.html', data)
@@ -191,6 +197,7 @@ def saveEditProfile(request):
         county = request.POST.get('county')
         subCounty = request.POST.get('subcounty')
         genderName = request.POST.get('gender')
+        cropped_image_data = request.POST.get('cropped_image')  # Get cropped base64 string
 
         try:
             # Get existing user
@@ -205,6 +212,25 @@ def saveEditProfile(request):
             user.county = county
             user.subcounty = subCounty
             user.gender = genderName
+
+            # Save profile picture if provided
+            if cropped_image_data and "base64" in cropped_image_data:
+                format, imgstr = cropped_image_data.split(';base64,')
+                ext = format.split('/')[-1]
+                file_name = f"profile_{myId}_{uuid.uuid4().hex[:8]}.{ext}"
+
+                # Define static/profiles/ directory
+                static_profiles_dir = os.path.join(settings.BASE_DIR, 'static', 'profiles')
+                os.makedirs(static_profiles_dir, exist_ok=True)  # Ensure directory exists
+
+                file_path = os.path.join(static_profiles_dir, file_name)
+
+                # Write image to file
+                with open(file_path, "wb") as f:
+                    f.write(base64.b64decode(imgstr))
+
+                # Save relative path in DB (to be used with {% static %})
+                user.profile_picture = f"profiles/{file_name}"
 
             user.save()
             return JsonResponse({'status': 'success', 'message': 'Profile updated successfully'})
