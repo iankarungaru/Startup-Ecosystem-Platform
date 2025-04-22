@@ -109,7 +109,7 @@ def registration_complete(request):
     for i in range(1, 3):
         request.session.pop(f'step_{i}', None)
 
-    return render(request, "register/completed.html")
+    return render(request, "dashboard.html")
 
 
 from django.shortcuts import render, redirect
@@ -121,7 +121,7 @@ def individual_reg(request):
         form = IndividualForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, "register/completed.html")  # Adjust URL as needed
+            return render(request, "dashboard.html")  # Adjust URL as needed
     else:
         form = IndividualForm()
 
