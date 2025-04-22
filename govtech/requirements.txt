@@ -1,0 +1,8 @@
+django
+mysqlclient
+validate-email-address
+pillow
+pymysql
+django-debug-toolbar
+djangorestframework
+djangorestframework-simplejwt
