@@ -228,6 +228,7 @@ def saveEditProfile(request):
 
                 # Save relative path in DB (to be used with {% static %})
                 user.profile_picture = f"profiles/{file_name}"
+                request.session['profile_picture'] = user.profile_picture
 
             user.save()
             return JsonResponse({'status': 'success', 'message': 'Profile updated successfully'})
