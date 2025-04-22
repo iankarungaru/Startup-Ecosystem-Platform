@@ -13,3 +13,6 @@ db.sqlite3
 
 # VS Code
 .vscode/
+
+# Ignore uploaded profile pictures
+static/profiles
