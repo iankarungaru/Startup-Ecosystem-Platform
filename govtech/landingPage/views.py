@@ -136,6 +136,7 @@ def authlogin(request):
             request.session['email'] = user_obj.email
             request.session['fName'] = user_obj.fName
             request.session['lName'] = user_obj.lName
+            request.session['profile_picture'] = user_obj.profile_picture
 
             # Reset login attempts after successful login
             attempt.attempts = 0

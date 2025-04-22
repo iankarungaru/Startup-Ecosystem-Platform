@@ -18,10 +18,7 @@ def dashboard_data(request):
 
 
 def index(request):
-    myId = request.session.get('id')
-    myInfo = SignupUser.objects.get(id=myId)
-    data = {'profilePicture': myInfo.profile_picture}
-    return render(request, "index.html", data)
+    return render(request, "index.html")
 
 
 def get_form(step):
