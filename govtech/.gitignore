@@ -1,2 +1,15 @@
+# Python bytecode
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Virtual environment
+env/
+venv/
+
+# Django specific
+*.log
+db.sqlite3
+
+# VS Code
+.vscode/
