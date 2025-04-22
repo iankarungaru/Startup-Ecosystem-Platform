@@ -1,4 +1,4 @@
-django
+Django
 mysqlclient
 validate-email-address
 pillow

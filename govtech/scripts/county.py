@@ -1,4 +1,19 @@
+import os
+import django
+import sys
+
+# Add the root directory of the project to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Set DJANGO_SETTINGS_MODULE to point to the correct path
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "startup.settings")
+
+# Setup Django
+django.setup()
+
+# Now you can import models from landingPage
 from landingPage.models import County, Subcounty
+
 
 county_data = {
     "Baringo": ["Baringo North", "Baringo South", "Mogotio", "Eldama Ravine", "Tiaty"],

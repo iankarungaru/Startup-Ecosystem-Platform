@@ -17,8 +17,10 @@ Dependencies and instructions to run📝
 -  pip install django-debug-toolbar
 -  pip install djangorestframework
 -  pip install djangorestframework-simplejwt
-- All pip commnads are in the govtech/requirement.txt file. Just run this command:
-    - python -m pip install -r requirements.txt
+-  SETUP EVERYTHING WITH ONE COMMAND
+    🛠️ browse until the scripts folder in your terminal govtech/scripts
+    🧑‍💻 run - python setup.py command
+
 
 
 
