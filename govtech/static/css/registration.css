@@ -11,13 +11,6 @@
     border-radius: 10px;
 }
 
-.btn-primary {
-    background-color: #007ACC;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin-bottom: 20px;
-}
-
 .card {
     border-radius: 10px;
     padding: 20px;
@@ -28,6 +21,7 @@
     background-color: #007ACC;
     border-radius: 5px;
     padding: 10px 20px;
+    margin-bottom: 20px;
 }
 
 .form-label {
@@ -71,9 +65,12 @@ textarea {
 }
 
 .btn-primary {
-    color: #fff;
+    color: #FFF;
     background-color: #007ACC;
     border-color: #3F71BC; /*set the color you want here*/
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {

@@ -22,10 +22,20 @@
                 <label class="form-label">Business Model</label>
                 {{ form.business_model }}
             </div>
-        </div>        
+        </div> 
         <div class="row">            
             <div class="col-md-6 mb-3">
-                <label class="form-label">Sector/Industry</label>
+                <label class="form-label">Nature of Business </label>
+                {{ form.nature }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Area of specialization (e.g. Frameworks, languages etc)</label>
+                {{ form.specialization }}
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Sector/Industry (e.g. ICT, Health, Banking etc)</label>
                 {{ form.sector }}
             </div>
             <div class="col-md-6 mb-3">
@@ -35,7 +45,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Company Description</label>
-            {{ form.startup_description }}
+            {{ form.company_description }}
         </div>
 
         <div class="d-flex justify-content-between">
