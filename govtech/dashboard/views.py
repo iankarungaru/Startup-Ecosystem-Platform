@@ -240,4 +240,10 @@ def saveEditProfile(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
 
+def mySupport(request):
+    return render(request,'support.html')
+
+def resetPassword(request):
+    return render(request,'myPassword.html')
+
 
