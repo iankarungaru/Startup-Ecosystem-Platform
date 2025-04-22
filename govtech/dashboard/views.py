@@ -1,22 +1,22 @@
-from django.shortcuts import render, HttpResponse
-import json
-from datetime import datetime
-from .models import Registration
-from django.http import HttpResponse
-from django.urls import reverse
-from datetime import datetime
-from .forms import (
-    Step1Form, Step2Form, IndividualForm
-)
 from django.contrib.auth import logout
+from django.http import HttpResponse
 from django.http import JsonResponse
+from django.urls import reverse
+from landingPage.models import SignupUser, County, Subcounty, Country, gender
+from startup.helper import *
+
+from .forms import (
+    Step1Form, Step2Form
+)
+from .models import Registration
+
 
 def dashboard_data(request):
     return render(request, "dashboard.html")
 
 
 def index(request):
-    return render(request,"index.html")
+    return render(request, "index.html")
 
 
 def get_form(step):
@@ -26,7 +26,9 @@ def get_form(step):
     }
     return forms.get(step)
 
+
 from datetime import date
+
 
 def multi_step_registration(request, step=1):
     step = int(step)
@@ -52,7 +54,7 @@ def multi_step_registration(request, step=1):
                     for chunk in file.chunks():
                         destination.write(chunk)
                 form_data["company_logo"] = file_path  # Store only file path in session
-                
+
             if "business_certificate" in request.FILES:
                 file = request.FILES["business_certificate"]
                 file_path = f'logos/{file.name}'  # Define file path
@@ -60,7 +62,7 @@ def multi_step_registration(request, step=1):
                     for chunk in file.chunks():
                         destination.write(chunk)
                 form_data["business_certificate"] = file_path  # Store file path instead of file object
-            
+
             request.session[f'step_{step}'] = form_data
 
             next_step = step + 1
@@ -79,7 +81,6 @@ def multi_step_registration(request, step=1):
         form = form_class(initial=initial_data)
 
     return render(request, f"register/step{step}.html", {"form": form, "step": step})
-
 
 
 def registration_complete(request):
@@ -106,9 +107,9 @@ def registration_complete(request):
     return render(request, "dashboard.html")
 
 
-
 from django.shortcuts import render, redirect
 from .forms import IndividualForm
+
 
 def individual_reg(request):
     if request.method == 'POST':
@@ -136,3 +137,83 @@ def authlogout(request):
     except Exception as e:
         # Handle any errors that occur during logout
         return JsonResponse({'status': 'error', 'message': f'Error during logout: {str(e)}'})
+
+
+def Myprofile(request):
+    myId = request.session.get('id')
+    myInfo = SignupUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'county': getCountyName(myInfo.county),
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'gender': getGenderName(myInfo.gender),
+    }
+
+    return render(request, 'myprofile.html', data)
+
+
+def profileChange(request):
+    myId = request.session.get('id')
+    myInfo = SignupUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'nationalityId': myInfo.nationality,
+        'county': getCountyName(myInfo.county),
+        'countyId': myInfo.county,
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'subcountyId': myInfo.subcounty,
+        'gender': getGenderName(myInfo.gender),
+        'genderId':myInfo.gender,
+        'countries': Country.objects.all().order_by('nationality'),
+        'counties': County.objects.all().order_by('name'),
+        'genders': gender.objects.all().order_by('name'),
+    }
+
+    return render(request, 'editProfile.html', data)
+
+def saveEditProfile(request):
+    myId = request.session.get('id')
+
+    if request.method == 'POST' and myId:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        nationality = request.POST.get('nationality')
+        county = request.POST.get('county')
+        subCounty = request.POST.get('subcounty')
+        genderName = request.POST.get('gender')
+
+        try:
+            # Get existing user
+            user = SignupUser.objects.get(id=myId)
+
+            # Update fields
+            user.fName = first_name
+            user.lName = last_name
+            user.email = email
+            user.phone = phone
+            user.nationality = nationality
+            user.county = county
+            user.subcounty = subCounty
+            user.gender = genderName
+
+            user.save()
+            return JsonResponse({'status': 'success', 'message': 'Profile updated successfully'})
+
+        except SignupUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error updating profile: {e}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+
