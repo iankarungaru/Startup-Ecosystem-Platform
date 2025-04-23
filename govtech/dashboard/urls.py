@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import multi_step_registration, registration_complete, individual_reg, dashboard_data, index, authlogout, \
-    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword  # DashboardData
+    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword,saveChangeMyPassword  # DashboardData
 
 urlpatterns = [
     # path("", views.home, name="home"),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('saveEditProfile/', saveEditProfile, name='saveEditProfile'),
     path('mySupport/', mySupport, name='mySupport'),
     path('changeMyPassword/', resetPassword, name='changeMyPassword'),
+    path('saveChangeMyPassword/', saveChangeMyPassword, name='saveChangeMyPassword'),
 ]
 
 from django.conf import settings

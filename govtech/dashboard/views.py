@@ -6,7 +6,7 @@ from landingPage.models import SignupUser, County, Subcounty, Country, gender
 from startup.helper import *
 import os, uuid, base64
 from django.conf import settings
-
+from django.contrib.auth.hashers import check_password, make_password
 from .forms import (
     Step1Form, Step2Form
 )
@@ -246,4 +246,35 @@ def mySupport(request):
 def resetPassword(request):
     return render(request,'myPassword.html')
 
+def saveChangeMyPassword(request):
+    myId = request.session.get('id')
 
+    if request.method == 'POST' and myId:
+        current_password = request.POST.get('currentPassword')
+        # Get actual password in the db
+        actualPassword = SignupUser.objects.filter(id=myId).values_list('password', flat=True).first()
+
+        if not check_password(current_password, actualPassword):
+            return JsonResponse({'status': 'warning', 'message': 'Invalid current password'})
+
+        new_password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
+
+        if not is_strong_password(new_password):
+            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
+        # Encrypt the password
+        encrypted_password = make_password(new_password)
+
+        try:
+            SignupUser.objects.filter(id=myId).update(password=encrypted_password)
+            return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
+
+
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
