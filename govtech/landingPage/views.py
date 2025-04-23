@@ -1,14 +1,14 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 from django.contrib.auth.models import User  # Import User model
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from .models import *
-import re
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 from django.utils import timezone
 from datetime import timedelta
+from startup.helper import *
 
 def landing(request):
     return render(request, 'landing.html')
@@ -27,16 +27,6 @@ def get_subcounties(request):
 # View for login page
 def login_view(request):
     return render(request, 'login.html')
-
-def is_strong_password(password):
-    # At least 8 characters, one uppercase letter, one number, and one symbol
-    return (
-        len(password) >= 8 and
-        re.search(r'[A-Z]', password) and
-        re.search(r'[a-z]', password) and
-        re.search(r'\d', password) and
-        re.search(r'[^A-Za-z0-9]', password)
-    )
 
 def signup(request):
     if request.method == 'POST':
@@ -142,6 +132,9 @@ def authlogin(request):
             attempt.attempts = 0
             attempt.save()
 
+            # update user ip address
+            SignupUser.objects.filter(email=email).update(ip_address=ip)
+
             return JsonResponse({'status': 'success', 'message': 'Login successful.'})
 
         except SignupUser.DoesNotExist:
@@ -152,11 +145,5 @@ def authlogin(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+
 

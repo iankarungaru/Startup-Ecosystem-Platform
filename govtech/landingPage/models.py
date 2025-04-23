@@ -48,6 +48,7 @@ class SignupUser(models.Model):
     gender = models.IntegerField(null=True, blank=True)  # Nullable in DB
     password = models.TextField()
     profile_picture = models.CharField(max_length=255, blank=True, null=True)
+    ip_address = models.CharField(max_length=255, blank=True, null=True)
     isLogin = models.IntegerField(default=0)
     logtime = models.DateTimeField(auto_now_add=True)
     isactive = models.IntegerField(default=0)
