@@ -1,8 +1,8 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import multi_step_registration,  individual_reg, dashboard_data, index, authlogout, \
-    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword, dashboard_view  # DashboardData
+from .views import multi_step_registration, individual_reg, index, authlogout, \
+    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword, saveChangeMyPassword, dashboard_view  # DashboardData
 
 urlpatterns = [
     # path("", views.home, name="home"),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('saveEditProfile/', saveEditProfile, name='saveEditProfile'),
     path('mySupport/', mySupport, name='mySupport'),
     path('changeMyPassword/', resetPassword, name='changeMyPassword'),
+    path('saveChangeMyPassword/', saveChangeMyPassword, name='saveChangeMyPassword'),
 ]
 
 
