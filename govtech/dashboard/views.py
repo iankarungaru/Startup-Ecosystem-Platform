@@ -6,6 +6,14 @@ from landingPage.models import SignupUser, County, Subcounty, Country, gender
 from startup.helper import *
 import os, uuid, base64
 from django.conf import settings
+from django.shortcuts import render
+from .models import Registration, IndividualDev
+from django.db.models import Count
+from django.utils.safestring import mark_safe
+import json
+from datetime import date
+
+
 from django.contrib.auth.hashers import check_password, make_password
 from .forms import (
     Step1Form, Step2Form
@@ -31,83 +39,54 @@ def get_form(step):
 
 from datetime import date
 
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .models import Registration
+from .forms import Step1Form, Step2Form  # You'll need to create these forms
+from django.contrib import messages
 
-def multi_step_registration(request, step=1):
+def multi_step_registration(request, step):
     step = int(step)
-    form_class = get_form(step)
 
-    if not form_class:
-        return HttpResponse("Invalid step.")
+    if step == 1:
+        if request.method == 'POST':
+            form = Step1Form(request.POST)
+            if form.is_valid():
+                step1_data = form.cleaned_data.copy()
+                
+                # Convert date to string
+                if isinstance(step1_data.get('date_of_establishment'), date):
+                    step1_data['date_of_establishment'] = step1_data['date_of_establishment'].isoformat()
 
-    if request.method == "POST":
-        form = form_class(request.POST, request.FILES)
-        if form.is_valid():
-            form_data = form.cleaned_data
+                request.session['step1_data'] = step1_data
+                return redirect('multi_step', step=2)
+        else:
+            form = Step1Form()
+        return render(request, 'register/step1.html', {'form': form, 'step': step})
 
-            # Convert date fields to string format
-            if "date_of_establishment" in form_data and isinstance(form_data["date_of_establishment"], date):
-                form_data["date_of_establishment"] = form_data["date_of_establishment"].isoformat()
+    elif step == 2:
+        if request.method == 'POST':
+            form = Step2Form(request.POST)
+            if form.is_valid():
+                step1_data = request.session.get('step1_data')
+                if not step1_data:
+                    messages.error(request, "Step 1 data not found. Please start again.")
+                    return redirect('multi_step', step=1)
 
-            # Handle file uploads by storing only file names in the session
-            if "company_logo" in form_data and form_data["company_logo"]:
-                file = form_data.pop("company_logo")  # Remove file from session data
-                file_path = f'logos/{file.name}'  # Define file path
-                with open(f'media/{file_path}', 'wb+') as destination:
-                    for chunk in file.chunks():
-                        destination.write(chunk)
-                form_data["company_logo"] = file_path  # Store only file path in session
+                # Convert date string back to date object
+                if 'date_of_establishment' in step1_data:
+                    step1_data['date_of_establishment'] = date.fromisoformat(step1_data['date_of_establishment'])
 
-            if "business_certificate" in request.FILES:
-                file = request.FILES["business_certificate"]
-                file_path = f'logos/{file.name}'  # Define file path
-                with open(f'media/{file_path}', 'wb+') as destination:
-                    for chunk in file.chunks():
-                        destination.write(chunk)
-                form_data["business_certificate"] = file_path  # Store file path instead of file object
+                all_data = {**step1_data, **form.cleaned_data}
+                Registration.objects.create(**all_data)
 
-            request.session[f'step_{step}'] = form_data
-
-            next_step = step + 1
-            if next_step > 2:
-                return redirect(reverse("registration_complete"))
-            return redirect(reverse("multi_step", kwargs={"step": next_step}))
-
-    else:
-        initial_data = request.session.get(f'step_{step}', {})
-        if "date_of_establishment" in initial_data:
-            try:
-                initial_data["date_of_establishment"] = date.fromisoformat(initial_data["date_of_establishment"])
-            except ValueError:
-                pass
-
-        form = form_class(initial=initial_data)
-
-    return render(request, f"register/step{step}.html", {"form": form, "step": step})
-
-
-def registration_complete(request):
-    # Combine session data from step 1 and 2
-    data = {}
-    for i in range(1, 3):
-        step_data = request.session.get(f'step_{i}', {})
-        data.update(step_data)
-
-    # Convert date back to Python date object
-    if "date_of_establishment" in data and isinstance(data["date_of_establishment"], str):
-        try:
-            data["date_of_establishment"] = date.fromisoformat(data["date_of_establishment"])
-        except ValueError:
-            data["date_of_establishment"] = None
-
-    # Save to the Registration model
-    Registration.objects.create(**data)
-
-    # Clear session data
-    for i in range(1, 3):
-        request.session.pop(f'step_{i}', None)
-
-    return render(request, "dashboard.html")
-
+                # Clean up session
+                del request.session['step1_data']
+                messages.success(request, "Registration complete!")
+                return redirect('dashboard_view')  # Optional success page
+        else:
+            form = Step2Form()
+        return render(request, 'register/step2.html', {'form': form, 'step': step})
 
 from django.shortcuts import render, redirect
 from .forms import IndividualForm
@@ -118,7 +97,7 @@ def individual_reg(request):
         form = IndividualForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, "dashboard.html")  # Adjust URL as needed
+            return redirect('dashboard_view')  # Optional success page
     else:
         form = IndividualForm()
 
@@ -245,6 +224,32 @@ def mySupport(request):
 
 def resetPassword(request):
     return render(request,'myPassword.html')
+
+def dashboard_view(request):
+    total_companies = Registration.objects.count()
+    total_individuals = IndividualDev.objects.count()
+
+    company_nature = Registration.objects.values('nature').annotate(count=Count('nature'))
+    business_model = Registration.objects.values('business_model').annotate(count=Count('business_model'))
+    stage = Registration.objects.values('stage').annotate(count=Count('stage'))
+
+    establishment_years = Registration.objects.dates('date_of_establishment', 'year')
+    year_counts = {year.year: Registration.objects.filter(date_of_establishment__year=year.year).count() for year in establishment_years}
+
+    context = {
+        'total_companies': total_companies,
+        'total_individuals': total_individuals,
+        'company_nature_labels': mark_safe(json.dumps([entry['nature'] for entry in company_nature])),
+        'company_nature_data': mark_safe(json.dumps([entry['count'] for entry in company_nature])),
+        'business_model_labels': mark_safe(json.dumps([entry['business_model'] for entry in business_model])),
+        'business_model_data': mark_safe(json.dumps([entry['count'] for entry in business_model])),
+        'stage_labels': mark_safe(json.dumps([entry['stage'] for entry in stage])),
+        'stage_data': mark_safe(json.dumps([entry['count'] for entry in stage])),
+        'year_labels': mark_safe(json.dumps(list(year_counts.keys()))),
+        'year_data': mark_safe(json.dumps(list(year_counts.values()))),
+    }
+
+    return render(request, 'dashboard.html', context)
 
 def saveChangeMyPassword(request):
     myId = request.session.get('id')
