@@ -11,6 +11,7 @@ EXEMPT_URLS = [
     r'^authlogin/.*$',
     r'^get-subcounties/.*$',    
     r'^signup/.*$',
+    r'^forgetPassword/.*$',
 ]
 
 class LoginRequiredMiddleware:

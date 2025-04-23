@@ -144,6 +144,17 @@ def authlogin(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+def forgetPassword(request):
+    return render(request,'forgetPassword.html')
+
+def verificationLink(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+
+
+
+    return email
 
 
 
