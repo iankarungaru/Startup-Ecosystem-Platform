@@ -498,6 +498,66 @@
 <script src="/static/js/custom/custom.js"></script>
 <!-- jQuery first -->
 
+<!-- Chart.js Setup -->
+<script>
+    const companyNatureLabels = {{ company_nature_labels }};
+    const companyNatureData = {{ company_nature_data }};
+    const businessModelLabels = {{ business_model_labels }};
+    const businessModelData = {{ business_model_data }};
+    const stageLabels = {{ stage_labels }};
+    const stageData = {{ stage_data }};
+    const yearLabels = {{ year_labels }};
+    const yearData = {{ year_data }};
+
+    new Chart(document.getElementById('companyNatureChart'), {
+        type: 'pie',
+        data: {
+            labels: companyNatureLabels,
+            datasets: [{
+                data: companyNatureData,
+                backgroundColor: ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('businessModelChart'), {
+        type: 'bar',
+        data: {
+            labels: businessModelLabels,
+            datasets: [{
+                label: 'Count',
+                data: businessModelData,
+                backgroundColor: '#f28e2c'
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('stageChart'), {
+        type: 'doughnut',
+        data: {
+            labels: stageLabels,
+            datasets: [{
+                data: stageData,
+                backgroundColor: ['#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('establishmentYearChart'), {
+        type: 'line',
+        data: {
+            labels: yearLabels,
+            datasets: [{
+                label: 'Companies Established',
+                data: yearData,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.3
+            }]
+        }
+    });
+</script>
+
 
 <script>layout_change('light');</script>
 
