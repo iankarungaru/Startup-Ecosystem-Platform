@@ -218,6 +218,108 @@ def mySupport(request):
 def resetPassword(request):
     return render(request,'myPassword.html')
 
+from django.db.models.functions import ExtractMonth
+from calendar import month_name
+
+from django.shortcuts import render
+from .models import Registration, IndividualDev
+from django.db.models import Count
+from django.db.models.functions import ExtractMonth
+from django.utils.safestring import mark_safe
+from calendar import month_name
+import json
+from datetime import datetime
+from django.db.models.functions import ExtractYear
+
+
+def dashboard_view(request):
+    # Basic totals
+    total_companies = Registration.objects.count()
+    total_individuals = IndividualDev.objects.count()
+
+    # Pie/Bar/Doughnut chart data
+    company_nature = Registration.objects.values('nature').annotate(count=Count('nature'))
+    business_model = Registration.objects.values('business_model').annotate(count=Count('business_model'))
+    stage = Registration.objects.values('stage').annotate(count=Count('stage'))
+
+    # Line chart: Companies by year
+    establishment_years = Registration.objects.dates('date_of_establishment', 'year')
+    year_counts = {
+        year.year: Registration.objects.filter(date_of_establishment__year=year.year).count()
+        for year in establishment_years
+    }
+
+    # Monthly registration data for comparison
+    def monthly_data_for_year(year):
+        monthly_counts = (
+            Registration.objects.filter(date_of_establishment__year=year)
+            .annotate(month=ExtractMonth('date_of_establishment'))
+            .values('month')
+            .annotate(count=Count('id'))
+        )
+        month_data = {entry['month']: entry['count'] for entry in monthly_counts}
+        return [month_data.get(i, 0) for i in range(1, 13)]
+
+    # Set your desired years for comparison (can be dynamic)
+    available_years = range(2020, 2025)
+    all_years_data = {
+        str(year): monthly_data_for_year(year) for year in available_years
+    }
+
+    # Month labels (Jan–Dec)
+    month_labels = [month_name[i] for i in range(1, 13)]
+        
+    years_qs = (Registration.objects
+        .annotate(year=ExtractYear('date_of_establishment'))
+        .values_list('year', flat=True)
+        .distinct()
+        .order_by('-year')[:10])  # LIMIT TO 10 RECENT YEARS
+    available_years = sorted(list(years_qs))  # sorted ascending
+
+    year_counts = {
+        year: Registration.objects.filter(date_of_establishment__year=year).count()
+        for year in available_years
+    }
+
+    # Breakdown of companies by nature and year for comparison chart
+    comparison_data = {}
+    for year in available_years:
+        year_data = Registration.objects.filter(date_of_establishment__year=year).values('nature').annotate(count=Count('id'))
+        comparison_data[year] = {item['nature']: item['count'] for item in year_data}
+        
+
+    context = {
+        'total_companies': total_companies,
+        'total_individuals': total_individuals,
+
+        # Chart labels and data
+        'company_nature_labels': mark_safe(json.dumps([entry['nature'] for entry in company_nature])),
+        'company_nature_data': mark_safe(json.dumps([entry['count'] for entry in company_nature])),
+
+        'business_model_labels': mark_safe(json.dumps([entry['business_model'] for entry in business_model])),
+        'business_model_data': mark_safe(json.dumps([entry['count'] for entry in business_model])),
+
+        'stage_labels': mark_safe(json.dumps([entry['stage'] for entry in stage])),
+        'stage_data': mark_safe(json.dumps([entry['count'] for entry in stage])),
+
+        'year_labels': mark_safe(json.dumps(list(year_counts.keys()))),
+        'year_data': mark_safe(json.dumps(list(year_counts.values()))),
+
+        # Monthly comparison
+        'month_labels': mark_safe(json.dumps(month_labels)),
+        'all_years_data': mark_safe(json.dumps(all_years_data)),
+        'available_years': mark_safe(json.dumps(list(available_years))),
+        
+    
+        'available_years': available_years,
+        'comparison_data': mark_safe(json.dumps(comparison_data)),
+        
+    }
+
+    return render(request, 'dashboard.html', context)
+
+
+'''
 def dashboard_view(request):
     total_companies = Registration.objects.count()
     total_individuals = IndividualDev.objects.count()
@@ -243,7 +345,7 @@ def dashboard_view(request):
     }
 
     return render(request, 'dashboard.html', context)
-
+'''
 def saveChangeMyPassword(request):
     myId = request.session.get('id')
 
