@@ -26,6 +26,11 @@
     <link rel="stylesheet" href="/static/css/style.css" id="main-style-link">
     <link rel="stylesheet" href="/static/css/style-preset.css">
     <link rel="stylesheet" href="/static/css/registration.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css"
           integrity="sha512-v+KDQpW7MdqD1UCuCTfZqJtuh5TfzRPr4ESVjkSrwEjZsG2vNsDA3ZpzGBOsF8dZRY3ebBAvEd6AEPkYvZxFSg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -497,66 +502,6 @@
 <script src="/static/js/plugins/feather.min.js"></script>
 <script src="/static/js/custom/custom.js"></script>
 <!-- jQuery first -->
-
-<!-- Chart.js Setup -->
-<script>
-    const companyNatureLabels = {{ company_nature_labels }};
-    const companyNatureData = {{ company_nature_data }};
-    const businessModelLabels = {{ business_model_labels }};
-    const businessModelData = {{ business_model_data }};
-    const stageLabels = {{ stage_labels }};
-    const stageData = {{ stage_data }};
-    const yearLabels = {{ year_labels }};
-    const yearData = {{ year_data }};
-
-    new Chart(document.getElementById('companyNatureChart'), {
-        type: 'pie',
-        data: {
-            labels: companyNatureLabels,
-            datasets: [{
-                data: companyNatureData,
-                backgroundColor: ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f']
-            }]
-        }
-    });
-
-    new Chart(document.getElementById('businessModelChart'), {
-        type: 'bar',
-        data: {
-            labels: businessModelLabels,
-            datasets: [{
-                label: 'Count',
-                data: businessModelData,
-                backgroundColor: '#f28e2c'
-            }]
-        }
-    });
-
-    new Chart(document.getElementById('stageChart'), {
-        type: 'doughnut',
-        data: {
-            labels: stageLabels,
-            datasets: [{
-                data: stageData,
-                backgroundColor: ['#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']
-            }]
-        }
-    });
-
-    new Chart(document.getElementById('establishmentYearChart'), {
-        type: 'line',
-        data: {
-            labels: yearLabels,
-            datasets: [{
-                label: 'Companies Established',
-                data: yearData,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.3
-            }]
-        }
-    });
-</script>
 
 
 <script>layout_change('light');</script>

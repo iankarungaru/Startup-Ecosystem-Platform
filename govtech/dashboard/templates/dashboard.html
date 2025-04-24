@@ -1,12 +1,26 @@
 {% extends 'index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
  {% block content %}
  <!-- [ Main Content ] start -->
  <div class="row">
    <!-- [ sample-page ] start -->
+    
+    <!-- Summary Cards -->
    <div class="col-md-6 col-xl-3">
      <div class="card">
        <div class="card-body">
-         <h6 class="mb-2 f-w-400 text-muted">Total Companies</h6>
+         <h6 class="mb-2 f-w-400 text-muted">Registered Sofatware Firms</h6>
          <h4 class="mb-3">{{ total_companies }} <span class="badge bg-light-primary border border-primary"><i
                class="ti ti-trending-up"></i> 59.3%</span></h4>
          <p class="mb-0 text-muted text-sm">You made an extra <span class="text-primary">35,000</span> this year
@@ -17,36 +31,82 @@
    <div class="col-md-6 col-xl-3">
      <div class="card">
        <div class="card-body">
-         <h6 class="mb-2 f-w-400 text-muted">Total Individual Developers</h6>
+         <h6 class="mb-2 f-w-400 text-muted">Registered Developers</h6>
          <h4 class="mb-3">{{ total_individuals }} <span class="badge bg-light-success border border-success"><i
                class="ti ti-trending-up"></i> 70.5%</span></h4>
          <p class="mb-0 text-muted text-sm">You made an extra <span class="text-success">8,900</span> this year</p>
        </div>
      </div>
    </div>
-   <div class="col-md-6 col-xl-3">
-     <div class="card">
-       <div class="card-body">
-         <h6 class="mb-2 f-w-400 text-muted">Total Order</h6>
-         <h4 class="mb-3">18,800 <span class="badge bg-light-warning border border-warning"><i
-               class="ti ti-trending-down"></i> 27.4%</span></h4>
-         <p class="mb-0 text-muted text-sm">You made an extra <span class="text-warning">1,943</span> this year</p>
-       </div>
-     </div>
-   </div>
-   <div class="col-md-6 col-xl-3">
-     <div class="card">
-       <div class="card-body">
-         <h6 class="mb-2 f-w-400 text-muted">Total Sales</h6>
-         <h4 class="mb-3">$35,078 <span class="badge bg-light-danger border border-danger"><i
-               class="ti ti-trending-down"></i> 27.4%</span></h4>
-         <p class="mb-0 text-muted text-sm">You made an extra <span class="text-danger">$20,395</span> this year
-         </p>
-       </div>
-     </div>
-   </div>
+   
+      <!-- Additional Summary cards
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mb-2 f-w-400 text-muted">Total Order</h6>
+            <h4 class="mb-3">18,800 <span class="badge bg-light-warning border border-warning"><i
+                  class="ti ti-trending-down"></i> 27.4%</span></h4>
+            <p class="mb-0 text-muted text-sm">You made an extra <span class="text-warning">1,943</span> this year</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mb-2 f-w-400 text-muted">Total Sales</h6>
+            <h4 class="mb-3">$35,078 <span class="badge bg-light-danger border border-danger"><i
+                  class="ti ti-trending-down"></i> 27.4%</span></h4>
+            <p class="mb-0 text-muted text-sm">You made an extra <span class="text-danger">$20,395</span> this year
+            </p>
+          </div>
+        </div>
+      </div>
+      -->
  
    
+
+        <!-- Charts Grid -->
+        <div class="row g-4">
+          <div class="col-md-6">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">Company Nature</h5>
+                      <canvas id="companyNatureChart"></canvas>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">Business Models</h5>
+                      <canvas id="businessModelChart"></canvas>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">Company Structures</h5>
+                      <canvas id="stageChart"></canvas>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">Companies by Establishment Year</h5>
+                      <canvas id="establishmentYearChart"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+
+
    <div class="col-md-12 col-xl-8">
      <div class="d-flex align-items-center justify-content-between mb-3">
        <h5 class="mb-0">Unique Visitor</h5>
@@ -284,49 +344,76 @@
        </div>
      </div>
    </div>
-
-   <!-- Charts Grid -->
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Company Nature</h5>
-                        <canvas id="companyNatureChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Business Models</h5>
-                        <canvas id="businessModelChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Startup Stages</h5>
-                        <canvas id="stageChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Companies by Establishment Year</h5>
-                        <canvas id="establishmentYearChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-   <!-- Chart.js Setup -->
+   
  </div>
+
  <!-- [ Main Content ] end -->   
+
+    <!-- Chart.js Setup -->
+    <script>
+        const companyNatureLabels = {{ company_nature_labels }};
+        const companyNatureData = {{ company_nature_data }};
+        const businessModelLabels = {{ business_model_labels }};
+        const businessModelData = {{ business_model_data }};
+        const stageLabels = {{ stage_labels }};
+        const stageData = {{ stage_data }};
+        const yearLabels = {{ year_labels }};
+        const yearData = {{ year_data }};
+
+        new Chart(document.getElementById('companyNatureChart'), {
+            type: 'pie',
+            data: {
+                labels: companyNatureLabels,
+                datasets: [{
+                    data: companyNatureData,
+                    backgroundColor: ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f']
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('businessModelChart'), {
+            type: 'bar',
+            data: {
+                labels: businessModelLabels,
+                datasets: [{
+                    label: 'Count',
+                    data: businessModelData,
+                    backgroundColor: '#f28e2c'
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('stageChart'), {
+            type: 'doughnut',
+            data: {
+                labels: stageLabels,
+                datasets: [{
+                    data: stageData,
+                    backgroundColor: ['#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('establishmentYearChart'), {
+            type: 'line',
+            data: {
+                labels: yearLabels,
+                datasets: [{
+                    label: 'Companies Established',
+                    data: yearData,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.3
+                }]
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
  {% endblock %}
 
