@@ -8,6 +8,9 @@ urlpatterns = [
     path('authlogin/', views.authlogin, name = 'authlogin'),
     path('get-subcounties/', views.get_subcounties, name='get_subcounties'),
     path('signup/', views.signup, name='signup'),
+
+    path('forgetPassword/', views.forgetPassword, name='forgetPassword'),
+    path('verificationLink/', views.verificationLink, name='verificationLink'),
     
 
 ]

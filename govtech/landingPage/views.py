@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
@@ -9,6 +9,12 @@ from django.db import IntegrityError
 from django.utils import timezone
 from datetime import timedelta
 from startup.helper import *
+from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+from django.conf import settings
+
+
 
 def landing(request):
     return render(request, 'landing.html')
@@ -144,6 +150,64 @@ def authlogin(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+def forgetPassword(request):
+    return render(request,'forgetPassword.html')
+
+def verificationLink(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        try:
+            user = SignupUser.objects.get(email=email)
+        except SignupUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Email does not exist in our system.'})
+
+        # Check daily limit
+        today_start = now().replace(hour=0, minute=0, second=0, microsecond=0)
+        reset_count_today = PasswordResetToken.objects.filter(
+            user=user,
+            created_at__gte=today_start
+        ).count()
+
+        if reset_count_today >= 5:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'You have reached the daily password reset limit. Please try again tomorrow.'
+            })
+
+        # Generate OTP (8-character, letters + digits)
+        otp = get_random_string(length=8)
+
+        # Save OTP to DB
+        PasswordResetToken.objects.create(user=user, token=otp)
+
+        subject = "Your Password Reset Code (Valid for 10 Minutes)"
+        message = f"""
+        You requested a password reset for your Startup Ecosystem Platform account.
+
+        🔐 Your one-time password (OTP) is: {otp}
+
+        This code is valid for 10 minutes. Please do not share it with anyone.
+
+        If you didn’t request this, you can safely ignore this email.
+
+        — Devlink Team
+        """
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,  # Replace with your verified sender
+            recipient_list=[email],
+            fail_silently=False,
+        )
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'An OTP has been sent to your email.'
+        })
+
+    return redirect('login')
 
 
 
