@@ -11,8 +11,18 @@ Dependencies and instructions to run📝
 -  pip install pillow
 -  pip install pymysql
 -  download mysql https://dev.mysql.com/downloads/installer/
+-  addtionally you can use xammp to get mysql and apache(if you need to work with phpmyadmin)/ MYSQL Workbench
 -  database name is startup
 -  setup your db credentials in settings.py
 -  pip install django-debug-toolbar
 -  pip install djangorestframework
--  pip install djangorestframework-simplejwt    
+-  pip install djangorestframework-simplejwt
+-  SETUP EVERYTHING WITH ONE COMMAND
+    🛠️ browse until the scripts folder in your terminal govtech/scripts
+    🧑‍💻 run - python setup.py command
+
+
+
+
+
+    

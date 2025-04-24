@@ -1,0 +1,19 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+
+# Virtual environment
+env/
+venv/
+
+# Django specific
+*.log
+db.sqlite3
+
+# VS Code
+.vscode/
+
+# Ignore uploaded profile pictures
+static/profiles
