@@ -37,10 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'startupRegistration',
-=======
->>>>>>> origin/main
     'dashboard',
     'debug_toolbar',
     'landingPage',   

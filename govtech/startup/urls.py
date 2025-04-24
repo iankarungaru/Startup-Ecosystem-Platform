@@ -21,10 +21,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-    path("startupRegistration/", include("startupRegistration.urls")),
-=======
->>>>>>> origin/main
     path("dashboard/", include("dashboard.urls")),
     path("landingPage/", include("landingPage.urls")),
     path('__debug__/', include(debug_toolbar.urls)),

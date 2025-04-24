@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-from django.shortcuts import render,redirect
-from django.contrib.auth.models import User  # Import User model
-from django.contrib.auth import authenticate, login
-=======
 from django.shortcuts import render
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import login
->>>>>>> origin/main
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from .models import *
@@ -14,10 +8,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 from django.utils import timezone
 from datetime import timedelta
-<<<<<<< HEAD
-=======
 from startup.helper import *
->>>>>>> origin/main
 
 def landing(request):
     return render(request, 'landing.html')
@@ -37,19 +28,6 @@ def get_subcounties(request):
 def login_view(request):
     return render(request, 'login.html')
 
-<<<<<<< HEAD
-def is_strong_password(password):
-    # At least 8 characters, one uppercase letter, one number, and one symbol
-    return (
-        len(password) >= 8 and
-        re.search(r'[A-Z]', password) and
-        re.search(r'[a-z]', password) and
-        re.search(r'\d', password) and
-        re.search(r'[^A-Za-z0-9]', password)
-    )
-
-=======
->>>>>>> origin/main
 def signup(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name') 
@@ -148,21 +126,15 @@ def authlogin(request):
             request.session['email'] = user_obj.email
             request.session['fName'] = user_obj.fName
             request.session['lName'] = user_obj.lName
-<<<<<<< HEAD
-=======
             request.session['profile_picture'] = user_obj.profile_picture
->>>>>>> origin/main
 
             # Reset login attempts after successful login
             attempt.attempts = 0
             attempt.save()
 
-<<<<<<< HEAD
-=======
             # update user ip address
             SignupUser.objects.filter(email=email).update(ip_address=ip)
 
->>>>>>> origin/main
             return JsonResponse({'status': 'success', 'message': 'Login successful.'})
 
         except SignupUser.DoesNotExist:
@@ -173,15 +145,5 @@ def authlogin(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
-<<<<<<< HEAD
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-=======
 
 
->>>>>>> origin/main
