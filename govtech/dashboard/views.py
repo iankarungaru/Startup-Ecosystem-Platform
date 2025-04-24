@@ -1,24 +1,17 @@
 from django.contrib.auth import logout
-from django.http import HttpResponse
 from django.http import JsonResponse
-from django.urls import reverse
-from landingPage.models import SignupUser, County, Subcounty, Country, gender
+from landingPage.models import SignupUser
 from startup.helper import *
 import os, uuid, base64
 from django.conf import settings
-from django.shortcuts import render
 from .models import Registration, IndividualDev
 from django.db.models import Count
 from django.utils.safestring import mark_safe
 import json
-from datetime import date
-
-
 from django.contrib.auth.hashers import check_password, make_password
 from .forms import (
     Step1Form, Step2Form
 )
-from .models import Registration
 
 
 def dashboard_data(request):
