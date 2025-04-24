@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from datetime import timedelta
 from startup.helper import *
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.conf import settings
@@ -182,32 +182,37 @@ def verificationLink(request):
         PasswordResetToken.objects.create(user=user, token=otp)
 
         subject = "Your Password Reset Code (Valid for 10 Minutes)"
-        message = f"""
-        You requested a password reset for your Startup Ecosystem Platform account.
+        message = (
+            "You requested a password reset for your Startup Ecosystem Platform account.\n\n"
+            "🔐 Your one-time password (OTP) is: {otp}\n\n"
+            "This code is valid for 10 minutes. Please do not share it with anyone.\n\n"
+            "If you didn’t request this, you can safely ignore this email.\n\n"
+            "— Devlink Team"
+        ).format(otp=otp)
+        from_email = f"Devlink Team <{settings.DEFAULT_FROM_EMAIL}>"
 
-        🔐 Your one-time password (OTP) is: {otp}
-
-        This code is valid for 10 minutes. Please do not share it with anyone.
-
-        If you didn’t request this, you can safely ignore this email.
-
-        — Devlink Team
-        """
-
-        send_mail(
+        email = EmailMessage(
             subject=subject,
-            message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,  # Replace with your verified sender
-            recipient_list=[email],
-            fail_silently=False,
+            body=message,
+            from_email=from_email,   # Your verified sender email
+            to=[email],
+            headers={"Reply-To": "no-reply@moict.go.ke"},
         )
+
+        email.send(fail_silently=False)
 
         return JsonResponse({
             'status': 'success',
             'message': 'An OTP has been sent to your email.'
         })
 
-    return redirect('login')
+    return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+def otpVerification(request):
+    return render(request,'otp.html')
+
+def verifyOTP(request):
+    return render(request,'otp.html')
 
 
 

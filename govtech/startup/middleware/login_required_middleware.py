@@ -13,6 +13,8 @@ EXEMPT_URLS = [
     r'^signup/.*$',
     r'^forgetPassword/.*$',
     r'^verificationLink/.*$',
+    r'^otpVerification/.*$',
+    r'^verifyOTP/.*$',
 ]
 
 class LoginRequiredMiddleware:
