@@ -7,6 +7,7 @@
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <script src="{% static 'js/dash.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -102,9 +103,32 @@
                   </div>
               </div>
           </div>
+         
+
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <label for="yearSelect" class="form-label">Select Years for Comparison</label>
+                  <select id="yearSelect" class="form-select" multiple>
+                      {% for year in available_years %}
+                          <option value="{{ year }}" selected>{{ year }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+          </div>
+          
+        </div>
+        
+
+          <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Year-over-Year Comparison</h5>
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
       </div>
-
-
 
 
    <div class="col-md-12 col-xl-8">
@@ -351,67 +375,157 @@
 
     <!-- Chart.js Setup -->
     <script>
-        const companyNatureLabels = {{ company_nature_labels }};
-        const companyNatureData = {{ company_nature_data }};
-        const businessModelLabels = {{ business_model_labels }};
-        const businessModelData = {{ business_model_data }};
-        const stageLabels = {{ stage_labels }};
-        const stageData = {{ stage_data }};
-        const yearLabels = {{ year_labels }};
-        const yearData = {{ year_data }};
-
-        new Chart(document.getElementById('companyNatureChart'), {
-            type: 'pie',
-            data: {
-                labels: companyNatureLabels,
-                datasets: [{
-                    data: companyNatureData,
-                    backgroundColor: ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f']
-                }]
-            }
-        });
-
-        new Chart(document.getElementById('businessModelChart'), {
-            type: 'bar',
-            data: {
-                labels: businessModelLabels,
-                datasets: [{
-                    label: 'Count',
-                    data: businessModelData,
-                    backgroundColor: '#f28e2c'
-                }]
-            }
-        });
-
-        new Chart(document.getElementById('stageChart'), {
-            type: 'doughnut',
-            data: {
-                labels: stageLabels,
-                datasets: [{
-                    data: stageData,
-                    backgroundColor: ['#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']
-                }]
-            }
-        });
-
-        new Chart(document.getElementById('establishmentYearChart'), {
-            type: 'line',
-            data: {
-                labels: yearLabels,
-                datasets: [{
-                    label: 'Companies Established',
-                    data: yearData,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.3
-                }]
-            }
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    
+      // Data passed from Django
+      const companyNatureLabels = {{ company_nature_labels }};
+      const companyNatureData = {{ company_nature_data }};
+      const businessModelLabels = {{ business_model_labels }};
+      const businessModelData = {{ business_model_data }};
+      const stageLabels = {{ stage_labels }};
+      const stageData = {{ stage_data }};
+      const yearLabels = {{ year_labels }};
+      const yearData = {{ year_data }};
+  
+      const monthLabels = {{ month_labels }};
+      const allYearsData = {{ all_years_data }};
+      const availableYears = {{ available_years }};
+  
+      const animationOptions = {
+          responsive: true,
+          animation: {
+              duration: 1000,
+              easing: 'easeOutBounce'
+          },
+          plugins: {
+              tooltip: {
+                  enabled: true,
+                  callbacks: {
+                      label: function (context) {
+                          return `${context.label}: ${context.raw}`;
+                      }
+                  }
+              },
+              legend: {
+                  position: 'bottom'
+              }
+          }
+      };
+  
+      // Company Nature (Pie Chart)
+      new Chart(document.getElementById('companyNatureChart'), {
+          type: 'pie',
+          data: {
+              labels: companyNatureLabels,
+              datasets: [{
+                  data: companyNatureData,
+                  backgroundColor: ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f']
+              }]
+          },
+          options: animationOptions
+      });
+  
+      // Business Model (Bar Chart)
+      new Chart(document.getElementById('businessModelChart'), {
+          type: 'bar',
+          data: {
+              labels: businessModelLabels,
+              datasets: [{
+                  label: 'Count',
+                  data: businessModelData,
+                  backgroundColor: '#f28e2c'
+              }]
+          },
+          options: {
+              ...animationOptions,
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+  
+      // Startup Stage (Doughnut Chart)
+      new Chart(document.getElementById('stageChart'), {
+          type: 'doughnut',
+          data: {
+              labels: stageLabels,
+              datasets: [{
+                  data: stageData,
+                  backgroundColor: ['#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']
+              }]
+          },
+          options: animationOptions
+      });
+  
+      // Establishment Year (Line Chart)
+      new Chart(document.getElementById('establishmentYearChart'), {
+          type: 'line',
+          data: {
+              labels: yearLabels,
+              datasets: [{
+                  label: 'Companies Established',
+                  data: yearData,
+                  fill: false,
+                  borderColor: 'rgb(75, 192, 192)',
+                  tension: 0.3
+              }]
+          },
+          options: animationOptions
+      });
+  
+      // Year Comparison Chart Setup
+      const comparisonChartCtx = document.getElementById('comparisonChart').getContext('2d');
+  
+      const comparisonChart = new Chart(comparisonChartCtx, {
+          type: 'bar',
+          data: {
+              labels: monthLabels,
+              datasets: []
+          },
+          options: {
+              ...animationOptions,
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              onClick: (e, activeEls) => {
+                  if (activeEls.length > 0) {
+                      const active = activeEls[0];
+                      const year = comparisonChart.data.datasets[active.datasetIndex].label;
+                      const month = comparisonChart.data.labels[active.index];
+                      // alert(`Drilling into ${month} ${year}`);
+                      // You can replace this with modal logic or data fetch here
+                  }
+              }
+          }
+      });
+  
+      // Handle dropdown changes
+      const yearSelect = document.getElementById('yearSelect');
+      yearSelect.addEventListener('change', () => {
+          const selectedYears = Array.from(yearSelect.selectedOptions).map(opt => opt.value);
+  
+          comparisonChart.data.datasets = selectedYears.map((year, index) => ({
+              label: year,
+              data: allYearsData[year],
+              backgroundColor: getColorForYear(index)
+          }));
+  
+          comparisonChart.update();
+      });
+  
+      // Get consistent color per year
+      const getColorForYear = (index) => {
+          const palette = ['#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f', '#edc949', '#af7aa1'];
+          return palette[index % palette.length];
+      };
+  
+      // Trigger initial render
+      yearSelect.dispatchEvent(new Event('change'));
+  </script>
+  
+  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
