@@ -229,10 +229,18 @@ def verifyOTP(request):
         # Get the most recent OTP/token for the user
         token_entry = PasswordResetToken.objects.filter(user=user).order_by('-created_at').first()
 
-        if token_entry and token_entry.token == otp:
-            return JsonResponse({'status': 'success', 'message': 'OTP verified.'})
+        if not token_entry:
+            return JsonResponse({'status': 'error', 'message': 'No OTP found. Please request again.'})
+
+        # Check OTP validity and expiration (e.g., 10 minutes)
+        expiry_time = token_entry.created_at + timedelta(minutes=10)
+        if token_entry.token == otp:
+            if now() <= expiry_time:
+                return JsonResponse({'status': 'success', 'message': 'OTP verified.'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'OTP has expired. Please request a new one.'})
         else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid or expired OTP.'})
+            return JsonResponse({'status': 'error', 'message': 'Invalid OTP.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
