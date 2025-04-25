@@ -156,7 +156,7 @@ def forgetPassword(request):
 def verificationLink(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-
+        enteredEmail = email
         try:
             user = SignupUser.objects.get(email=email)
         except SignupUser.DoesNotExist:
@@ -203,8 +203,10 @@ def verificationLink(request):
 
         return JsonResponse({
             'status': 'success',
-            'message': 'An OTP has been sent to your email.'
+            'message': 'An OTP has been sent to your email.',
+            'email':enteredEmail,
         })
+
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
@@ -212,7 +214,52 @@ def otpVerification(request):
     return render(request,'otp.html')
 
 def verifyOTP(request):
-    return render(request,'otp.html')
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        email = request.POST.get('email')
+
+        if not email or not otp:
+            return JsonResponse({'status': 'error', 'message': 'Missing email or OTP.'})
+
+        try:
+            user = SignupUser.objects.get(email=email)
+        except SignupUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found.'})
+
+        # Get the most recent OTP/token for the user
+        token_entry = PasswordResetToken.objects.filter(user=user).order_by('-created_at').first()
+
+        if token_entry and token_entry.token == otp:
+            return JsonResponse({'status': 'success', 'message': 'OTP verified.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid or expired OTP.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def ChangePassword(request):
+    return render(request,'changePassword.html')
+
+def saveForgetMyPassword(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        new_password = request.POST.get('password')
+        confirmpassword = request.POST.get('confirm_password')
+
+        if new_password != confirmpassword:
+            return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
+
+        if not is_strong_password(new_password):
+            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
+        # Encrypt the password
+        encrypted_password = make_password(new_password)
+
+        try:
+            SignupUser.objects.filter(email=email).update(password=encrypted_password)
+            return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
 
 
 
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})

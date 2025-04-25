@@ -12,6 +12,9 @@ urlpatterns = [
     path('verificationLink/', views.verificationLink, name='verificationLink'),
     path('otpVerification/', views.otpVerification, name='otpVerification'),
     path('verifyOTP/', views.verifyOTP, name='verifyOTP'),
-    
+    path('ChangePassword/', views.ChangePassword, name='ChangePassword'),
+    path('saveForgetMyPassword/', views.saveForgetMyPassword, name='saveForgetMyPassword'),
+
+
 
 ]

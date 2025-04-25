@@ -1,20 +1,19 @@
-# govtech/startup/middleware/login_required_middleware.py
-
 from django.shortcuts import redirect
-from django.conf import settings
 import re
 
 EXEMPT_URLS = [
     r'^$',
-    r'^register/?$',                   
+    r'^register/?$',
     r'^login/?$',
     r'^authlogin/.*$',
-    r'^get-subcounties/.*$',    
+    r'^get-subcounties/.*$',
     r'^signup/.*$',
     r'^forgetPassword/.*$',
     r'^verificationLink/.*$',
     r'^otpVerification/.*$',
     r'^verifyOTP/.*$',
+    r'^ChangePassword/.*$',
+    r'^saveForgetMyPassword/.*$',
 ]
 
 class LoginRequiredMiddleware:
