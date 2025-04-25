@@ -75,7 +75,7 @@
                    <label class="form-label">OTP</label>
                                 <input type="text" class="form-control" name="otp" id="otp"
                                        placeholder="Enter your one time password" required>
-                                <small id="emailFeedback" class="form-text"></small>
+                                <input type="hidden" name="email" id="emailField">
                 </div>
                 <div class="d-grid mt-4">
                   <button type="submit" class="btn btn-primary">Verify</button>
@@ -89,6 +89,17 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- [ Main Content ] end -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const email = sessionStorage.getItem("otp_email");
+        if (email) {
+            document.getElementById("emailField").value = email;
+        } else {
+            alert("No email found in session. Please go back and try again.");
+            window.location.href = "/forgetPassword/";
+        }
+    });
+</script>
   <script>
     document.getElementById('otpform').addEventListener('submit', function(e) {
         e.preventDefault();  // Prevent default form submission
@@ -114,7 +125,7 @@
                     title: 'Success',
                     text: data.message
                 }).then(() => {
-                  window.location.href = "/login/";  // Redirect to Dashboard on success
+                  window.location.href = "/ChangePassword/";  // Redirect to Dashboard on success
                 });
             } else {
                 Swal.fire({
