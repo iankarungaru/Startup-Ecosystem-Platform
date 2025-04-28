@@ -378,3 +378,7 @@ def saveChangeMyPassword(request):
 
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+#lets start displaying notfications
+def notifications(request):
+    return render(request, 'dashboard.html')
