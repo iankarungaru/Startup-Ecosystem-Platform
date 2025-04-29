@@ -70,3 +70,18 @@ def notification_insert(title, message, user_id):
     except Exception as e:
         return {'status': 'error', 'message': f'Unexpected error: {str(e)}'}
 
+
+def getAccountNames(id):
+    try:
+        user = SignupUser.objects.get(id=id)
+        firstName = user.fName
+        lastName = user.lName
+        fullName = firstName + ' ' + lastName
+
+        return fullName
+    except IntegrityError as e:
+        return {'status': 'error', 'message': f'Database error: {str(e)}'}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Unexpected error: {str(e)}'}
+
+

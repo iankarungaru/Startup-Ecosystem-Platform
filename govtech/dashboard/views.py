@@ -13,8 +13,7 @@ from django.db.models import Count
 from django.db.models.functions import ExtractMonth
 from django.db.models.functions import ExtractYear
 from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.safestring import mark_safe
 
 from startup.helper import *
@@ -383,4 +382,40 @@ def saveChangeMyPassword(request):
 
 # let's start displaying notifications
 def notifications(request):
-    return render(request, 'dashboard.html')
+    myId = request.session.get('id')
+    notif = Notification.objects.filter(user_id=myId, is_read=False)
+
+    notif = Notification.objects.filter(user_id=myId, is_read=False)
+
+    data = {
+        'notifications': [
+            {
+                'id': n.id,
+                'title': n.title,
+                'message': n.message,
+                'is_read': n.is_read,
+                'created_at': n.created_at,
+                'accountName': getAccountNames(n.user_id),
+            }
+            for n in notif
+        ]
+    }
+    return render(request, 'viewNotification.html',data)
+
+def markAsRead(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications')  # or wherever you want to redirect
+
+def viewMynotifications(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+
+    # Optional: mark as read automatically on view
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
+
+    return render(request, 'view_notification.html', {
+        'notification': notification
+    })
