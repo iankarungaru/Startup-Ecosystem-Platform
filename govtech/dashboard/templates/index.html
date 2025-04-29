@@ -137,22 +137,6 @@
                     </a>
                 </li>
                 <li class="pc-item pc-caption">
-                    <label>Registration</label>
-                    <i class="ti ti-dashboard"></i>
-                </li>
-                <li class="pc-item">
-                    <a href="{% url 'individual_reg' %}" class="pc-link">
-                        <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
-                        <span class="pc-mtext">Register Individual Developer</span>
-                    </a>
-                </li>
-                <li class="pc-item">
-                    <a href="{% url 'multi_step' step=1 %}" class="pc-link">
-                        <span class="pc-micon"> <i class="ti ti-building-skyscraper"></i></span>
-                        <span class="pc-mtext">Register Software Company</span>
-                    </a>
-                </li>
-                <li class="pc-item pc-caption">
                     <label>Applications</label>
                     <i class="ti ti-news"></i>
                 </li>
@@ -161,12 +145,12 @@
                         <span class="pc-mtext">My Applications</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
                     <ul class="pc-submenu">
                         <li class="pc-item">
-                            <a class="pc-link" href="#!">
+                            <a class="pc-link" href="{% url 'individual_reg' %}">
                                 <i class="ti ti-user-check"></i> Individual Application
                             </a>
                         </li>
                         <li class="pc-item">
-                            <a class="pc-link" href="#!">
+                            <a class="pc-link" href="{% url 'multi_step' step=1 %}">
                                 <i class="fas fa-building"></i> Company Application
                             </a>
                         </li>
