@@ -407,3 +407,15 @@ def markAsRead(request, pk):
     notification.is_read = True
     notification.save()
     return redirect('notifications')  # or wherever you want to redirect
+
+def viewMynotifications(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+
+    # Optional: mark as read automatically on view
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
+
+    return render(request, 'view_notification.html', {
+        'notification': notification
+    })

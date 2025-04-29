@@ -34,7 +34,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="#">View</a>
+                                    <a class="dropdown-item" href="{% url 'viewMynotifications' n.id %}">View</a>
                                 </li>
                                 {% if not n.is_read %}
                                 <li>
