@@ -383,4 +383,22 @@ def saveChangeMyPassword(request):
 
 # let's start displaying notifications
 def notifications(request):
-    return render(request, 'dashboard.html')
+    myId = request.session.get('id')
+    notif = Notification.objects.filter(user_id=myId, is_read=False)
+
+    notif = Notification.objects.filter(user_id=myId, is_read=False)
+
+    data = {
+        'notifications': [
+            {
+                'id': n.id,
+                'title': n.title,
+                'message': n.message,
+                'is_read': n.is_read,
+                'created_at': n.created_at,
+                'accountName': getAccountNames(n.user_id),
+            }
+            for n in notif
+        ]
+    }
+    return render(request, 'viewNotification.html',data)

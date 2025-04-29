@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import multi_step_registration, individual_reg, index, authlogout, \
-    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword, saveChangeMyPassword, dashboard_view  # DashboardData
+    Myprofile, profileChange, saveEditProfile, mySupport, resetPassword, saveChangeMyPassword, dashboard_view, notifications  # DashboardData
 
 urlpatterns = [
     # path("", views.home, name="home"),
@@ -18,29 +18,10 @@ urlpatterns = [
     path('mySupport/', mySupport, name='mySupport'),
     path('changeMyPassword/', resetPassword, name='changeMyPassword'),
     path('saveChangeMyPassword/', saveChangeMyPassword, name='saveChangeMyPassword'),
+    path('notifications/', notifications, name='notifications'),
 ]
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home),
-    path('newsletter/', include('newsletter.urls')),
-]
-'''
