@@ -13,8 +13,7 @@ from django.db.models import Count
 from django.db.models.functions import ExtractMonth
 from django.db.models.functions import ExtractYear
 from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.safestring import mark_safe
 
 from startup.helper import *
@@ -402,3 +401,9 @@ def notifications(request):
         ]
     }
     return render(request, 'viewNotification.html',data)
+
+def markAsRead(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications')  # or wherever you want to redirect

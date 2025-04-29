@@ -1,49 +1,66 @@
 {% extends 'index.html' %}
 
 {% block content %}
-   <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Subject</th>
-                <th>Preview</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for n in notifications %}
+    <div class="card-body table-border-style">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ n.title }}</td>
-                    <td>{{ n.message|truncatechars:20 }}</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="#">View</a>
-                                </li>
-                                <li>
-                                    <form method="POST" action="#" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit" class="dropdown-item">Mark as Read</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
+                    <th>No.</th>
+                    <th>Subject</th>
+                    <th>Preview</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Action</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4" class="text-center">No notifications found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for n in notifications %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ n.title }}</td>
+                        <td>{{ n.message|truncatechars:20 }}</td>
+                        <td>
+                            {% if n.is_read %}
+                                <span class="badge bg-success">Read</span>
+                            {% else %}
+                                <span class="badge bg-danger">Unread</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ n.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-success dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#">View</a>
+                                    </li>
+                                    {% if not n.is_read %}
+                                    <li>
+                                        <form method="POST" action="{% url 'markAsRead' n.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item">Mark as Read</button>
+                                        </form>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No notifications found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
 
 
 
