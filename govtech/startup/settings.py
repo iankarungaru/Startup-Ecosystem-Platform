@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-p7c+70%&+i2m#+#x_^cq%@8)v2)-d8!af^%3j4o55ys(+m@e-3
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -39,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'debug_toolbar',
-    'landingPage',   
+    'landingPage',
+    'systemAdmin'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,25 +74,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'startup.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Use MySQL engine
-        'NAME': 'startup',  # Change to your MySQL database name
-        'USER': 'root',  # Change to your MySQL username
-        'PASSWORD': 'Root@2025*',  # Change to your MySQL password
-        'HOST': '127.0.0.1',  # Use localhost or 127.0.0.1
-        'PORT': '3306',  # Default MySQL port
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'startup',
+        'USER': 'root',
+        'PASSWORD': 'Root@2025*',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    },
+    'sysadmin': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sysadmin',
+        'USER': 'root',
+        'PASSWORD': 'Root@2025*',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
     }
 }
 
-
+DATABASE_ROUTERS = ['startup.db_router.SystemAdminRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -123,7 +131,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # }
 
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -134,7 +141,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
