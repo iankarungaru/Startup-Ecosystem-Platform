@@ -1,3 +1,6 @@
+# sysadmin/views.py
 from django.shortcuts import render
 
-# Create your views here.
+def index(request):
+    # Explicitly specify the path to the template for sysadmin
+    return render(request, 'sysadmin/index.html')
