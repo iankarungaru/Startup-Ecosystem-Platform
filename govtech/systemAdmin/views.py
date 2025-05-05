@@ -2,7 +2,7 @@
 import base64
 import os
 import uuid
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User  # Import User model
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
@@ -348,3 +348,83 @@ def saveEditProfile(request):
             return JsonResponse({'status': 'error', 'message': f'Error updating profile: {e}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+def resetPassword(request):
+    return render(request, 'pages/myPassword.html')
+
+def saveChangeMyPassword(request):
+    myId = request.session.get('id')
+
+    if request.method == 'POST' and myId:
+        current_password = request.POST.get('currentPassword')
+        # Get actual password in the db
+        actualPassword = InternalUser.objects.filter(id=myId).values_list('password', flat=True).first()
+
+        if not check_password(current_password, actualPassword):
+            return JsonResponse({'status': 'warning', 'message': 'Invalid current password'})
+
+        new_password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
+
+        if not is_strong_password(new_password):
+            return JsonResponse({'status': 'error',
+                                 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
+        # Encrypt the password
+        encrypted_password = make_password(new_password)
+
+        try:
+            InternalUser.objects.filter(id=myId).update(password=encrypted_password)
+            title = "Password Change"
+            message = (
+                "You have successfully updated your Account Password."
+            )
+            result = notification_insert(title, message, myId, sysNotification)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
+            return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+# let's start displaying notifications
+def notifications(request):
+    myId = request.session.get('id')
+    notif = sysNotification.objects.filter(user_id=myId, is_read=False)
+
+    data = {
+        'notifications': [
+            {
+                'id': n.id,
+                'title': n.title,
+                'message': n.message,
+                'is_read': n.is_read,
+                'created_at': n.created_at,
+                'accountName': getAccountNames(n.user_id),
+            }
+            for n in notif
+        ]
+    }
+    return render(request, 'pages/viewNotification.html',data)
+
+def markAsRead(request, pk):
+    notification = get_object_or_404(sysNotification, pk=pk)
+    notification.is_read = True
+    notification.save()
+    return redirect('Sys_notifications')  # or wherever you want to redirect
+
+def viewMynotifications(request, pk):
+    notification = get_object_or_404(sysNotification, pk=pk)
+
+    # Optional: mark as read automatically on view
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
+
+    return render(request, 'pages/view_notification.html', {
+        'notification': notification
+    })
