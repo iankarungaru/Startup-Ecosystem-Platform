@@ -1,7 +1,10 @@
 # sysadmin/views.py
+import base64
+import os
+import uuid
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User  # Import User model
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from .models import *
@@ -24,7 +27,7 @@ def authorize_login(request):
         ip = get_client_ip(request)
 
         # Get or create login attempt tracker
-        attempt, created = LoginAttempt.objects.get_or_create(email=email, ip_address=ip)
+        attempt, created = AttemptLogin.objects.get_or_create(email=email, ip_address=ip)
 
         # Reset count if more than 10 minutes have passed
         if timezone.now() - attempt.last_attempt > timedelta(minutes=10):
@@ -218,5 +221,130 @@ def saveForgetMyPasswordSys(request):
             return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
 
 
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+def authlogoutSys(request):
+    try:
+        # Clear the session
+        request.session.flush()
+
+        # Logout the user
+        logout(request)  # This will log the user out and clear their session.
+
+        # You can return a success message via JSON if needed (optional)
+        return redirect('/sysadmin/')  # Redirect to login page or other desired page
+
+    except Exception as e:
+        # Handle any errors that occur during logout
+        return JsonResponse({'status': 'error', 'message': f'Error during logout: {str(e)}'})
+
+def Adminprofile(request):
+    myId = request.session.get('id')
+    myInfo = InternalUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'county': getCountyName(myInfo.county),
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'gender': getGenderName(myInfo.gender),
+        'profilePicture': myInfo.profile_picture,
+    }
+
+    return render(request, 'pages/myprofile.html', data)
+
+def profileChange(request):
+    myId = request.session.get('id')
+    myInfo = InternalUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'nationalityId': myInfo.nationality,
+        'county': getCountyName(myInfo.county),
+        'countyId': myInfo.county,
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'subcountyId': myInfo.subcounty,
+        'gender': getGenderName(myInfo.gender),
+        'genderId': myInfo.gender,
+        'countries': Country.objects.all().order_by('nationality'),
+        'counties': County.objects.all().order_by('name'),
+        'genders': gender.objects.all().order_by('name'),
+    }
+
+    return render(request, 'pages/editProfile.html', data)
+
+def saveEditProfile(request):
+    myId = request.session.get('id')
+
+    if request.method == 'POST' and myId:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        nationality = request.POST.get('nationality')
+        county = request.POST.get('county')
+        subCounty = request.POST.get('subcounty')
+        genderName = request.POST.get('gender')
+        cropped_image_data = request.POST.get('cropped_image')  # Base64 string
+
+        try:
+            # Get existing user
+            user = InternalUser.objects.get(id=myId)
+
+            # Update fields
+            user.fName = first_name
+            user.lName = last_name
+            user.email = email
+            user.phone = phone
+            user.nationality = nationality
+            user.county = county
+            user.subcounty = subCounty
+            user.gender = genderName
+
+            # Handle profile picture if provided
+            if cropped_image_data and "base64" in cropped_image_data:
+                format, imgstr = cropped_image_data.split(';base64,')
+                ext = format.split('/')[-1]
+                file_name = f"profile_{myId}_{uuid.uuid4().hex[:8]}.{ext}"
+
+                # Define and create static/profiles/ directory
+                static_profiles_dir = os.path.join(settings.BASE_DIR, 'static', 'profiles')
+                os.makedirs(static_profiles_dir, exist_ok=True)
+
+                file_path = os.path.join(static_profiles_dir, file_name)
+
+                # Save the decoded image
+                with open(file_path, "wb") as f:
+                    f.write(base64.b64decode(imgstr))
+
+                # Save relative path
+                user.profile_picture = f"profiles/{file_name}"
+                request.session['profile_picture'] = user.profile_picture
+
+            # Save updated user (both with or without image)
+            user.save()
+
+            # Add notification
+            title = "Editing of Profile"
+            message = (
+                "You have successfully updated your profile. "
+                "Remember, updating your email or phone may affect your login credentials."
+            )
+            result = notification_insert(title, message, myId, sysNotification)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
+
+            return JsonResponse({'status': 'success', 'message': 'Profile updated successfully'})
+
+        except InternalUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error updating profile: {e}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})

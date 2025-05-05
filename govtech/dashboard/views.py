@@ -209,7 +209,7 @@ def saveEditProfile(request):
                 "You have successfully updated your profile. "
                 "Remember, updating your email or phone may affect your login credentials."
             )
-            result = notification_insert(title, message, myId)
+            result = notification_insert(title, message, myId, Notification)
             if result['status'] != 'success':
                 print("Notification insert failed:", result['message'])
 
@@ -377,7 +377,7 @@ def saveChangeMyPassword(request):
             message = (
                 "You have successfully updated your Account Password."
             )
-            result = notification_insert(title, message, myId)
+            result = notification_insert(title, message, myId, Notification)
             if result['status'] != 'success':
                 print("Notification insert failed:", result['message'])
             return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
