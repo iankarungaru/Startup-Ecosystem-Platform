@@ -123,7 +123,7 @@ def verificationLinkSys(request):
         PasswordResetToken.objects.create(user=user, token=otp)
 
         subject = "System Administrator account Password Reset"
-        from_email = f"Devlink Team <{settings.DEFAULT_FROM_EMAIL}>"
+        from_email = f"Devlink System Admin Team <{settings.DEFAULT_FROM_EMAIL}>"
 
         # Plain text
         text_content = (
