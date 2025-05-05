@@ -14,6 +14,6 @@ urlpatterns = [
     path('authlogoutSys/', views.authlogoutSys, name='authlogoutSys'),
     path('Adminprofile/', views.Adminprofile, name='Adminprofile'),
     path('editProfile/', views.profileChange, name='editProfileSys'),
-
+    path('saveEditProfile/', views.saveEditProfile, name='saveEditProfileSys'),
 
 ]

@@ -59,3 +59,20 @@ class PasswordResetToken(models.Model):
 
     def __str__(self):
         return f'Token for {self.user.email}'
+
+class sysNotification(models.Model):
+    user = models.ForeignKey(InternalUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)  # ← Move it inside the class!
+
+    class Meta:
+        db_table = 'notifications'
+        ordering = ['-created_at']
+
+    def short_message(self):
+        return (self.message[:50] + '...') if len(self.message) > 50 else self.message
+
+    def __str__(self):
+        return f"To: {self.user.id} | {self.title}"

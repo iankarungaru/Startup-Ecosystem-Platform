@@ -136,7 +136,7 @@
                     const form = e.target;
                     const formData = new FormData(form);
 
-                    fetch("{% url 'saveEditProfile' %}", {
+                    fetch("{% url 'saveEditProfileSys' %}", {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': formData.get('csrfmiddlewaretoken')
@@ -151,7 +151,7 @@
                                     title: 'Profile Updated',
                                     text: 'Your changes were saved successfully.'
                                 }).then(() => {
-                                    window.location.href = "{% url 'Myprofile' %}";
+                                    window.location.href = "{% url 'Adminprofile' %}";
                                 });
                             } else {
                                 Swal.fire({

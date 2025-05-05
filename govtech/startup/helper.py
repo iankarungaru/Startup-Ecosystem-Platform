@@ -55,9 +55,9 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-def notification_insert(title, message, user_id):
+def notification_insert(title, message, user_id, myModel):
     try:
-        notif = Notification.objects.create(
+        notif = myModel.objects.create(
             title=title,
             message=message,
             user_id=user_id,
