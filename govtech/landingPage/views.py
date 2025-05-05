@@ -259,6 +259,9 @@ def ChangePassword(request):
 def saveForgetMyPassword(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+        user = SignupUser.objects.get(email=email)
+        myId = user.id
+
         new_password = request.POST.get('password')
         confirmpassword = request.POST.get('confirm_password')
 
@@ -273,6 +276,13 @@ def saveForgetMyPassword(request):
 
         try:
             SignupUser.objects.filter(email=email).update(password=encrypted_password)
+            title = "Forgot Password Change"
+            message = (
+                "You have successfully updated your Account Password."
+            )
+            result = notification_insert(title, message, myId)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
             return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
