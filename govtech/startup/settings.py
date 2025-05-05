@@ -169,10 +169,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # This should NOT be the same as STATICFILES_DIRS
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = 'apikey'  # 'apikey' is the SendGrid username
-EMAIL_HOST_PASSWORD = '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'  # SendGrid API key here
-DEFAULT_FROM_EMAIL = 'officialotienosylvester@gmail.com'  # Your default sender email
+EMAIL_HOST_USER = 'officialotienosylvester@gmail.com'
+EMAIL_HOST_PASSWORD = 'xidq tdpg ftgz ejmc'
+DEFAULT_FROM_EMAIL = 'officialotienosylvester@gmail.com'

@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from datetime import timedelta
 from startup.helper import *
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.conf import settings
@@ -157,6 +157,7 @@ def verificationLink(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         enteredEmail = email
+
         try:
             user = SignupUser.objects.get(email=email)
         except SignupUser.DoesNotExist:
@@ -175,38 +176,46 @@ def verificationLink(request):
                 'message': 'You have reached the daily password reset limit. Please try again tomorrow.'
             })
 
-        # Generate OTP (8-character, letters + digits)
+        # Generate OTP
         otp = get_random_string(length=8)
 
         # Save OTP to DB
         PasswordResetToken.objects.create(user=user, token=otp)
 
-        subject = "Your Password Reset Code (Valid for 10 Minutes)"
-        message = (
-            "You requested a password reset for your Startup Ecosystem Platform account.\n\n"
-            "🔐 Your one-time password (OTP) is: {otp}\n\n"
-            "This code is valid for 10 minutes. Please do not share it with anyone.\n\n"
-            "If you didn’t request this, you can safely ignore this email.\n\n"
-            "— Devlink Team"
-        ).format(otp=otp)
+        subject = "Startup Ecosystem Platform account Password Reset"
         from_email = f"Devlink Team <{settings.DEFAULT_FROM_EMAIL}>"
 
-        email = EmailMessage(
-            subject=subject,
-            body=message,
-            from_email=from_email,   # Your verified sender email
-            to=[email],
-            headers={"Reply-To": "no-reply@moict.go.ke"},
+        # Plain text
+        text_content = (
+            f"You requested a password reset for your Startup Ecosystem Platform account.\n\n"
+            f"Your reset code is: {otp}\n\n"
+            f"This code is valid for 10 minutes. If you did not request this, please ignore this message.\n\n"
+            f"- Devlink Team"
         )
 
-        email.send(fail_silently=False)
+        # HTML content
+        html_content = f"""
+            <html>
+            <body>
+                <p>You requested a password reset for your <strong>Startup Ecosystem Platform account</strong> account.</p>
+                <p><strong>Your reset code is:</strong> <code style="font-size: 18px;">{otp}</code></p>
+                <p>This code is valid for 10 minutes. If you did not request this, you can safely ignore it.</p>
+                <br>
+                <p style="font-size: 14px; color: #888;">— Devlink Team</p>
+            </body>
+            </html>
+        """
+
+        # Send both plain text and HTML
+        email_msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+        email_msg.attach_alternative(html_content, "text/html")
+        email_msg.send(fail_silently=False)
 
         return JsonResponse({
             'status': 'success',
             'message': 'An OTP has been sent to your email.',
-            'email':enteredEmail,
+            'email': enteredEmail,
         })
-
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
