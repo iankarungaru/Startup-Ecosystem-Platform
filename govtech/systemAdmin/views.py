@@ -160,7 +160,7 @@ def verificationLinkSys(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
 def otpVerificationSys(request):
-    return render(request,'otp.html')
+    return render(request,'auth/otp.html')
 
 def verifyOTPSys(request):
     if request.method == 'POST':
@@ -194,7 +194,7 @@ def verifyOTPSys(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 def ChangePasswordSys(request):
-    return render(request,'changePassword.html')
+    return render(request,'auth/changePassword.html')
 
 def saveForgetMyPasswordSys(request):
     if request.method == 'POST':

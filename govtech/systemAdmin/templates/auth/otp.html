@@ -92,7 +92,7 @@
 
                         <div class="d-flex justify-content-between align-items-end mt-3">
                             <p class="mb-0">Did not receive the email? Check your spam filter, or</p>
-                            <a href="{% url 'forgetPassword' %}" class="link-primary">Resend code</a>
+                            <a href="{% url 'forgetPasswordSysAdmin' %}" class="link-primary">Resend code</a>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                             title: 'Success',
                             text: data.message
                         }).then(() => {
-                            window.location.href = "/ChangePasswordSys/";
+                            window.location.href = "/sysadmin/ChangePasswordSys/";
                         });
                     } else {
                         Swal.fire({
