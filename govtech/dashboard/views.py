@@ -373,6 +373,13 @@ def saveChangeMyPassword(request):
 
         try:
             SignupUser.objects.filter(id=myId).update(password=encrypted_password)
+            title = "Password Change"
+            message = (
+                "You have successfully updated your Account Password."
+            )
+            result = notification_insert(title, message, myId)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
             return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
