@@ -167,7 +167,7 @@
             data.append('email', email);
             data.append('otp', full_code);
 
-            fetch("{% url 'verifyOTP' %}", {
+            fetch("{% url 'verifyOTPSys' %}", {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken
@@ -182,7 +182,7 @@
                             title: 'Success',
                             text: data.message
                         }).then(() => {
-                            window.location.href = "/ChangePassword/";
+                            window.location.href = "/ChangePasswordSys/";
                         });
                     } else {
                         Swal.fire({
