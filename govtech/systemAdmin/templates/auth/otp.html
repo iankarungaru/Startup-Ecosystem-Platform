@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<!-- [Head] start -->
+
+<head>
+    <title>Verify OTP | MOICDE</title>
+    <!-- [Meta] -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="{% static 'images/cos.ico' %}" type="image/x-icon"> <!-- [Google Font] Family -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+          id="main-font-link">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="{% static 'fonts/tabler-icons.min.css' %}">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="{% static 'fonts/feather.css' %}">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome.css' %}">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="{% static 'fonts/material.css' %}">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link">
+    <link rel="stylesheet" href="{% static 'css/style-preset.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+<style>
+    .input-group .input-group-text {
+        background-color: #fff;
+        border-left: none;
+        border-radius: 0 .25rem .25rem 0;
+        display: flex;
+        align-items: center;
+        padding: 0 0.75rem;
+        height: 100%;
+    }
+
+    .input-group input.form-control {
+        border-right: none;
+    }
+
+</style>
+
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<div class="auth-main">
+    <div class="auth-wrapper v3">
+        <div class="auth-form">
+            <div class="auth-header">
+                <a href="#"><img src="{% static 'images/COTlog.png' %}" alt="img"></a>
+            </div>
+
+            <form class="login-form" id="otpform" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card my-5" style="width: 500px; max-width: 100%; margin: auto;">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h3 class="mb-2"><b>Enter Verification Code</b></h3>
+                            <p class="text-muted mb-4"></p>
+                            <p id="emailDisplay">We've sent a code to <b>loading...</b></p>
+                        </div>
+
+                        <div class="row text-center">
+                            {% for i in "12345678" %}
+                                <div class="col">
+                                    <input type="text" name="otp" maxlength="1" class="form-control code-input"
+                                           required>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Hidden email input -->
+                        <input type="hidden" name="email" id="emailField">
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Continue</button>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-end mt-3">
+                            <p class="mb-0">Did not receive the email? Check your spam filter, or</p>
+                            <a href="{% url 'forgetPassword' %}" class="link-primary">Resend code</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const email = sessionStorage.getItem("otp_email");
+
+        if (email) {
+            // Blur the email
+            const parts = email.split("@");
+            const blurredEmail = parts[0].substring(0, 3) + "*****@" + parts[1];
+            document.getElementById("emailDisplay").innerHTML = `We've sent a code to <b>${blurredEmail}</b>`;
+            document.getElementById("emailField").value = email;
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No email found in session. Please go back and try again.'
+            }).then(() => {
+                window.location.href = "/forgetPassword/";
+            });
+        }
+
+        // Move to next input automatically
+        const inputs = document.querySelectorAll('.code-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', function () {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function (e) {
+                if (e.key === "Backspace" && input.value === "" && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Handle Form Submission
+        document.getElementById('otpform').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent default form submission
+
+            const form = e.target;
+            const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+            const email = document.getElementById('emailField').value;
+            const inputs = document.querySelectorAll('.code-input');
+
+            let full_code = "";
+            inputs.forEach(input => full_code += input.value);
+
+            if (full_code.length !== 8) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Code',
+                    text: 'Please enter all 8 digits of the verification code.'
+                });
+                return;
+            }
+
+            const data = new FormData();
+            data.append('email', email);
+            data.append('otp', full_code);
+
+            fetch("{% url 'verifyOTP' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: data
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message
+                        }).then(() => {
+                            window.location.href = "/ChangePassword/";
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong. Please try again.'
+                    });
+                });
+        });
+    });
+</script>
+
+
+<!-- Required Js -->
+<script src="{% static 'js/plugins/popper.min.js' %}"></script>
+<script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
+<script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/fonts/custom-font.js' %}"></script>
+<script src="{% static 'js/pcoded.js' %}"></script>
+<script src="{% static 'js/plugins/feather.min.js' %}"></script>
+
+
+<script>layout_change('light');</script>
+
+
+<script>change_box_container('false');</script>
+
+
+<script>layout_rtl_change('false');</script>
+
+
+<script>preset_change("preset-1");</script>
+
+
+<script>font_change("Public-Sans");</script>
+
+
+</body>
+<!-- [Body] end -->
+
+</html>

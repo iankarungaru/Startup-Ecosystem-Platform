@@ -17,6 +17,12 @@ EXEMPT_URLS = [
     r'^sysadmin/?$',           # sysadmin login
     r'^sysadmin/login/?$',
     r'^sysadmin/authorize_login/.*$',
+    r'^sysadmin/forgetPasswordSysAdmin/.*$',
+    r'^sysadmin/verificationLinkSys/.*$',
+    r'^sysadmin/otpVerificationSys/.*$',
+    r'^sysadmin/verifyOTPSys/.*$',
+    r'^sysadmin/ChangePasswordSys/.*$',
+    r'^sysadmin/saveForgetMyPasswordSys/.*$',
 ]
 
 class LoginRequiredMiddleware:

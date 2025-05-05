@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from datetime import timedelta
 from startup.helper import *
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.conf import settings
@@ -89,3 +89,134 @@ def authorize_login(request):
 
 def dashboard(request):
     return render(request, "pages/dashboard.html")
+
+def forgetPasswordSysAdmin(request):
+    return render(request, 'auth/forgetPassword.html')
+
+def verificationLinkSys(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        enteredEmail = email
+
+        try:
+            user = InternalUser.objects.get(email=email)
+        except InternalUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Email does not exist in our system.'})
+
+        # Check daily limit
+        today_start = now().replace(hour=0, minute=0, second=0, microsecond=0)
+        reset_count_today = PasswordResetToken.objects.filter(
+            user=user,
+            created_at__gte=today_start
+        ).count()
+
+        if reset_count_today >= 5:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'You have reached the daily password reset limit. Please try again tomorrow.'
+            })
+
+        # Generate OTP
+        otp = get_random_string(length=8)
+
+        # Save OTP to DB
+        PasswordResetToken.objects.create(user=user, token=otp)
+
+        subject = "System Administrator account Password Reset"
+        from_email = f"Devlink Team <{settings.DEFAULT_FROM_EMAIL}>"
+
+        # Plain text
+        text_content = (
+            f"You requested a password reset for your System Administrator account.\n\n"
+            f"Your reset code is: {otp}\n\n"
+            f"This code is valid for 10 minutes. If you did not request this, please ignore this message.\n\n"
+            f"- Devlink Team"
+        )
+
+        # HTML content
+        html_content = f"""
+            <html>
+            <body>
+                <p>You requested a password reset for your <strong>System Administrator Account</strong> account.</p>
+                <p><strong>Your reset code is:</strong> <code style="font-size: 18px;">{otp}</code></p>
+                <p>This code is valid for 10 minutes. If you did not request this, you can safely ignore it.</p>
+                <br>
+                <p style="font-size: 14px; color: #888;">— Devlink Team</p>
+            </body>
+            </html>
+        """
+
+        # Send both plain text and HTML
+        email_msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+        email_msg.attach_alternative(html_content, "text/html")
+        email_msg.send(fail_silently=False)
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'An OTP has been sent to your email.',
+            'email': enteredEmail,
+        })
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+def otpVerificationSys(request):
+    return render(request,'otp.html')
+
+def verifyOTPSys(request):
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        email = request.POST.get('email')
+
+        if not email or not otp:
+            return JsonResponse({'status': 'error', 'message': 'Missing email or OTP.'})
+
+        try:
+            user = InternalUser.objects.get(email=email)
+        except InternalUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found.'})
+
+        # Get the most recent OTP/token for the user
+        token_entry = PasswordResetToken.objects.filter(user=user).order_by('-created_at').first()
+
+        if not token_entry:
+            return JsonResponse({'status': 'error', 'message': 'No OTP found. Please request again.'})
+
+        # Check OTP validity and expiration (e.g., 10 minutes)
+        expiry_time = token_entry.created_at + timedelta(minutes=10)
+        if token_entry.token == otp:
+            if now() <= expiry_time:
+                return JsonResponse({'status': 'success', 'message': 'OTP verified.'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'OTP has expired. Please request a new one.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid OTP.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def ChangePasswordSys(request):
+    return render(request,'changePassword.html')
+
+def saveForgetMyPasswordSys(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        new_password = request.POST.get('password')
+        confirmpassword = request.POST.get('confirm_password')
+
+        if new_password != confirmpassword:
+            return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
+
+        if not is_strong_password(new_password):
+            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
+        # Encrypt the password
+        encrypted_password = make_password(new_password)
+
+        try:
+            InternalUser.objects.filter(email=email).update(password=encrypted_password)
+            return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
+
+
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
