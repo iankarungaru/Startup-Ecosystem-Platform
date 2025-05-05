@@ -17,5 +17,8 @@ urlpatterns = [
     path('saveEditProfile/', views.saveEditProfile, name='saveEditProfileSys'),
     path('changeMyPassword/', views.resetPassword, name='changeMyPasswordSys'),
     path('saveChangeMyPassword/', views.saveChangeMyPassword, name='saveChangeMyPasswordSys'),
+    path('notifications/', views.notifications, name='Sys_notifications'),
+    path('markAsRead/<int:pk>/', views.markAsRead, name='markAsReadSys'),
+    path('viewMynotifications/<int:pk>/', views.viewMynotifications, name='viewMynotificationsSys'),
 
 ]
