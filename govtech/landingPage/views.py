@@ -72,6 +72,19 @@ def signup(request):
                 gender=genderName
             )
             user.save()
+
+            # Add notification
+            title = "Account created successfully"
+            message = (
+                "You have successfully Created your account. "
+                "Proceed to make the relevant applications."
+            )
+            user = SignupUser.objects.get(email=email)
+            myId = user.id
+            result = notification_insert(title, message, myId)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
+
             return JsonResponse({'status': 'success', 'message': 'Registration successful. Please log in.'})
 
         except IntegrityError:
