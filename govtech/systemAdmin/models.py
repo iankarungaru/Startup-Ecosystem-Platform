@@ -27,11 +27,14 @@ class InternalUser(models.Model):
     def __str__(self):
         return f"{self.fName} {self.lName}"
 
-class LoginAttempt(models.Model):
+class AttemptLogin(models.Model):
     email = models.EmailField()
     ip_address = models.GenericIPAddressField()
     attempts = models.IntegerField(default=0)
     last_attempt = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'attempt_login'
 
     def is_locked_out(self):
         # You can lockout after 5 attempts within 10 minutes, for example

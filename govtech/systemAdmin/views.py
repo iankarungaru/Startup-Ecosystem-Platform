@@ -1,7 +1,7 @@
 # sysadmin/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User  # Import User model
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from .models import *
@@ -24,7 +24,7 @@ def authorize_login(request):
         ip = get_client_ip(request)
 
         # Get or create login attempt tracker
-        attempt, created = LoginAttempt.objects.get_or_create(email=email, ip_address=ip)
+        attempt, created = AttemptLogin.objects.get_or_create(email=email, ip_address=ip)
 
         # Reset count if more than 10 minutes have passed
         if timezone.now() - attempt.last_attempt > timedelta(minutes=10):
@@ -220,3 +220,58 @@ def saveForgetMyPasswordSys(request):
 
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+def authlogoutSys(request):
+    try:
+        # Clear the session
+        request.session.flush()
+
+        # Logout the user
+        logout(request)  # This will log the user out and clear their session.
+
+        # You can return a success message via JSON if needed (optional)
+        return redirect('/sysadmin/')  # Redirect to login page or other desired page
+
+    except Exception as e:
+        # Handle any errors that occur during logout
+        return JsonResponse({'status': 'error', 'message': f'Error during logout: {str(e)}'})
+
+def Adminprofile(request):
+    myId = request.session.get('id')
+    myInfo = InternalUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'county': getCountyName(myInfo.county),
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'gender': getGenderName(myInfo.gender),
+        'profilePicture': myInfo.profile_picture,
+    }
+
+    return render(request, 'pages/myprofile.html', data)
+
+def profileChange(request):
+    myId = request.session.get('id')
+    myInfo = InternalUser.objects.get(id=myId)
+    data = {
+        'firstName': myInfo.fName,
+        'lastName': myInfo.lName,
+        'email': myInfo.email,
+        'phone': myInfo.phone,
+        'nationality': getnationalityName(myInfo.nationality),
+        'nationalityId': myInfo.nationality,
+        'county': getCountyName(myInfo.county),
+        'countyId': myInfo.county,
+        'subcounty': getSubcountyName(myInfo.subcounty),
+        'subcountyId': myInfo.subcounty,
+        'gender': getGenderName(myInfo.gender),
+        'genderId': myInfo.gender,
+        'countries': Country.objects.all().order_by('nationality'),
+        'counties': County.objects.all().order_by('name'),
+        'genders': gender.objects.all().order_by('name'),
+    }
+
+    return render(request, 'pages/editProfile.html', data)
