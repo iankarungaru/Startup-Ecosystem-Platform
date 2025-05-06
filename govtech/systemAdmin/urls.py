@@ -20,5 +20,8 @@ urlpatterns = [
     path('notifications/', views.notifications, name='Sys_notifications'),
     path('markAsRead/<int:pk>/', views.markAsRead, name='markAsReadSys'),
     path('viewMynotifications/<int:pk>/', views.viewMynotifications, name='viewMynotificationsSys'),
+    path('externalUsers/', views.externalUsers, name='externalUsers'),
+    path('internalUsers/', views.internalUsers, name='internalUsers'),
+    path('internalUserSys/', views.internalUserSys, name='internalUserSys'),
 
 ]
