@@ -431,8 +431,22 @@ def viewMynotifications(request, pk):
     })
 
 def externalUsers(request):
-    startupUsers = SignupUser.objects.values('id', 'fName', 'lName', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
-    return render(request,'pages/externalUsers.html',{'startupUsers': startupUsers})
+    raw_users = SignupUser.objects.values(
+        'id', 'fName', 'lName', 'email', 'phone',
+        'nationality', 'county', 'subcounty',
+        'gender', 'isactive', 'dateCreated'
+    )
+
+    startupUsers = []
+    for user in raw_users:
+        user = dict(user)  # ensure it's mutable
+        user['nationality_name'] = getnationalityName(user['nationality'])
+        user['county_name'] = getCountryName(user['county'])
+        user['subcounty_name'] = getSubcountyName(user['subcounty'])
+        user['gender_name'] = getGenderName(user['gender'])
+        startupUsers.append(user)
+
+    return render(request, 'pages/externalUsers.html', {'startupUsers': startupUsers})
 
 def internalUsers(request):
     icto = InternalUser.objects.values('id', 'fName', 'lName', 'idNo', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
@@ -441,3 +455,15 @@ def internalUsers(request):
 def internalUserSys(request):
     ictoSys = InternalUser.objects.values('id', 'fName', 'lName', 'idNo', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
     return render(request,'pages/internalUsers.html',{'internaluser': ictoSys})
+
+def activate_user(request, user_id):
+    user = get_object_or_404(SignupUser, id=user_id)
+    user.isactive = 0
+    user.save()
+    return JsonResponse({'status': 'success', 'message': 'User account activated successfully.'})
+
+def deactivate_user(request, user_id):
+    user = get_object_or_404(SignupUser, id=user_id)
+    user.isactive = 1
+    user.save()
+    return JsonResponse({'status': 'success', 'message': 'User account deactivated successfully.'})
