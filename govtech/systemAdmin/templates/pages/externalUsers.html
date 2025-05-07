@@ -47,10 +47,12 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ forloop.counter }}">
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="javascript:void(0);"
+                                       onclick="confirmAction('{{ user.id }}', 'force-password')">
                                         Force Password Change
                                     </a>
                                 </li>
+
                                 {% if user.isactive == 1 %}
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);"
@@ -82,11 +84,15 @@
     <!-- Confirmation Function -->
     <script>
         function confirmAction(userId, actionType) {
-            const actionUrl = `/sysadmin/${actionType}/${userId}/`;  // e.g., /users/activate/3/
+            const actionUrl = `/sysadmin/${actionType}/${userId}/`; // Works for all three actions
+
+            let actionVerb = actionType === 'activate' ? 'activate' :
+                actionType === 'deactivate' ? 'deactivate' :
+                    'force a password change for';
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: `You are about to ${actionType} this user.`,
+                text: `You are about to ${actionVerb} this user.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, proceed',
@@ -106,7 +112,7 @@
                         .then(data => {
                             if (data.status === 'success') {
                                 Swal.fire('Success', data.message, 'success').then(() => {
-                                    location.reload(); // Reload to update status
+                                    location.reload();
                                 });
                             } else {
                                 Swal.fire('Error', 'An error occurred.', 'error');
@@ -120,6 +126,7 @@
             });
         }
     </script>
+
 
 
 {% endblock %}

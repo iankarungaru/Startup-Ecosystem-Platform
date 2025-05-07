@@ -467,3 +467,9 @@ def deactivate_user(request, user_id):
     user.isactive = 1
     user.save()
     return JsonResponse({'status': 'success', 'message': 'User account deactivated successfully.'})
+
+def force_password_change(request, user_id):
+    user = get_object_or_404(SignupUser, id=user_id)
+    user.pswdchange = 1  # Make sure this field exists in your model
+    user.save()
+    return JsonResponse({'status': 'success', 'message': 'User will be required to change their password on next login.'})
