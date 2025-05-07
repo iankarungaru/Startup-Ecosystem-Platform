@@ -18,6 +18,7 @@ class InternalUser(models.Model):
     isLogin = models.BooleanField(default=False)
     logtime = models.DateTimeField(auto_now_add=True)
     isactive = models.BooleanField(default=True)
+    pswdchange = models.BooleanField(default=True)
     dateCreated = models.DateTimeField(auto_now_add=True)
     dateUpdated = models.DateTimeField(auto_now=True)
 

@@ -52,6 +52,7 @@ class SignupUser(models.Model):
     isLogin = models.IntegerField(default=0)
     logtime = models.DateTimeField(auto_now_add=True)
     isactive = models.IntegerField(default=0)
+    pswdchange = models.IntegerField(default=0)
     dateCreated = models.DateTimeField(auto_now_add=True) 
     dateUpdated = models.DateTimeField(auto_now=True) 
 
