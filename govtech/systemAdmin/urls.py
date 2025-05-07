@@ -25,6 +25,5 @@ urlpatterns = [
     path('internalUserSys/', views.internalUserSys, name='internalUserSys'),
     path('activate/<int:user_id>/', views.activate_user, name='activate_user'),
     path('deactivate/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
-
-
+    path('force-password/<int:user_id>/', views.force_password_change, name='force_password_change'),
 ]
