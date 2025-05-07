@@ -23,5 +23,8 @@ urlpatterns = [
     path('externalUsers/', views.externalUsers, name='externalUsers'),
     path('internalUsers/', views.internalUsers, name='internalUsers'),
     path('internalUserSys/', views.internalUserSys, name='internalUserSys'),
+    path('activate/<int:user_id>/', views.activate_user, name='activate_user'),
+    path('deactivate/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
+
 
 ]
