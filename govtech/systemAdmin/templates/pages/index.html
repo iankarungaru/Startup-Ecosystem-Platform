@@ -146,23 +146,18 @@
                                 data-feather="chevron-right"></i></span></a>
                     <ul class="pc-submenu">
                         <li class="pc-item">
-                            <a class="pc-link" href="{% url 'individual_reg' %}">
+                            <a class="pc-link" href="{% url 'internalUsers' %}">
                                 <i class="fas fa-user-secret"></i> Internal Users
                             </a>
                         </li>
                         <li class="pc-item">
-                            <a class="pc-link" href="{% url 'multi_step' step=1 %}">
+                            <a class="pc-link" href="{% url 'externalUsers' %}">
                                 <i class="fas fa-user-alt"></i> External Users
                             </a>
                         </li>
                         <li class="pc-item">
-                            <a class="pc-link" href="{% url 'multi_step' step=1 %}">
+                            <a class="pc-link" href="{% url 'internalUserSys' %}">
                                 <i class="fas fa-user-lock"></i> System Administrators
-                            </a>
-                        </li>
-                        <li class="pc-item">
-                            <a class="pc-link" href="{% url 'multi_step' step=1 %}">
-                                <i class="material-icons-two-tone"> login</i> Account Logins
                             </a>
                         </li>
                     </ul>
@@ -242,7 +237,7 @@
                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ti ti-bell"></i>
                         {% if notification_count > 0 %}
-                           <span class="position-absolute bottom-0 start-5 translate-middle badge rounded-pill bg-danger">
+                            <span class="position-absolute bottom-0 start-5 translate-middle badge rounded-pill bg-danger">
     {{ notification_count }}
 </span>
 
@@ -261,9 +256,10 @@
                                     <a class="list-group-item list-group-item-action">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0">
-                                               <img src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
-                                         alt="user-image"
-                                         class="user-avtar wid-35">
+                                                <img src="/static/
+                                                        {{ request.session.profile_picture|default:'images/avatar.jpg' }}"
+                                                     alt="user-image"
+                                                     class="user-avtar wid-35">
                                             </div>
                                             <div class="flex-grow-1 ms-1">
                                                 <span class="float-end text-muted">{{ notif.created_at|date:"P" }}</span>
@@ -288,9 +284,9 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                        role="button"
                        aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                       <img src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
-                                         alt="user-image"
-                                         class="user-avtar wid-35">
+                        <img src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
+                             alt="user-image"
+                             class="user-avtar wid-35">
                         <span>{{ request.session.fName }} {{ request.session.lName }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">

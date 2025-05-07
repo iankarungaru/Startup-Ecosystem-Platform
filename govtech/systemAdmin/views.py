@@ -16,6 +16,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.conf import settings
+from dashboard.models import SignupUser
 
 def index(request):
     # Explicitly specify the path to the template for sysadmin
@@ -428,3 +429,15 @@ def viewMynotifications(request, pk):
     return render(request, 'pages/view_notification.html', {
         'notification': notification
     })
+
+def externalUsers(request):
+    startupUsers = SignupUser.objects.values('id', 'fName', 'lName', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
+    return render(request,'pages/externalUsers.html',{'startupUsers': startupUsers})
+
+def internalUsers(request):
+    icto = InternalUser.objects.values('id', 'fName', 'lName', 'idNo', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
+    return render(request,'pages/internalUsers.html',{'internaluser': icto})
+
+def internalUserSys(request):
+    ictoSys = InternalUser.objects.values('id', 'fName', 'lName', 'idNo', 'email', 'phone', 'nationality','county', 'subcounty','gender', 'isactive', 'dateCreated')
+    return render(request,'pages/internalUsers.html',{'internaluser': ictoSys})
