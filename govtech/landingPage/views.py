@@ -1,63 +1,68 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User  # Import User model
+from datetime import timedelta
+
+from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
-from django.http import JsonResponse
-from .models import *
 from django.contrib.auth.hashers import make_password
-from django.db import IntegrityError
-from django.utils import timezone
-from datetime import timedelta
-from startup.helper import *
+from django.contrib.auth.models import User  # Import User model
 from django.core.mail import EmailMultiAlternatives
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from django.conf import settings
 
+from startup.helper import *
+from .models import *
 
 
 def landing(request):
     return render(request, 'landing.html')
 
+
 def register_view(request):
     countries = Country.objects.all().order_by('nationality')
     counties = County.objects.all().order_by('name')
-    genders  = gender.objects.all().order_by('name')
-    return render(request, 'register.html', {'countries': countries, 'counties': counties, 'genders':genders})
+    genders = gender.objects.all().order_by('name')
+    return render(request, 'register.html', {'countries': countries, 'counties': counties, 'genders': genders})
+
 
 def get_subcounties(request):
     county_id = request.GET.get('county_id')
     subcounties = Subcounty.objects.filter(county_id=county_id).values('id', 'name')
     return JsonResponse(list(subcounties), safe=False)
 
+
 # View for login page
 def login_view(request):
     return render(request, 'login.html')
 
+
 def signup(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name') 
+        first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        email = request.POST.get('email')  
+        email = request.POST.get('email')
         phone = request.POST.get('phone')
-        nationality = request.POST.get('nationality')  
+        nationality = request.POST.get('nationality')
         county = request.POST.get('county')
-        subCounty = request.POST.get('subcounty')  
+        subCounty = request.POST.get('subcounty')
         genderName = request.POST.get('gender')
-        password = request.POST.get('password')  
+        password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        
+
         # Password match check
         if password != confirm_password:
             return JsonResponse({'status': 'error', 'message': 'Passwords do not match.'})
-        
+
         # Password strength check
         if not is_strong_password(password):
-            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
-        
+            return JsonResponse({'status': 'error',
+                                 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
         # Encrypt the password
         encrypted_password = make_password(password)
-        
+
         # Save to DB
         try:
             user = SignupUser.objects.create(
@@ -94,6 +99,7 @@ def signup(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
+
 def authlogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -113,14 +119,13 @@ def authlogin(request):
             return JsonResponse(
                 {'status': 'locked', 'message': 'Too many failed login attempts. Please try again in 10 minutes.'})
 
-
-
         try:
             # Get user by email
             user_obj = SignupUser.objects.get(email=email)
 
             if user_obj.isactive == 1:
-                return JsonResponse({'status': 'error', 'message': 'Your account is deactivated or not activated. Please contact system admin.'})
+                return JsonResponse({'status': 'error',
+                                     'message': 'Your account is deactivated or not activated. Please contact system admin.'})
 
             # Check password
             if not check_password(password, user_obj.password):
@@ -128,6 +133,15 @@ def authlogin(request):
                 attempt.last_attempt = timezone.now()
                 attempt.save()
                 return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
+
+                # ✅ Check if password change is required
+            if user_obj.pswdchange == 1:
+                return JsonResponse({
+                    'status': 'force_change',
+                    'message': 'You are required to change your password.',
+                    'user_id': user_obj.id,
+                    'user_email': user_obj.email
+                })
 
             # Now get or create a Django User for authentication (temporary fix)
             # At this point, we’ve verified that the email and password match. Now, we need to create a Django User model (or get the existing one).
@@ -163,8 +177,11 @@ def authlogin(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+
 def forgetPassword(request):
-    return render(request,'forgetPassword.html')
+    return render(request, 'forgetPassword.html')
+
 
 def verificationLink(request):
     if request.method == 'POST':
@@ -232,8 +249,10 @@ def verificationLink(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
+
 def otpVerification(request):
-    return render(request,'otp.html')
+    return render(request, 'otp.html')
+
 
 def verifyOTP(request):
     if request.method == 'POST':
@@ -266,8 +285,10 @@ def verifyOTP(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
+
 def ChangePassword(request):
-    return render(request,'changePassword.html')
+    return render(request, 'changePassword.html')
+
 
 def saveForgetMyPassword(request):
     if request.method == 'POST':
@@ -282,7 +303,8 @@ def saveForgetMyPassword(request):
             return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
 
         if not is_strong_password(new_password):
-            return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+            return JsonResponse({'status': 'error',
+                                 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
 
         # Encrypt the password
         encrypted_password = make_password(new_password)
@@ -300,6 +322,8 @@ def saveForgetMyPassword(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
 
-
-
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
+
+def force_password_change(request, user_id):
+    email = request.GET.get('email')
+    return render(request, 'changeForcePassword.html', {'user_id': user_id, 'email': email})
