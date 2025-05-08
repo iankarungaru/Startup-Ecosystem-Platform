@@ -14,7 +14,7 @@ urlpatterns = [
     path('verifyOTP/', views.verifyOTP, name='verifyOTP'),
     path('ChangePassword/', views.ChangePassword, name='ChangePassword'),
     path('saveForgetMyPassword/', views.saveForgetMyPassword, name='saveForgetMyPassword'),
-    path('force-password-change/<int:user_id>/', views.force_password_change, name='force_password_change'),
-
+    path('force-password-change/', views.force_password_change, name='force_password_change'),
+    path('saveForgetMyPasswordForce/', views.saveForgetMyPasswordForce, name='saveForgetMyPasswordForce'),
 
 ]

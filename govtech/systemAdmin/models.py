@@ -69,7 +69,7 @@ class sysNotification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # ← Move it inside the class!
 
     class Meta:
-        db_table = 'notifications'
+        db_table = 'sys_notifications'
         ordering = ['-created_at']
 
     def short_message(self):

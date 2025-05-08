@@ -204,9 +204,9 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0 position-relative" data-bs-toggle="dropdown"
                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ti ti-bell"></i>
-                        {% if notification_count > 0 %}
+                        {% if user_notification_count > 0 %}
                            <span class="position-absolute bottom-0 start-5 translate-middle badge rounded-pill bg-danger">
-    {{ notification_count }}
+    {{ user_notification_count }}
 </span>
 
                         {% endif %}
@@ -220,7 +220,7 @@
                         <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
                              style="max-height: calc(100vh - 215px)">
                             <div class="list-group list-group-flush w-100">
-                                {% for notif in latest_notifications %}
+                                {% for notif in user_latest_notifications %}
                                     <a class="list-group-item list-group-item-action">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0">

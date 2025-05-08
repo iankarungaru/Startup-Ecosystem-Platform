@@ -159,9 +159,10 @@
 
                 // Store the email in sessionStorage (if needed)
                 sessionStorage.setItem('user_email', userEmail);
+                sessionStorage.setItem('userId', userId);
 
                 // Redirect to the password change page
-                window.location.href = `/force-password-change/${data.user_id}/`;
+                window.location.href = `/force-password-change/`;
             });
         } else {
                 Swal.fire({
