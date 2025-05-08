@@ -5,7 +5,7 @@ def notification_data(request):
 
     if myId:
         unread_count = Notification.objects.filter(user_id=myId, is_read=False).count()
-        latest_notifications = Notification.objects.filter(user_id=myId).order_by('-created_at')[:4]
+        latest_notifications = Notification.objects.filter(user_id=myId, is_read=False).order_by('-created_at')[:4]
         return {
             'user_notification_count': unread_count,
             'user_latest_notifications': latest_notifications,
