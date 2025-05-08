@@ -14,6 +14,7 @@ EXEMPT_URLS = [
     r'^verifyOTP/.*$',
     r'^ChangePassword/.*$',
     r'^saveForgetMyPassword/.*$',
+    r'^saveForgetMyPasswordForce/.*$',
     r'^force-password-change(/.*)?$',
     r'^sysadmin/?$',           # sysadmin login
     r'^sysadmin/login/?$',

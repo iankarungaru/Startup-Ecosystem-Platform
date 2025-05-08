@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
@@ -8,7 +6,6 @@ from django.contrib.auth.models import User  # Import User model
 from django.core.mail import EmailMultiAlternatives
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 
@@ -324,6 +321,41 @@ def saveForgetMyPassword(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
 
-def force_password_change(request, user_id):
+
+def force_password_change(request):
     email = request.GET.get('email')
-    return render(request, 'changeForcePassword.html', {'user_id': user_id, 'email': email})
+    userId = request.GET.get('userId')
+    return render(request, 'changeForcePassword.html', {'user_id': userId, 'email': email})
+
+
+def saveForgetMyPasswordForce(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        myId = request.POST.get('myId')
+        new_password = request.POST.get('password')
+        confirmpassword = request.POST.get('confirm_password')
+
+        if new_password != confirmpassword:
+            return JsonResponse({'status': 'warning', 'message': 'The new password and current password do not match.'})
+
+        if not is_strong_password(new_password):
+            return JsonResponse({'status': 'error',
+                                 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
+
+        # Encrypt the password
+        encrypted_password = make_password(new_password)
+
+        try:
+            SignupUser.objects.filter(email=email).update(password=encrypted_password, pswdchange=0)
+            title = "Forgot Password Change"
+            message = (
+                "You have successfully updated your Account Password."
+            )
+            result = notification_insert(title, message, myId, Notification)
+            if result['status'] != 'success':
+                print("Notification insert failed:", result['message'])
+            return JsonResponse({'status': 'success', 'message': 'Password updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Failed to update password: {str(e)}'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method or missing session ID.'})
