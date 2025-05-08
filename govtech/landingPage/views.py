@@ -347,7 +347,7 @@ def saveForgetMyPasswordForce(request):
 
         try:
             SignupUser.objects.filter(email=email).update(password=encrypted_password, pswdchange=0)
-            title = "Forgot Password Change"
+            title = "Update Forgot Password Force"
             message = (
                 "You have successfully updated your Account Password."
             )
