@@ -76,7 +76,7 @@ def run_migrations():
 
 def run_scripts():
     print("⚙️ Running custom data scripts...\n")
-    scripts = ["county.py", "genderInsert.py", "load_countries.py"]
+    scripts = ["county.py", "genderInsert.py", "load_countries.py", "sysadminUser.py"]
     for script in scripts:
         script_path = os.path.join(os.path.dirname(__file__), script)
         if os.path.exists(script_path):
