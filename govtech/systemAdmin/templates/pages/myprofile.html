@@ -1,0 +1,73 @@
+{% extends 'pages/index.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0">My Profile</h4>
+    </div>
+    <a href="{% url 'editProfileSys' %}" class="btn btn-primary">Edit Your Profile</a>
+  </div>
+
+  <!-- Profile Overview -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <img src="/static/{{profilePicture|default:'images/avatar.jpg'}}" alt="Avatar" class="rounded-circle mb-3" width="100" height="100">
+          <h5 class="card-title mb-0">{{ firstName }} {{ lastName }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Personal Information</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" id="firstName" class="form-control" value="{{ firstName }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" id="lastName" class="form-control" value="{{ lastName }}" readonly>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" value="{{ email }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" id="phone" class="form-control" value="{{ phone }}" readonly>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <!-- Address -->
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Address</h5>
+        </div>
+        <div class="card-body">
+          <p><strong><i data-feather="map-pin" class="me-1"></i> County and Sub-county :</strong> {{ county }}, {{ subcounty }}</p>
+          <p><strong><i data-feather="flag" class="me-1"></i> Nationality:</strong> {{ nationality }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

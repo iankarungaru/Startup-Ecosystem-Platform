@@ -88,7 +88,7 @@
                 </div>                               
                 <div class="d-flex mt-1 justify-content-between">
                   <a href="{% url 'register' %}" class="link-primary">Don't have an account?</a>
-                  <h5 class="text-secondary f-w-400"><a href="{% url 'register' %}" class="link-primary">Forgot Password?</a></h5>
+                  <h5 class="text-secondary f-w-400"><a href="{% url 'forgetPassword' %}" class="link-primary">Forgot Password?</a></h5>
                 </div>
                 <div class="d-grid mt-4">
                   <button type="submit" class="btn btn-primary">Login</button>
@@ -121,22 +121,21 @@
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
+ <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();  // Prevent default form submission
-    
+
         const form = e.target;
         const formData = new FormData(form);  // Collect form data
 
-        // Get CSRF token from the hidden input field (if it's in the form)
         const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
 
         fetch("{% url 'authlogin' %}", {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrfToken  // Send CSRF token in the header
+                'X-CSRFToken': csrfToken
             },
-            body: formData  // Send the form data
+            body: formData
         })
         .then(res => res.json())
         .then(data => {
@@ -146,9 +145,26 @@
                     title: 'Success',
                     text: data.message
                 }).then(() => {
-                  window.location.href = "/dashboard/";  // Redirect to Dashboard on success
+                    window.location.href = "/dashboard/";  // Redirect to dashboard
                 });
-            } else {
+            } else if (data.status === 'force_change') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Password Change Required',
+                text: data.message
+            }).then(() => {
+                // Get user ID and email from the response
+                const userId = data.user_id;
+                const userEmail = data.user_email;
+
+                // Store the email in sessionStorage (if needed)
+                sessionStorage.setItem('user_email', userEmail);
+                sessionStorage.setItem('userId', userId);
+
+                // Redirect to the password change page
+                window.location.href = `/force-password-change/`;
+            });
+        } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -159,6 +175,8 @@
         .catch(error => console.log(error));
     });
 </script>
+
+
 
 
   <!-- Required Js -->

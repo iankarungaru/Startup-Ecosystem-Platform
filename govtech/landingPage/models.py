@@ -52,6 +52,7 @@ class SignupUser(models.Model):
     isLogin = models.IntegerField(default=0)
     logtime = models.DateTimeField(auto_now_add=True)
     isactive = models.IntegerField(default=0)
+    pswdchange = models.IntegerField(default=0)
     dateCreated = models.DateTimeField(auto_now_add=True) 
     dateUpdated = models.DateTimeField(auto_now=True) 
 
@@ -76,3 +77,19 @@ class LoginAttempt(models.Model):
         if timezone.now() - self.last_attempt > timedelta(minutes=10):
             self.attempts = 0
             self.save()
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey('SignupUser', on_delete=models.CASCADE)
+    token = models.CharField(max_length=8)  # OTPs are 8-char, alphanumeric
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        # Valid for 10 minutes
+        return timezone.now() < self.created_at + timedelta(minutes=10)
+
+    class Meta:
+        db_table = 'password_reset_token'
+
+    def __str__(self):
+        return f'Token for {self.user.email}'

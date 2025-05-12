@@ -1,6 +1,9 @@
 import re
 
-from landingPage.models import Subcounty, County, Country, gender
+from landingPage.models import Subcounty, County, Country, gender, SignupUser
+from dashboard.models import Notification
+from django.db import IntegrityError
+
 
 
 def getSubcountyName(subcountyId):
@@ -51,3 +54,34 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def notification_insert(title, message, user_id, myModel):
+    try:
+        notif = myModel.objects.create(
+            title=title,
+            message=message,
+            user_id=user_id,
+            is_read = False,
+        )
+        notif.save()
+        return {'status': 'success', 'id': notif.id}
+    except IntegrityError as e:
+        return {'status': 'error', 'message': f'Database error: {str(e)}'}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Unexpected error: {str(e)}'}
+
+
+def getAccountNames(id):
+    try:
+        user = SignupUser.objects.get(id=id)
+        firstName = user.fName
+        lastName = user.lName
+        fullName = firstName + ' ' + lastName
+
+        return fullName
+    except IntegrityError as e:
+        return {'status': 'error', 'message': f'Database error: {str(e)}'}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Unexpected error: {str(e)}'}
+
+

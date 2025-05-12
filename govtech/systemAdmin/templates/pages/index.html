@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- [Head] start -->
+
+<head>
+    <title>Govtech | Sysadmin| MICDE </title>
+    <!-- [Meta] -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="/static/images/cos.ico" type="image/x-icon"> <!-- [Google Font] Family -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+          id="main-font-link">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="/static/fonts/tabler-icons.min.css">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="/static/fonts/feather.css">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="/static/fonts/fontawesome.css">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="/static/fonts/material.css">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="/static/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="/static/css/style-preset.css">
+    <link rel="stylesheet" href="/static/css/registration.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css"
+          integrity="sha512-v+KDQpW7MdqD1UCuCTfZqJtuh5TfzRPr4ESVjkSrwEjZsG2vNsDA3ZpzGBOsF8dZRY3ebBAvEd6AEPkYvZxFSg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Add custom styles -->
+    <style>
+        /* Loader background container */
+        .loader-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white; /* You can change this if desired */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Cube container */
+        .cube-container {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Cube styles */
+        .cube1, .cube2 {
+            background-color: skyblue; /* Cube color */
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-cubemove 2s infinite ease-in-out; /* Smooth animation */
+        }
+
+        /* Stagger the second cube's animation */
+        .cube2 {
+            animation-delay: -1s;
+        }
+
+        /* Loader text style */
+        .loader-text {
+            margin-top: 10px;
+            font-family: sans-serif;
+            font-size: 18px;
+            color: skyblue; /* Text color */
+        }
+
+        /* Cube animation keyframes */
+        @keyframes sk-cubemove {
+            25% {
+                transform: translateX(42px) rotate(-90deg) scale(0.5);
+            }
+            50% {
+                transform: translateX(42px) translateY(42px) rotate(-179deg);
+            }
+            50.1% {
+                transform: translateX(42px) translateY(42px) rotate(-180deg);
+            }
+            75% {
+                transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+    </style>
+
+
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+
+<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="cube-container">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div class="loader-text">Devlink</div>
+</div>
+<!-- [ Pre-loader ] End -->
+<!-- [ Sidebar Menu ] start -->
+<nav class="pc-sidebar">
+    <div class="navbar-wrapper">
+        <div class="m-header">
+            <a href="{% url 'dashboard_view' %}" class="b-brand text-primary">
+                <!-- ========   Change your logo from here   ============ -->
+                <img src="/static/images/COT.png" class="img-fluid logo-lg" alt="logo">
+            </a>
+        </div>
+        <div class="navbar-content">
+            <ul class="pc-navbar">
+                <li class="pc-item">
+                    <a href="{% url 'dashboard' %}" class="pc-link">
+                        <span class="pc-micon"><i class="fas fa-tachometer-alt"></i></span>
+                        <span class="pc-mtext">Dashboard</span>
+                    </a>
+                </li>
+                <li class="pc-item pc-caption">
+                    <label>Users</label>
+                    <i class="ti ti-news"></i>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link"><span class="pc-micon"> <i class="fas fa-users-cog"></i></span>
+                        <span class="pc-mtext">User Management</span><span class="pc-arrow"><i
+                                data-feather="chevron-right"></i></span></a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'internalUsers' %}">
+                                <i class="fas fa-user-secret"></i> Internal Users
+                            </a>
+                        </li>
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'externalUsers' %}">
+                                <i class="fas fa-user-alt"></i> External Users
+                            </a>
+                        </li>
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'internalUserSys' %}">
+                                <i class="fas fa-user-lock"></i> System Administrators
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="pc-item pc-caption">
+                    <label>System Setups</label>
+                    <i class="ti ti-news"></i>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link"><span class="pc-micon"> <i class="fas fa-cog"></i></span>
+                        <span class="pc-mtext">Setups</span><span class="pc-arrow"><i
+                                data-feather="chevron-right"></i></span></a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'individual_reg' %}">
+                                <i class="fas fa-map-pin"></i> Counties
+                            </a>
+                        </li>
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'individual_reg' %}">
+                                <i class="fas fa-flag-usa"></i> Countries
+                            </a>
+                        </li>
+                        <li class="pc-item">
+                            <a class="pc-link" href="{% url 'individual_reg' %}">
+                                <i class="fas fa-user-friends"></i> Gender
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="pc-item pc-caption">
+                    <label>Account Profile</label>
+                    <i class="ti ti-brand-chrome"></i>
+                </li>
+                <li class="pc-item">
+                    <a href="{% url 'Adminprofile' %}" class="pc-link">
+                        <span class="pc-micon"><i class="fas fa-user-edit"></i></span>
+                        <span class="pc-mtext">Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
+<header class="pc-header">
+    <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
+        <div class="me-auto pc-mob-drp">
+            <ul class="list-unstyled">
+                <!-- ======= Menu collapse Icon ===== -->
+                <li class="pc-h-item pc-sidebar-collapse">
+                    <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                        <i class="ti ti-menu-2"></i>
+                    </a>
+                </li>
+                <li class="pc-h-item pc-sidebar-popup">
+                    <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+                        <i class="ti ti-menu-2"></i>
+                    </a>
+                </li>
+                <li class="dropdown pc-h-item d-inline-flex d-md-none">
+                    <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown" href="#"
+                       role="button"
+                       aria-haspopup="false" aria-expanded="false">
+                        <i class="ti ti-search"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- [Mobile Media Block end] -->
+        <div class="ms-auto">
+            <ul class="list-unstyled">
+                <li class="dropdown pc-h-item">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0 position-relative" data-bs-toggle="dropdown"
+                       href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <i class="ti ti-bell"></i>
+                        {% if notification_count > 0 %}
+                            <span class="position-absolute bottom-0 start-5 translate-middle badge rounded-pill bg-danger">
+    {{ notification_count }}
+</span>
+
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
+                        <div class="dropdown-header d-flex align-items-center justify-content-between">
+                            <h5 class="m-0">Notifications</h5>
+                            <a href="#!" class="pc-head-link bg-transparent"><i class="ti ti-x text-danger"></i></a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
+                             style="max-height: calc(100vh - 215px)">
+                            <div class="list-group list-group-flush w-100">
+                                {% for notif in latest_notifications %}
+                                    <a class="list-group-item list-group-item-action">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <img src="/static/
+                                                        {{ request.session.profile_picture|default:'images/avatar.jpg' }}"
+                                                     alt="user-image"
+                                                     class="user-avtar wid-35">
+                                            </div>
+                                            <div class="flex-grow-1 ms-1">
+                                                <span class="float-end text-muted">{{ notif.created_at|date:"P" }}</span>
+                                                <p class="text-body mb-1"><b>{{ notif.title }}</b></p>
+                                                <span class="text-muted">{{ notif.short_message }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    {% empty %}
+                                    <div class="text-center py-3 text-muted">No notifications</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="text-center py-2">
+                            <a href="{% url 'Sys_notifications' %}" class="link-primary">View all</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="dropdown pc-h-item header-user-profile">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                       role="button"
+                       aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                        <img src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
+                             alt="user-image"
+                             class="user-avtar wid-35">
+                        <span>{{ request.session.fName }} {{ request.session.lName }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+                        <div class="dropdown-header">
+                            <div class="d-flex mb-1">
+                                <div class="flex-shrink-0">
+                                    <img src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
+                                         alt="user-image"
+                                         class="user-avtar wid-35">
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ request.session.fName }} {{ request.session.lName }}</h6>
+                                </div>
+                                <a href="{% url 'authlogoutSys' %}" class="pc-head-link bg-transparent"><i
+                                        class="ti ti-power text-danger"></i></a>
+                            </div>
+                        </div>
+                        <ul class="nav drp-tabs nav-fill nav-tabs" id="mydrpTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="drp-t1" data-bs-toggle="tab"
+                                        data-bs-target="#drp-tab-1"
+                                        type="button" role="tab" aria-controls="drp-tab-1" aria-selected="true"><i
+                                        class="ti ti-user"></i>
+                                    Profile
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="drp-t2" data-bs-toggle="tab" data-bs-target="#drp-tab-2"
+                                        type="button"
+                                        role="tab" aria-controls="drp-tab-2" aria-selected="false"><i
+                                        class="ti ti-settings"></i>
+                                    Setting
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="mysrpTabContent">
+                            <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel"
+                                 aria-labelledby="drp-t1"
+                                 tabindex="0">
+                                <a href="{% url 'Adminprofile' %}" class="dropdown-item">
+                                    <i class="ti ti-user"></i>
+                                    <span>View Profile</span>
+                                </a>
+                                <a href="{% url 'authlogoutSys' %}" class="dropdown-item">
+                                    <i class="ti ti-power"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                            <div class="tab-pane fade" id="drp-tab-2" role="tabpanel" aria-labelledby="drp-t2"
+                                 tabindex="0">
+                                <a href="{% url 'changeMyPasswordSys' %}" class="dropdown-item">
+                                    <i class="ti ti-lock"></i>
+                                    <span>Change Password</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!-- [ Header ] end -->
+
+
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+    <div class="pc-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">Devlink</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript: void(0)">Devlink</a></li>
+                            <li class="breadcrumb-item" id="breadcrumbCurrent" aria-current="page"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <!-- [ Main Content ] start -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm rounded">
+                    <div class="card-body ">
+                        {% block content %}
+                            <!-- Content from child templates will appear here -->
+
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<footer class="pc-footer">
+    <div class="footer-wrapper container-fluid">
+        <div class="row">
+            <div class="col-sm my-1">
+                {% load tz %}
+                <p class="m-0 text-center">
+                    Copyright &copy; {% now "Y" %} |
+                    <a href="https://www.ict.go.ke/" target="_blank">
+                        The Ministry of Information, Communications and The Digital Economy
+                    </a>
+                    | All Rights Reserved.
+                    <br>
+                    Developed by <strong>Directorate of E-Government and Digital Economy, Software Development and
+                    Digital
+                    Services</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- Add this where you want to display the session data in HTML -->
+<div id="user-info"></div>
+
+<!-- [Page Specific JS] start -->
+<script src="/static/js/plugins/apexcharts.min.js"></script>
+<script src="/static/js/pages/dashboard-default.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<!-- [Page Specific JS] end -->
+<!-- Required Js -->
+<script src="/static/js/plugins/popper.min.js"></script>
+<script src="/static/js/plugins/simplebar.min.js"></script>
+<script src="/static/js/plugins/bootstrap.min.js"></script>
+<script src="/static/js/fonts/custom-font.js"></script>
+<script src="/static/js/pcoded.js"></script>
+<script src="/static/js/plugins/feather.min.js"></script>
+<script src="/static/js/custom/custom.js"></script>
+<!-- jQuery first -->
+
+
+<script>layout_change('light');</script>
+
+
+<script>change_box_container('false');</script>
+
+
+<script>layout_rtl_change('false');</script>
+
+
+<script>preset_change("preset-1");</script>
+
+
+<script>font_change("Public-Sans");</script>
+
+<script>
+    // Hide the loader after the page loads (optional fade-out effect)
+    window.addEventListener('load', function () {
+        const loader = document.querySelector('.loader-bg');
+        // Add a fade-out transition before hiding completely if needed
+        loader.style.transition = 'opacity 0.3s ease';
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 300);
+    });
+</script>
+
+
+{# Autologout functionality#}
+<script>
+    // Set auto-logout duration (15 mins)
+    const logoutAfter = 15 * 60 * 1000;
+
+    // Save current time on any activity
+    function resetTimer() {
+        localStorage.setItem('lastActivity', Date.now());
+    }
+
+    // Set initial timestamp on load
+    resetTimer();
+
+    // Monitor user activity to keep session alive
+    ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, resetTimer);
+    });
+
+    // Check every 1 minute if inactivity > 15 mins
+    setInterval(() => {
+        const last = localStorage.getItem('lastActivity');
+        if (last && (Date.now() - last > logoutAfter)) {
+            localStorage.removeItem('lastActivity'); // optional cleanup
+            window.location.href = '{% url 'authlogoutSys' %}';
+        }
+    }, 60000); // check every 60 sec
+</script>
+
+<script>
+    localStorage.removeItem('lastActivity');
+</script>
+
+<script>
+    // Get the last part of the current URL path
+    let currentPage = window.location.pathname.split('/').filter(Boolean).pop();
+
+    // Capitalize first letter for nice display (optional)
+    currentPage = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
+
+    // Set default if no page (e.g., you're on the homepage "/")
+    if (!currentPage) currentPage = "Home";
+
+    // Set the breadcrumb text
+    document.getElementById('breadcrumbCurrent').textContent = currentPage;
+</script>
+
+
+</body>
+<!-- [Body] end -->
+
+
+</html>
