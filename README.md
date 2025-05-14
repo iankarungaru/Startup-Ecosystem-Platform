@@ -20,6 +20,7 @@ Dependencies and instructions to run📝
 -  SETUP EVERYTHING WITH ONE COMMAND
     🛠️ browse until the scripts folder in your terminal govtech/scripts
     🧑‍💻 run - python setup.py command.
+- remember we are moving to postregesql
 
 
 
