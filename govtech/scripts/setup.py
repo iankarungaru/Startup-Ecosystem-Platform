@@ -1,17 +1,13 @@
 import subprocess
 import os
 import sys
-import django
 import importlib.util
-import psycopg2
-from django.conf import settings
 
 # Add the root directory of the project to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Set DJANGO_SETTINGS_MODULE and setup Django
+# Set DJANGO_SETTINGS_MODULE early, but delay importing Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "startup.settings")
-django.setup()
 
 
 def is_package_installed(package_name):
@@ -22,14 +18,21 @@ def is_package_installed(package_name):
         return False
 
 
-def install_psycopg2():
+def install_dependencies():
+    print("📦 Installing requirements.txt dependencies...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+    print("✅ All packages installed.\n")
+
+    # Ensure psycopg2 is installed
     if not is_package_installed('psycopg2'):
-        print("⚠️ psycopg2 not found. Installing it now...")
+        print("⚠️ psycopg2 not found. Installing psycopg2-binary...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "psycopg2-binary"])
-        print("✅ psycopg2 installed.")
+        print("✅ psycopg2-binary installed.\n")
 
 
 def check_and_create_database(db_config):
+    import psycopg2
+
     print(f"🔍 Checking if '{db_config['NAME']}' database exists...")
 
     # Connect to default 'postgres' database to check/create target DB
@@ -54,12 +57,6 @@ def check_and_create_database(db_config):
 
     cursor.close()
     connection.close()
-
-
-def install_dependencies():
-    print("📦 Installing requirements.txt dependencies...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-    print("✅ All packages installed.\n")
 
 
 def run_migrations():
@@ -92,8 +89,13 @@ def run_scripts():
 
 
 if __name__ == "__main__":
-    install_psycopg2()
     install_dependencies()
+
+    # Now it's safe to import Django
+    import django
+    from django.conf import settings
+
+    django.setup()
 
     check_and_create_database(settings.DATABASES['default'])
     check_and_create_database(settings.DATABASES['sysadmin'])
