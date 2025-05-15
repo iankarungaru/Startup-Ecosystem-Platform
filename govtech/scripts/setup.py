@@ -3,7 +3,7 @@ import os
 import sys
 import django
 import importlib.util
-import mysql.connector
+import psycopg2
 from django.conf import settings
 
 # Add the root directory of the project to the Python path
@@ -22,27 +22,31 @@ def is_package_installed(package_name):
         return False
 
 
-def install_mysql_connector():
-    if not is_package_installed('mysql.connector'):
-        print("⚠️ mysql-connector-python not found. Installing it now...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "mysql-connector-python"])
-        print("✅ mysql-connector-python installed.")
+def install_psycopg2():
+    if not is_package_installed('psycopg2'):
+        print("⚠️ psycopg2 not found. Installing it now...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "psycopg2-binary"])
+        print("✅ psycopg2 installed.")
 
 
 def check_and_create_database(db_config):
     print(f"🔍 Checking if '{db_config['NAME']}' database exists...")
 
-    connection = mysql.connector.connect(
-        host=db_config['HOST'],
+    # Connect to default 'postgres' database to check/create target DB
+    connection = psycopg2.connect(
+        dbname='postgres',
         user=db_config['USER'],
-        password=db_config['PASSWORD']
+        password=db_config['PASSWORD'],
+        host=db_config.get('HOST', 'localhost'),
+        port=db_config.get('PORT', 5432)
     )
-
+    connection.autocommit = True
     cursor = connection.cursor()
-    cursor.execute("SHOW DATABASES LIKE %s", (db_config['NAME'],))
-    result = cursor.fetchone()
 
-    if result:
+    cursor.execute("SELECT 1 FROM pg_database WHERE datname = %s", (db_config['NAME'],))
+    exists = cursor.fetchone()
+
+    if exists:
         print(f"✅ Database '{db_config['NAME']}' already exists.")
     else:
         cursor.execute(f"CREATE DATABASE {db_config['NAME']}")
@@ -88,10 +92,9 @@ def run_scripts():
 
 
 if __name__ == "__main__":
-    install_mysql_connector()
+    install_psycopg2()
     install_dependencies()
 
-    # Check and create both databases
     check_and_create_database(settings.DATABASES['default'])
     check_and_create_database(settings.DATABASES['sysadmin'])
 

@@ -7,3 +7,4 @@ django-debug-toolbar
 djangorestframework
 djangorestframework-simplejwt
 sendgrid
+psycopg2-binary
