@@ -1,60 +1,39 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<!-- [Head] start -->
-
 <head>
     <title>Sign Up | MOICDE</title>
-    <!-- [Meta] -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- [Favicon] icon -->
-    <link rel="icon" href="{% static 'images/cos.ico' %}" type="image/x-icon"> <!-- [Google Font] Family -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-          id="main-font-link">
-    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="icon" href="{% static 'images/cos.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{% static 'fonts/tabler-icons.min.css' %}">
-    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="{% static 'fonts/feather.css' %}">
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="{% static 'fonts/fontawesome.css' %}">
-    <!-- [Material Icons] https://fonts.google.com/icons -->
     <link rel="stylesheet" href="{% static 'fonts/material.css' %}">
-    <!-- [Template CSS Files] -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" id="main-style-link">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style-preset.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
+
 <style>
-    .input-group .input-group-text {
-        background-color: #fff;
-        border-left: none;
-        border-radius: 0 .25rem .25rem 0;
-        display: flex;
-        align-items: center;
-        padding: 0 0.75rem;
-        height: 100%;
-    }
-
-    .input-group input.form-control {
-        border-right: none;
-    }
-
+.input-group .input-group-text {
+    background-color: #fff;
+    border-left: none;
+    border-radius: 0 .25rem .25rem 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    height: 100%;
+}
+.input-group input.form-control {
+    border-right: none;
+}
 </style>
 
 <body>
-<!-- [ Pre-loader ] start -->
-<div class="loader-bg">
-    <div class="loader-track">
-        <div class="loader-fill"></div>
-    </div>
-</div>
-<!-- [ Pre-loader ] End -->
+<div class="loader-bg"><div class="loader-track"><div class="loader-fill"></div></div></div>
 
 <div class="auth-main">
     <div class="auth-wrapper v3">
@@ -69,43 +48,73 @@
                         <div class="d-flex justify-content-between align-items-end mb-4">
                             <h3 class="mb-0"><b>Sign Up</b></h3>
                         </div>
-                        <br>
+
                         <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Account Type</label>
+                                <select class="form-select" name="account_type" id="account_type" required>
+                                    <option value="">Select Account Type (Individual or Company)</option>
+                                    <option value="1">Individual</option>
+                                    <option value="2">Company</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3" id="nameFields">
                             <div class="col-md-6">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name"
-                                       placeholder="Enter your First Name" required>
+                                <input type="text" class="form-control" name="first_name" placeholder="Enter your First Name" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Surname</label>
-                                <input type="text" class="form-control" name="last_name"
-                                       placeholder="Enter your Surname" required>
+                                <input type="text" class="form-control" name="last_name" placeholder="Enter your Surname" required>
                             </div>
                         </div>
+
+                        <div class="row mb-3 d-none" id="companyField">
+                            <div class="col-md-12">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" class="form-control" name="company_name" placeholder="Enter your Company Name">
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="emailInput"
-                                       placeholder="Enter your email address" required>
+                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email address" required>
                                 <small id="emailFeedback" class="form-text"></small>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" name="phone"
-                                       placeholder="Enter your phone number (+254712345678 or 0712345678)" required>
+                                <input type="tel" class="form-control" name="phone" placeholder="Enter your phone number (+254712345678 or 0712345678)" required>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Nationality</label>
-                                <select class="form-control" name="nationality" required>
-                                    <option value="">-- Select Nationality --</option>
-                                    {% for country in countries %}
-                                        <option value="{{ country.id }}">{{ country.nationality }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
 
+                        <div id="personalFields">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nationality</label>
+                                    <select class="form-control" name="nationality" id="nationality" required>
+                                        <option value="">-- Select Nationality --</option>
+                                        {% for country in countries %}
+                                            <option value="{{ country.id }}">{{ country.nationality }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Gender</label>
+                                    <select class="form-control" name="gender" id="gender" required>
+                                        <option value="">-- Select Gender --</option>
+                                        {% for mygender in genders %}
+                                            <option value="{{ mygender.id }}">{{ mygender.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">County</label>
                                 <select id="county" name="county" class="form-control" required>
@@ -115,24 +124,14 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Subcounty</label>
                                 <select id="subcounty" name="subcounty" class="form-control" required>
                                     <option value="">-- Select Subcounty --</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Gender</label>
-                                <select class="form-control" name="gender" required>
-                                    <option value="">-- Select Gender --</option>
-                                    {% for mygender in genders %}
-                                        <option value="{{ mygender.id }}">{{ mygender.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
+
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Password</label>
@@ -164,210 +163,137 @@
                                 </div>
                                 <small id="matchMessage" class="form-text"></small>
                             </div>
-
                         </div>
+
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Sign Up</button>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- [ Main Content ] end -->
-<!-- Required Js -->
+
+<!-- JS Dependencies -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-        e.preventDefault();  // Prevent default form submission
+    document.getElementById('account_type').addEventListener('change', function () {
+        const accountType = this.value;
+        const companyField = document.getElementById('companyField');
+        const nameFields = document.getElementById('nameFields');
+        const personalFields = document.getElementById('personalFields');
 
-        const form = e.target;
-        const formData = new FormData(form);  // Collect form data
+        if (accountType === "2") { // Company
+            companyField.classList.remove('d-none');
+            nameFields.classList.add('d-none');
+            personalFields.classList.add('d-none');
 
-        fetch("{% url 'signup' %}", {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // Send CSRF token
-            },
-            body: formData  // Send the form data
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: data.message
-                    }).then(() => {
-                        window.location.href = "{% url 'login' %}";  // Redirect to login on success
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: data.message
-                    });
-                }
-            });
+            companyField.querySelector('input').required = true;
+            nameFields.querySelectorAll('input').forEach(i => i.required = false);
+            personalFields.querySelectorAll('select').forEach(s => s.required = false);
+        } else {
+            companyField.classList.add('d-none');
+            nameFields.classList.remove('d-none');
+            personalFields.classList.remove('d-none');
+
+            companyField.querySelector('input').required = false;
+            nameFields.querySelectorAll('input').forEach(i => i.required = true);
+            personalFields.querySelectorAll('select').forEach(s => s.required = true);
+        }
     });
-</script>
 
-<script>
+    $('#togglePassword').on('click', () => toggleVisibility('#password', '#togglePasswordIcon'));
+    $('#toggleConfirmPassword').on('click', () => toggleVisibility('#confirm_password', '#toggleConfirmPasswordIcon'));
+
+    function toggleVisibility(inputSelector, iconSelector) {
+        const input = $(inputSelector);
+        const icon = $(iconSelector);
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        icon.toggleClass('fa-eye fa-eye-slash');
+    }
+
+    $('#emailInput').on('input', function () {
+        const email = $(this).val();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        const feedback = $('#emailFeedback');
+
+        if (!email) feedback.text('').removeClass();
+        else if (emailRegex.test(email)) feedback.text('Looks good!').removeClass().addClass('form-text text-success');
+        else feedback.text('Please enter a valid email like name@example.com').removeClass().addClass('form-text text-danger');
+    });
+
+    $('#password').on('input', function () {
+        const password = $(this).val();
+        const strength = getPasswordStrength(password);
+        const strengthDiv = $('#passwordStrength');
+        const messages = ['Too weak', 'Weak', 'Moderate', 'Strong', 'Very strong'];
+        const colors = ['danger', 'warning', 'info', 'primary', 'success'];
+
+        strengthDiv.html(`<div class="progress"><div class="progress-bar bg-${colors[strength]}" style="width: ${(strength + 1) * 20}%"></div></div><small class="text-${colors[strength]}">${messages[strength]}</small>`);
+    });
+
+    function getPasswordStrength(pwd) {
+        let score = 0;
+        if (pwd.length >= 8) score++;
+        if (/[A-Z]/.test(pwd)) score++;
+        if (/\d/.test(pwd)) score++;
+        if (/[\W_]/.test(pwd)) score++;
+        return score;
+    }
+
+    $('#password, #confirm_password').on('input', function () {
+        const pw1 = $('#password').val();
+        const pw2 = $('#confirm_password').val();
+        const msg = $('#matchMessage');
+
+        if (!pw2) msg.text('');
+        else if (pw1 === pw2) msg.text('Passwords match').removeClass().addClass('form-text text-success');
+        else msg.text('Passwords do not match').removeClass().addClass('form-text text-danger');
+    });
+
     $('#county').on('change', function () {
-        var countyId = $(this).val();
-
+        const countyId = $(this).val();
         if (countyId) {
-            $.ajax({
-                url: '/get-subcounties/',
-                data: {
-                    'county_id': countyId
-                },
-                success: function (data) {
-                    $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
-                    $.each(data, function (i, item) {
-                        $('#subcounty').append($('<option>', {
-                            value: item.id,
-                            text: item.name
-                        }));
-                    });
-                }
+            $.get('/get-subcounties/', { county_id: countyId }, function (data) {
+                const subcounty = $('#subcounty');
+                subcounty.empty().append('<option value="">-- Select Subcounty --</option>');
+                data.forEach(item => subcounty.append(`<option value="${item.id}">${item.name}</option>`));
             });
         } else {
             $('#subcounty').empty().append('<option value="">-- Select Subcounty --</option>');
         }
     });
-</script>
-<script>
-    // Toggle password visibility
-    $('#togglePassword').on('click', function () {
-        const input = $('#password');
-        const icon = $('#togglePasswordIcon');
-        const type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-        icon.toggleClass('fa-eye fa-eye-slash');
-    });
 
-    $('#toggleConfirmPassword').on('click', function () {
-        const input = $('#confirm_password');
-        const icon = $('#toggleConfirmPasswordIcon');
-        const type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-        icon.toggleClass('fa-eye fa-eye-slash');
-    });
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const form = this;
+        const formData = new FormData(form);
 
-    // Password strength checker
-    $('#password').on('input', function () {
-        const password = $(this).val();
-        const strength = getPasswordStrength(password);
-        const strengthDiv = $('#passwordStrength');
-
-        let color, message;
-        switch (strength) {
-            case 0:
-                color = 'danger';
-                message = 'Too weak';
-                break;
-            case 1:
-                color = 'warning';
-                message = 'Weak';
-                break;
-            case 2:
-                color = 'info';
-                message = 'Moderate';
-                break;
-            case 3:
-                color = 'primary';
-                message = 'Strong';
-                break;
-            case 4:
-                color = 'success';
-                message = 'Very strong';
-                break;
-        }
-
-        strengthDiv.html(`<div class="progress">
-                <div class="progress-bar bg-${color}" role="progressbar" style="width: ${(strength + 1) * 20}%"></div>
-            </div><small class="text-${color}">${message}</small>`);
-    });
-
-    function getPasswordStrength(password) {
-        let score = 0;
-        if (password.length >= 8) score++;
-        if (/[A-Z]/.test(password)) score++;
-        if (/[0-9]/.test(password)) score++;
-        if (/[^A-Za-z0-9]/.test(password)) score++;
-        return score;
-    }
-
-    // Password match validation
-    $('#password, #confirm_password').on('input', function () {
-        const password = $('#password').val();
-        const confirmPassword = $('#confirm_password').val();
-        const messageEl = $('#matchMessage');
-
-        if (confirmPassword.length === 0) {
-            messageEl.text('');
-            return;
-        }
-
-        if (password === confirmPassword) {
-            messageEl.text('Passwords match').removeClass().addClass('form-text text-success');
-        } else {
-            messageEl.text('Passwords do not match').removeClass().addClass('form-text text-danger');
-        }
+        fetch("{% url 'signup' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            Swal.fire({
+                icon: data.status === 'success' ? 'success' : 'error',
+                title: data.status === 'success' ? 'Success' : 'Error',
+                text: data.message
+            }).then(() => {
+                if (data.status === 'success') {
+                    window.location.href = "{% url 'login' %}";
+                }
+            });
+        });
     });
 </script>
-<script>
-    const emailInput = document.getElementById('emailInput');
-    const emailFeedback = document.getElementById('emailFeedback');
-
-    emailInput.addEventListener('input', function () {
-        const email = this.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-        if (!email) {
-            emailFeedback.textContent = '';
-            emailFeedback.className = 'form-text';
-        } else if (emailRegex.test(email)) {
-            emailFeedback.textContent = 'Looks good!';
-            emailFeedback.className = 'form-text text-success';
-        } else {
-            emailFeedback.textContent = 'Please enter a valid email like name@example.com';
-            emailFeedback.className = 'form-text text-danger';
-        }
-    });
-</script>
-
-
-</script>
-<script src="{% static 'js/plugins/popper.min.js' %}"></script>
-<script src="{% static 'js/plugins/simplebar.min.js' %}"></script>
-<script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/fonts/custom-font.js' %}"></script>
-<script src="{% static 'js/pcoded.js' %}"></script>
-<script src="{% static 'js/plugins/feather.min.js' %}"></script>
-
-
-<script>layout_change('light');</script>
-
-
-<script>change_box_container('false');</script>
-
-
-<script>layout_rtl_change('false');</script>
-
-
-<script>preset_change("preset-1");</script>
-
-
-<script>font_change("Public-Sans");</script>
-
 
 </body>
-<!-- [Body] end -->
-
 </html>
