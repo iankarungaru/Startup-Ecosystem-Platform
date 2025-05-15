@@ -80,28 +80,23 @@ WSGI_APPLICATION = 'startup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'startup',
-        'USER': 'root',
+        'USER': 'startupadmin',
         'PASSWORD': 'Root@2025*',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'HOST': 'localhost',  
+        'PORT': '5432',       
     },
     'sysadmin': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sysadmin',
-        'USER': 'root',
+        'USER': 'startupadmin',
         'PASSWORD': 'Root@2025*',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'HOST': 'localhost', 
+        'PORT': '5432',       
     }
 }
+
 
 DATABASE_ROUTERS = ['startup.db_router.SystemAdminRouter']
 
