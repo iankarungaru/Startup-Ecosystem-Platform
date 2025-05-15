@@ -8,3 +8,6 @@ djangorestframework
 djangorestframework-simplejwt
 sendgrid
 psycopg2-binary
+psycopg2
+python-decouple
+django-environ

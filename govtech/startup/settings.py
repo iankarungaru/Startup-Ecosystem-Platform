@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,21 +83,22 @@ WSGI_APPLICATION = 'startup.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'startup',
-        'USER': 'startupadmin',
-        'PASSWORD': 'Root@2025*',
-        'HOST': 'localhost',  
-        'PORT': '5432',       
+        'NAME': config('DB_DEFAULT_NAME'),
+        'USER': config('DB_DEFAULT_USER'),
+        'PASSWORD': config('DB_DEFAULT_PASSWORD'),
+        'HOST': config('DB_DEFAULT_HOST'),
+        'PORT': config('DB_DEFAULT_PORT'),
     },
     'sysadmin': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sysadmin',
-        'USER': 'startupadmin',
-        'PASSWORD': 'Root@2025*',
-        'HOST': 'localhost', 
-        'PORT': '5432',       
+        'NAME': config('DB_SYSADMIN_NAME'),
+        'USER': config('DB_SYSADMIN_USER'),
+        'PASSWORD': config('DB_SYSADMIN_PASSWORD'),
+        'HOST': config('DB_SYSADMIN_HOST'),
+        'PORT': config('DB_SYSADMIN_PORT'),
     }
 }
+
 
 
 DATABASE_ROUTERS = ['startup.db_router.SystemAdminRouter']
