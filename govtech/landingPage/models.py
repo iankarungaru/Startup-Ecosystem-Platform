@@ -38,8 +38,10 @@ class gender(models.Model):
         return self.name
     
 class SignupUser(models.Model):
-    fName = models.CharField(max_length=255)
-    lName = models.CharField(max_length=255)
+    accountType = models.IntegerField(null=True, blank=True)
+    fName = models.CharField(max_length=255, null=True, blank=True)
+    lName = models.CharField(max_length=255, null=True, blank=True)
+    company = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=255)
     nationality = models.IntegerField()

@@ -37,14 +37,32 @@ def login_view(request):
 
 def signup(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        account_type = request.POST.get('account_type')  # '1' or '2'
+
+        # Initialize fields
+        first_name = ''
+        last_name = ''
+        company_name = ''
+        genderName = None
+        nationality = None
+
+        # Individual details
+        if account_type == '1':
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            genderName = request.POST.get('gender')
+            nationality = request.POST.get('nationality')
+        else:
+            company_name = request.POST.get('company_name')
+            nationality = 73  # default nationality for company
+
+        # common details
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        nationality = request.POST.get('nationality')
         county = request.POST.get('county')
         subCounty = request.POST.get('subcounty')
-        genderName = request.POST.get('gender')
+
+        # password
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -71,7 +89,9 @@ def signup(request):
                 nationality=nationality,
                 county=county,
                 subcounty=subCounty,
-                gender=genderName
+                gender=genderName,
+                accountType=account_type,
+                company=company_name
             )
             user.save()
 
