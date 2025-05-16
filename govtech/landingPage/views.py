@@ -201,9 +201,14 @@ def authlogin(request):
 
             # Set the user details in the session (id, email, fName, lName)
             request.session['id'] = user_obj.id
+
+            if user_obj.accountType == 1:
+                request.session['fName'] = user_obj.fName
+                request.session['lName'] = user_obj.lName
+            else:
+                request.session['company'] = user_obj.company
+
             request.session['email'] = user_obj.email
-            request.session['fName'] = user_obj.fName
-            request.session['lName'] = user_obj.lName
             request.session['profile_picture'] = user_obj.profile_picture
             request.session['userType'] = user_obj.accountType
 
