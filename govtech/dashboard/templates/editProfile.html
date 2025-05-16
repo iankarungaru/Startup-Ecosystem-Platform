@@ -24,7 +24,7 @@
             <div class="col-md-12 text-center">
                 <label class="form-label d-block"><b>Click to edit profile picture</b></label>
                 <div class="position-relative d-inline-block">
-                    <img id="profile-preview" src="/static/images/avatar.jpg" class="rounded-circle border mb-2"
+                    <img id="profile-preview" src="/static/{{ request.session.profile_picture|default:'images/avatar.jpg' }}"
                          width="150" height="150" style="object-fit: cover;">
                     <input type="file" id="profile-picture" name="profile_picture" accept="image/*"
                            class="form-control-file mt-2">
