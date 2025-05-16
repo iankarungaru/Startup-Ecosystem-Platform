@@ -123,6 +123,7 @@ def Myprofile(request):
         'subcounty': getSubcountyName(myInfo.subcounty),
         'gender': getGenderName(myInfo.gender),
         'profilePicture': myInfo.profile_picture,
+        'company':myInfo.company,
     }
 
     return render(request, 'myprofile.html', data)

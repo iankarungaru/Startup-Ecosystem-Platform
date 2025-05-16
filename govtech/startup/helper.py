@@ -10,31 +10,50 @@ from django.db import IntegrityError
 def getSubcountyName(subcountyId):
     subcountyInfo = Subcounty.objects.get(id=subcountyId)
     subcountyName = subcountyInfo.name
-    return subcountyName
 
+    try:
+        return subcountyName
+    except Subcounty.DoesNotExist:
+        return None
 
 def getCountyName(countyId):
     countyInfo = County.objects.get(id=countyId)
     countyName = countyInfo.name
-    return countyName
+    try:
+        return countyName
+    except County.DoesNotExist:
+        return None
 
 
 def getGenderName(genderId):
+    if not genderId:
+        return None
+
     genderInfo = gender.objects.get(id=genderId)
     genderName = genderInfo.name
-    return genderName
+
+    try:
+        return genderName
+    except gender.DoesNotExist:
+        return None
 
 
 def getnationalityName(countryId):
     nationalityInfo = Country.objects.get(id=countryId)
     nationalityName = nationalityInfo.nationality
-    return nationalityName
+    try:
+        return nationalityName
+    except Country.DoesNotExist:
+        return None
 
 
 def getCountryName(countryId):
     countryInfo = Country.objects.get(id=countryId)
     countryName = countryInfo.name
-    return countryName
+    try:
+        return countryName
+    except Country.DoesNotExist:
+        return None
 
 
 def is_strong_password(password):
