@@ -132,38 +132,38 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Password</label>
-                                <div class="input-group">
-                                    <input type="password" id="password" class="form-control" name="password"
-                                           placeholder="Enter password" required>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-                                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters,
-                                    include a capital letter, number, and symbol.</small>
-                                <div id="passwordStrength" class="mt-1"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Confirm Password</label>
-                                <div class="input-group">
-                                    <input type="password" id="confirm_password" class="form-control"
-                                           name="confirm_password" placeholder="Confirm password" required>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="toggleConfirmPassword"
-                                              style="cursor: pointer;">
-                                            <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <small id="matchMessage" class="form-text"></small>
-                            </div>
-                        </div>
+{#                        <div class="row mb-3">#}
+{#                            <div class="col-md-6">#}
+{#                                <label class="form-label">Password</label>#}
+{#                                <div class="input-group">#}
+{#                                    <input type="password" id="password" class="form-control" name="password"#}
+{#                                           placeholder="Enter password" required>#}
+{#                                    <div class="input-group-append">#}
+{#                                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">#}
+{#                                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>#}
+{#                                        </span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters,#}
+{#                                    include a capital letter, number, and symbol.</small>#}
+{#                                <div id="passwordStrength" class="mt-1"></div>#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-md-6">#}
+{#                                <label class="form-label">Confirm Password</label>#}
+{#                                <div class="input-group">#}
+{#                                    <input type="password" id="confirm_password" class="form-control"#}
+{#                                           name="confirm_password" placeholder="Confirm password" required>#}
+{#                                    <div class="input-group-append">#}
+{#                                        <span class="input-group-text" id="toggleConfirmPassword"#}
+{#                                              style="cursor: pointer;">#}
+{#                                            <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>#}
+{#                                        </span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <small id="matchMessage" class="form-text"></small>#}
+{#                            </div>#}
+{#                        </div>#}
 
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Sign Up</button>
@@ -205,16 +205,7 @@
         }
     });
 
-    $('#togglePassword').on('click', () => toggleVisibility('#password', '#togglePasswordIcon'));
-    $('#toggleConfirmPassword').on('click', () => toggleVisibility('#confirm_password', '#toggleConfirmPasswordIcon'));
 
-    function toggleVisibility(inputSelector, iconSelector) {
-        const input = $(inputSelector);
-        const icon = $(iconSelector);
-        const type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-        icon.toggleClass('fa-eye fa-eye-slash');
-    }
 
     $('#emailInput').on('input', function () {
         const email = $(this).val();
@@ -226,34 +217,7 @@
         else feedback.text('Please enter a valid email like name@example.com').removeClass().addClass('form-text text-danger');
     });
 
-    $('#password').on('input', function () {
-        const password = $(this).val();
-        const strength = getPasswordStrength(password);
-        const strengthDiv = $('#passwordStrength');
-        const messages = ['Too weak', 'Weak', 'Moderate', 'Strong', 'Very strong'];
-        const colors = ['danger', 'warning', 'info', 'primary', 'success'];
 
-        strengthDiv.html(`<div class="progress"><div class="progress-bar bg-${colors[strength]}" style="width: ${(strength + 1) * 20}%"></div></div><small class="text-${colors[strength]}">${messages[strength]}</small>`);
-    });
-
-    function getPasswordStrength(pwd) {
-        let score = 0;
-        if (pwd.length >= 8) score++;
-        if (/[A-Z]/.test(pwd)) score++;
-        if (/\d/.test(pwd)) score++;
-        if (/[\W_]/.test(pwd)) score++;
-        return score;
-    }
-
-    $('#password, #confirm_password').on('input', function () {
-        const pw1 = $('#password').val();
-        const pw2 = $('#confirm_password').val();
-        const msg = $('#matchMessage');
-
-        if (!pw2) msg.text('');
-        else if (pw1 === pw2) msg.text('Passwords match').removeClass().addClass('form-text text-success');
-        else msg.text('Passwords do not match').removeClass().addClass('form-text text-danger');
-    });
 
     $('#county').on('change', function () {
         const countyId = $(this).val();
@@ -294,6 +258,48 @@
         });
     });
 </script>
+{#commented out#}
+{#<script>#}
+{#     $('#togglePassword').on('click', () => toggleVisibility('#password', '#togglePasswordIcon'));#}
+{#    $('#toggleConfirmPassword').on('click', () => toggleVisibility('#confirm_password', '#toggleConfirmPasswordIcon'));#}
+{##}
+{#    function toggleVisibility(inputSelector, iconSelector) {#}
+{#        const input = $(inputSelector);#}
+{#        const icon = $(iconSelector);#}
+{#        const type = input.attr('type') === 'password' ? 'text' : 'password';#}
+{#        input.attr('type', type);#}
+{#        icon.toggleClass('fa-eye fa-eye-slash');#}
+{#    }#}
+{#    #}
+{#     $('#password').on('input', function () {#}
+{#        const password = $(this).val();#}
+{#        const strength = getPasswordStrength(password);#}
+{#        const strengthDiv = $('#passwordStrength');#}
+{#        const messages = ['Too weak', 'Weak', 'Moderate', 'Strong', 'Very strong'];#}
+{#        const colors = ['danger', 'warning', 'info', 'primary', 'success'];#}
+{##}
+{#        strengthDiv.html(`<div class="progress"><div class="progress-bar bg-${colors[strength]}" style="width: ${(strength + 1) * 20}%"></div></div><small class="text-${colors[strength]}">${messages[strength]}</small>`);#}
+{#    });#}
+{##}
+{#    function getPasswordStrength(pwd) {#}
+{#        let score = 0;#}
+{#        if (pwd.length >= 8) score++;#}
+{#        if (/[A-Z]/.test(pwd)) score++;#}
+{#        if (/\d/.test(pwd)) score++;#}
+{#        if (/[\W_]/.test(pwd)) score++;#}
+{#        return score;#}
+{#    }#}
+{##}
+{#    $('#password, #confirm_password').on('input', function () {#}
+{#        const pw1 = $('#password').val();#}
+{#        const pw2 = $('#confirm_password').val();#}
+{#        const msg = $('#matchMessage');#}
+{##}
+{#        if (!pw2) msg.text('');#}
+{#        else if (pw1 === pw2) msg.text('Passwords match').removeClass().addClass('form-text text-success');#}
+{#        else msg.text('Passwords do not match').removeClass().addClass('form-text text-danger');#}
+{#    });#}
+{#</script>#}
 
 </body>
 </html>
