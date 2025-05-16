@@ -11,6 +11,7 @@ from django.utils.timezone import now
 
 from startup.helper import *
 from .models import *
+from dashboard.models import Notification
 
 
 def landing(request):
@@ -37,7 +38,7 @@ def login_view(request):
 
 def signup(request):
     if request.method == 'POST':
-        account_type = request.POST.get('account_type')  # '1' or '2'
+        account_type = request.POST.get('account_type')  # '1' for individual, '2' for company
 
         # Initialize fields
         first_name = ''
@@ -54,32 +55,20 @@ def signup(request):
             nationality = request.POST.get('nationality')
         else:
             company_name = request.POST.get('company_name')
-            nationality = 73  # default nationality for company
+            nationality = 73  # Default for companies
 
-        # common details
+        # Common details
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         county = request.POST.get('county')
         subCounty = request.POST.get('subcounty')
 
-        # password
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Password match check
-        if password != confirm_password:
-            return JsonResponse({'status': 'error', 'message': 'Passwords do not match.'})
-
-        # Password strength check
-        if not is_strong_password(password):
-            return JsonResponse({'status': 'error',
-                                 'message': 'Password must be at least 8 characters long and include a capital letter, number, and symbol.'})
-
-        # Encrypt the password
+        # Password generation and encryption
+        password = generate_strong_password()
         encrypted_password = make_password(password)
 
-        # Save to DB
         try:
+            # Save user to DB
             user = SignupUser.objects.create(
                 email=email,
                 password=encrypted_password,
@@ -93,26 +82,65 @@ def signup(request):
                 accountType=account_type,
                 company=company_name
             )
-            user.save()
 
             # Add notification
             title = "Account created successfully"
             message = (
-                "You have successfully Created your account. "
+                "You have successfully created your account. "
                 "Proceed to make the relevant applications."
             )
-            user = SignupUser.objects.get(email=email)
-            myId = user.id
-            result = notification_insert(title, message, myId, Notification)
+            result = notification_insert(title, message, user.id, Notification)
             if result['status'] != 'success':
                 print("Notification insert failed:", result['message'])
 
-            return JsonResponse({'status': 'success', 'message': 'Registration successful. Please log in.'})
+            # Prepare email
+            subject = "Your Devlink Platform Account Details"
+            from_email = f"Devlink Team <{settings.DEFAULT_FROM_EMAIL}>"
+
+            # Plain text content
+            text_content = (
+                f"Dear User,\n\n"
+                f"Your account on the Devlink Startup Ecosystem Platform has been created successfully.\n\n"
+                f"Here are your login credentials:\n"
+                f"Email: {email}\n"
+                f"Password: {password}\n\n"
+                f"For security, please log in and change your password as soon as possible.\n\n"
+                f"Regards,\n"
+                f"The Devlink Team"
+            )
+
+            # HTML content
+            html_content = f"""
+                <html>
+                <body>
+                    <p>Dear User,</p>
+                    <p>Your account on the <strong>Devlink Startup Ecosystem Platform</strong> has been created successfully.</p>
+                    <p><strong>Your login credentials are:</strong></p>
+                    <ul>
+                        <li><strong>Email:</strong> {email}</li>
+                        <li><strong>Password:</strong> <code style="font-size: 16px;">{password}</code></li>
+                    </ul>
+                    <p>For your security, please log in and change your password as soon as possible.</p>
+                    <br>
+                    <p style="font-size: 14px; color: #888;">— The Devlink Team</p>
+                </body>
+                </html>
+            """
+
+            # Send email
+            email_msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+            email_msg.attach_alternative(html_content, "text/html")
+            email_msg.send(fail_silently=False)
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Registration successful. Login credentials have been sent to your email.'
+            })
 
         except IntegrityError:
             return JsonResponse({'status': 'error', 'message': 'An account with this email already exists.'})
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'An error occurred while saving your data: {e}'})
+            return JsonResponse({'status': 'error', 'message': f'Error occurred: {e}'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
@@ -177,6 +205,7 @@ def authlogin(request):
             request.session['fName'] = user_obj.fName
             request.session['lName'] = user_obj.lName
             request.session['profile_picture'] = user_obj.profile_picture
+            request.session['userType'] = user_obj.accountType
 
             # Reset login attempts after successful login
             attempt.attempts = 0

@@ -19,7 +19,7 @@ from django.utils.safestring import mark_safe
 from startup.helper import *
 from .forms import IndividualForm
 from .forms import Step1Form, Step2Form  # You'll need to create these forms
-from .models import Registration, IndividualDev
+from .models import *
 
 
 def dashboard_data(request):

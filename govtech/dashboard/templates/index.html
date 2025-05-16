@@ -145,16 +145,19 @@
                         <span class="pc-mtext">My Applications</span><span class="pc-arrow"><i
                                 data-feather="chevron-right"></i></span></a>
                     <ul class="pc-submenu">
+                        {% if request.session.userType == 1 %}
                         <li class="pc-item">
                             <a class="pc-link" href="{% url 'individual_reg' %}">
                                 <i class="ti ti-user-check"></i> Individual Application
                             </a>
                         </li>
+                        {% else %}
                         <li class="pc-item">
                             <a class="pc-link" href="{% url 'multi_step' step=1 %}">
                                 <i class="fas fa-building"></i> Company Application
                             </a>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
 

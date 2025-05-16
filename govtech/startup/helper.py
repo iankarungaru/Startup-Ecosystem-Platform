@@ -1,7 +1,8 @@
 import re
+import random
+import string
 
 from landingPage.models import Subcounty, County, Country, gender, SignupUser
-from dashboard.models import Notification
 from django.db import IntegrityError
 
 
@@ -84,4 +85,29 @@ def getAccountNames(id):
     except Exception as e:
         return {'status': 'error', 'message': f'Unexpected error: {str(e)}'}
 
+def generate_strong_password(length=12):
+    if length < 8:
+        raise ValueError("Password length must be at least 8 characters")
 
+    # Character sets
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    symbols = string.punctuation
+
+    # Ensure the password contains at least one of each required character type
+    password = [
+        random.choice(lowercase),
+        random.choice(uppercase),
+        random.choice(digits),
+        random.choice(symbols),
+    ]
+
+    # Fill the rest of the password length with random choices from all characters
+    all_chars = lowercase + uppercase + digits + symbols
+    password += random.choices(all_chars, k=length - 4)
+
+    # Shuffle the list to make the order random
+    random.shuffle(password)
+
+    return ''.join(password)
