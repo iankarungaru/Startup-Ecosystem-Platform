@@ -123,6 +123,7 @@ def Myprofile(request):
         'subcounty': getSubcountyName(myInfo.subcounty),
         'gender': getGenderName(myInfo.gender),
         'profilePicture': myInfo.profile_picture,
+        'company':myInfo.company,
     }
 
     return render(request, 'myprofile.html', data)
@@ -134,6 +135,7 @@ def profileChange(request):
     data = {
         'firstName': myInfo.fName,
         'lastName': myInfo.lName,
+        'company': myInfo.company,
         'email': myInfo.email,
         'phone': myInfo.phone,
         'nationality': getnationalityName(myInfo.nationality),
@@ -154,16 +156,27 @@ def profileChange(request):
 
 def saveEditProfile(request):
     myId = request.session.get('id')
+    userType = request.session.get('userType')
+    first_name = ''
+    last_name = ''
+    company = ''
+    genderName = None
+    nationality = 73
 
     if request.method == 'POST' and myId:
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        if userType == 1:
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            genderName = request.POST.get('gender')
+            nationality = request.POST.get('nationality')
+        else:
+            company = request.POST.get('company')
+
+
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        nationality = request.POST.get('nationality')
         county = request.POST.get('county')
         subCounty = request.POST.get('subcounty')
-        genderName = request.POST.get('gender')
         cropped_image_data = request.POST.get('cropped_image')  # Base64 string
 
         try:
@@ -179,6 +192,7 @@ def saveEditProfile(request):
             user.county = county
             user.subcounty = subCounty
             user.gender = genderName
+            user.company = company
 
             # Handle profile picture if provided
             if cropped_image_data and "base64" in cropped_image_data:
@@ -202,6 +216,11 @@ def saveEditProfile(request):
 
             # Save updated user (both with or without image)
             user.save()
+            if userType == 1:
+                request.session['fName'] = first_name
+                request.session['lName'] = last_name
+            else:
+                request.session['company'] = company
 
             # Add notification
             title = "Editing of Profile"
