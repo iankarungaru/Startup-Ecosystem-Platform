@@ -22,8 +22,8 @@ class InternalUser(models.Model):
     dateCreated = models.DateTimeField(auto_now_add=True)
     dateUpdated = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        db_table = 'internalusers'
+    # class Meta:
+    #     db_table = 'internalusers'
 
     def __str__(self):
         return f"{self.fName} {self.lName}"
@@ -34,8 +34,8 @@ class AttemptLogin(models.Model):
     attempts = models.IntegerField(default=0)
     last_attempt = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        db_table = 'attempt_login'
+    # class Meta:
+    #     db_table = 'attempt_login'
 
     def is_locked_out(self):
         # You can lockout after 5 attempts within 10 minutes, for example
@@ -55,8 +55,8 @@ class PasswordResetToken(models.Model):
         # Valid for 10 minutes
         return timezone.now() < self.created_at + timedelta(minutes=10)
 
-    class Meta:
-        db_table = 'password_reset_token'
+    # class Meta:
+    #     db_table = 'password_reset_token'
 
     def __str__(self):
         return f'Token for {self.user.email}'
@@ -69,7 +69,7 @@ class sysNotification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # ← Move it inside the class!
 
     class Meta:
-        db_table = 'sys_notifications'
+        # db_table = 'sys_notifications'
         ordering = ['-created_at']
 
     def short_message(self):
