@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-p7c+70%&+i2m#+#x_^cq%@8)v2)-d8!af^%3j4o55ys(+m@e-3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'devlink.ict.go.ke',]
 
 # Application definition
 
@@ -80,28 +80,34 @@ WSGI_APPLICATION = 'startup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_DEFAULT_NAME'),
+#         'USER': config('DB_DEFAULT_USER'),
+#         'PASSWORD': config('DB_DEFAULT_PASSWORD'),
+#         'HOST': config('DB_DEFAULT_HOST'),
+#         'PORT': config('DB_DEFAULT_PORT'),
+#     },
+#     'sysadmin': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_SYSADMIN_NAME'),
+#         'USER': config('DB_SYSADMIN_USER'),
+#         'PASSWORD': config('DB_SYSADMIN_PASSWORD'),
+#         'HOST': config('DB_SYSADMIN_HOST'),
+#         'PORT': config('DB_SYSADMIN_PORT'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_DEFAULT_NAME'),
-        'USER': config('DB_DEFAULT_USER'),
-        'PASSWORD': config('DB_DEFAULT_PASSWORD'),
-        'HOST': config('DB_DEFAULT_HOST'),
-        'PORT': config('DB_DEFAULT_PORT'),
-    },
-    'sysadmin': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_SYSADMIN_NAME'),
-        'USER': config('DB_SYSADMIN_USER'),
-        'PASSWORD': config('DB_SYSADMIN_PASSWORD'),
-        'HOST': config('DB_SYSADMIN_HOST'),
-        'PORT': config('DB_SYSADMIN_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-
-
-DATABASE_ROUTERS = ['startup.db_router.SystemAdminRouter']
+# DATABASE_ROUTERS = ['startup.db_router.SystemAdminRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -135,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -147,25 +153,21 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 
+# Tell Django to look for static files both inside the app and in the global static folder
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Only used in production (when running `collectstatic`)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_ROOT = BASE_DIR / "mediafiles"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Static files URL prefix
-STATIC_URL = '/static/'
-
-# Tell Django to look for static files both inside the app and in the global static folder
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),  # Global static folder outside the app
-]
-
-# Only used in production (when running `collectstatic`)
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # This should NOT be the same as STATICFILES_DIRS
 
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')
