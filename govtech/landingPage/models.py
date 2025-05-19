@@ -6,16 +6,16 @@ class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
     nationality = models.CharField(max_length=100)
     
-    class Meta:
-        db_table = 'country'
+    # class Meta:
+    #     db_table = 'country'
 
     def __str__(self):
         return f"{self.name} ({self.nationality})"
 
 class County(models.Model):
     name = models.CharField(max_length=100, unique=True)  # Ensuring county names are unique
-    class Meta:
-        db_table = 'county'
+    # class Meta:
+    #     db_table = 'county'
     def __str__(self):
         return self.name
 
@@ -23,16 +23,16 @@ class Subcounty(models.Model):
     name = models.CharField(max_length=100)  
     county = models.ForeignKey(County, on_delete=models.CASCADE, related_name='subcounties')  # Foreign key to County
 
-    class Meta:
-        db_table = 'subcounty'  # The name of the table in the database
+    # class Meta:
+    #     db_table = 'subcounty'  # The name of the table in the database
 
     def __str__(self):
         return self.name
 
 class gender(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    class Meta:
-        db_table = 'gender'
+    # class Meta:
+    #     db_table = 'gender'
 
     def __str__(self):
         return self.name
@@ -58,8 +58,8 @@ class SignupUser(models.Model):
     dateCreated = models.DateTimeField(auto_now_add=True) 
     dateUpdated = models.DateTimeField(auto_now=True) 
 
-    class Meta:
-        db_table = 'externalusers'  # Change this to your actual DB table name
+    # class Meta:
+    #     db_table = 'externalusers'  # Change this to your actual DB table name
 
     def __str__(self):
         return self.email
@@ -90,8 +90,8 @@ class PasswordResetToken(models.Model):
         # Valid for 10 minutes
         return timezone.now() < self.created_at + timedelta(minutes=10)
 
-    class Meta:
-        db_table = 'password_reset_token'
+    # class Meta:
+    #     db_table = 'password_reset_token'
 
     def __str__(self):
         return f'Token for {self.user.email}'
