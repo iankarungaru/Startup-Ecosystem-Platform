@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- templates/faq.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - DevLink Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Frequently Asked Questions</h1>
+
+    <div class="accordion" id="faqAccordion">
+        <!-- Getting Started -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                    What is DevLink Portal?
+                </button>
+            </h2>
+            <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    DevLink Portal is a platform that connects developers and firms, offering resources, collaboration tools, and support systems to help innovators thrive.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                    How do I register as a Developer?
+                </button>
+            </h2>
+            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Simply visit the <a href="/register/developer/">Developer Registration</a> page and fill in the required details.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                    How do I register as a Firm?
+                </button>
+            </h2>
+            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Head to the <a href="/register/firm/">Firm Registration</a> page to create your organization profile.
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more items as needed -->
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}
+{% block title %}FAQs - DevLink Portal{% endblock %}
+{% block description %}Find answers to common questions about the DevLink Portal, including registration, features, and support.{% endblock %}
+{% block keywords %}FAQs, DevLink Portal, support, questions{% endblock %}
+{% block canonical %}https://www.devlinkportal.com/faqs{% endblock %}
+{% block og_title %}FAQs - DevLink Portal{% endblock %}
+{% block og_description %}Explore frequently asked questions about the DevLink Portal and get the information you need.{% endblock %}
+{% block og_image %}https://www.devlinkportal.com/images/faqs.jpg{% endblock %}
+{% block og_url %}https://www.devlinkportal.com/faqs{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block twitter_card %}summary_large_image{% endblock %}
+{% block twitter_site %}@DevLinkPortal{% endblock %}
+{% block twitter_title %}FAQs - DevLink Portal{% endblock %}
+{% block twitter_description %}Get answers to your questions about the DevLink Portal.{% endblock %}
+{% block twitter_image %}https://www.devlinkportal.com/images/faqs.jpg{% endblock %}
+{% block twitter_url %}https://www.devlinkportal.com/faqs{% endblock %}
+{% block twitter_creator %}@DevLinkPortal{% endblock %}
+{% block twitter_image_alt %}FAQs - DevLink Portal{% endblock %}
+{% block twitter_card_image %}https://www.devlinkportal.com/images/faqs.jpg{% endblock %}
+{% block twitter_card_site %}@DevLinkPortal{% endblock %}
+{% block twitter_card_title %}FAQs - DevLink Portal{% endblock %}
+{% block twitter_card_description %}Explore frequently asked questions about the DevLink Portal and get the information you need.{% endblock %}
+{% block twitter_card_url %}https://www.devlinkportal.com/faqs{% endblock %}
+{% block twitter_card_image_alt %}FAQs - DevLink Portal{% endblock %}
+{% block twitter_card_image_url %}https://www.devlinkportal.com/images/faqs.jpg{% endblock %}
+{% block twitter_card_image_width %}1200{% endblock %}
+{% block twitter_card_image_height %}630{% endblock %}
+{% block twitter_card_image_type %}image/jpeg{% endblock %}
+{% block twitter_card_image_alt_text %}FAQs - DevLink Portal{% endblock %}

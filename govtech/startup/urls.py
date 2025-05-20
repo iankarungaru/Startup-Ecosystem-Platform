@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("", include("landingPage.urls")),
     path('sysadmin/', include('systemAdmin.urls')),
+    path('support/', include('support.urls')),
+
 
 ]
 
